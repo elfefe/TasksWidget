@@ -1,43 +1,19 @@
-import org.jetbrains.compose.compose
-import org.jetbrains.compose.desktop.application.dsl.TargetFormat
+group "fr.exem"
+version "1.0-SNAPSHOT"
+
+allprojects {
+    repositories {
+        google()
+        mavenCentral()
+        maven("https://maven.pkg.jetbrains.space/public/p/compose/dev")
+    }
+}
 
 plugins {
-    kotlin("multiplatform")
-    id("org.jetbrains.compose")
-}
-
-group = "fr.exem.toolbox"
-version = "1.0-SNAPSHOT"
-
-repositories {
-    google()
-    mavenCentral()
-    maven("https://maven.pkg.jetbrains.space/public/p/compose/dev")
-}
-
-kotlin {
-    jvm {
-        jvmToolchain(11)
-        withJava()
-    }
-    sourceSets {
-        val jvmMain by getting {
-            dependencies {
-                implementation(compose.desktop.currentOs)
-                implementation("com.hierynomus:sshj:0.32.0")
-            }
-        }
-        val jvmTest by getting
-    }
-}
-
-compose.desktop {
-    application {
-        mainClass = "MainKt"
-        nativeDistributions {
-            targetFormats(TargetFormat.Dmg, TargetFormat.Msi, TargetFormat.Deb)
-            packageName = "KillianToolbox"
-            packageVersion = "1.0.0"
-        }
-    }
+    kotlin("multiplatform") apply false
+    kotlin("android") apply false
+    id("com.android.application") apply false
+    id("com.android.library") apply false
+    id("org.jetbrains.compose") apply false
+    id("org.openjfx.javafxplugin") version("0.0.13")
 }

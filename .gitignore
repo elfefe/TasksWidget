@@ -35,6 +35,9 @@ bin/
 /nbdist/
 /.nb-gradle/
 
+/.git-original
+/.git-autre
+
 ### VS Code ###
 .vscode/
 

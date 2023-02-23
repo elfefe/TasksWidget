@@ -1,3 +1,5 @@
+import org.jetbrains.compose.compose
+
 plugins {
     kotlin("multiplatform")
     id("org.jetbrains.compose")
@@ -23,6 +25,8 @@ kotlin {
                 api(compose.runtime)
                 api(compose.foundation)
                 api(compose.material)
+
+                implementation(compose("org.jetbrains.compose.ui:ui-util"))
 
                 implementation("com.google.code.gson:gson:2.10.1")
 

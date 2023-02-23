@@ -1,13 +1,11 @@
-package com.elfefe.common.pager.page
+package fr.exem.common.pager.page
 
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.Icon
 import androidx.compose.material.IconButton
 import androidx.compose.material.OutlinedTextField
 import androidx.compose.material.TextFieldDefaults
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.AccountBox
 import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material.icons.filled.Send
 import androidx.compose.runtime.*
@@ -18,6 +16,7 @@ import androidx.compose.ui.input.key.Key
 import androidx.compose.ui.input.key.key
 import androidx.compose.ui.input.key.onKeyEvent
 import androidx.compose.ui.unit.dp
+import com.elfefe.common.pager.page.PageImpl
 import com.jcraft.jsch.JSch
 import com.jcraft.jsch.JSchException
 import kotlinx.coroutines.CoroutineScope
@@ -26,7 +25,6 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import java.awt.event.KeyEvent
 import java.io.ByteArrayOutputStream
-import java.io.File
 import java.io.PrintStream
 
 

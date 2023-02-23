@@ -1,7 +1,6 @@
-package com.elfefe.common.firebase.authentication
+package fr.exem.common.firebase.authentication
 
-import androidx.compose.ui.window.application
-import com.elfefe.common.firebase.authentication.model.GoogleService
+import fr.exem.common.firebase.authentication.model.GoogleService
 import com.google.gson.Gson
 import java.io.File
 

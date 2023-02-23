@@ -1,4 +1,4 @@
-package com.elfefe.common.firebase.authentication
+package fr.exem.common.firebase.authentication
 
 import com.jcraft.jsch.jce.SHA256
 import io.ktor.client.*

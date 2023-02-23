@@ -1,6 +1,6 @@
 package com.elfefe.android
 
-import com.elfefe.common.App
+import fr.exem.common.App
 import android.os.Bundle
 import androidx.activity.compose.setContent
 import androidx.appcompat.app.AppCompatActivity

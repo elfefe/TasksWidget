@@ -1,4 +1,4 @@
-package com.elfefe.common.firebase.authentication.model
+package fr.exem.common.firebase.authentication.model
 
 import com.google.gson.annotations.Expose
 import com.google.gson.annotations.SerializedName

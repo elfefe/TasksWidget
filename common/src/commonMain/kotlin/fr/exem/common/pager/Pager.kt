@@ -55,7 +55,7 @@ fun Pager(
                     }
                 }
                 .onGloballyPositioned {
-                    pagerWidth = it.size.width.dp
+                    pagerWidth = WindowState().size.width
                 }
         ),
         state = scrollState,

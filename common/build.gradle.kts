@@ -1,3 +1,4 @@
+import org.gradle.internal.impldep.org.junit.experimental.categories.Categories.CategoryFilter.exclude
 import org.jetbrains.compose.compose
 
 plugins {
@@ -6,7 +7,7 @@ plugins {
     id("com.android.library")
 }
 
-group = "fr.exem"
+group = "com.elfefe"
 version = "1.0-SNAPSHOT"
 
 val ktorVersion = "2.2.3"
@@ -27,6 +28,12 @@ kotlin {
                 api(compose.material)
 
                 implementation(compose("org.jetbrains.compose.ui:ui-util"))
+
+                implementation("com.github.jeziellago:compose-markdown:0.3.2")
+
+                api("io.jsonwebtoken:jjwt-api:0.11.5")
+                runtimeOnly("io.jsonwebtoken:jjwt-impl:0.11.5")
+                runtimeOnly("io.jsonwebtoken:jjwt-orgjson:0.11.5")
 
                 implementation("com.google.code.gson:gson:2.10.1")
 

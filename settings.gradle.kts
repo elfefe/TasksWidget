@@ -15,6 +15,6 @@ pluginManagement {
     }
 }
 
-rootProject.name = "SMQToolbox"
+rootProject.name = "TasksWidget"
 
 include(":android", ":desktop", ":common")

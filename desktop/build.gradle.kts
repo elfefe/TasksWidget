@@ -6,7 +6,7 @@ plugins {
     id("org.jetbrains.compose")
 }
 
-group = "fr.exem"
+group = "com.elfefe"
 version = "1.0-SNAPSHOT"
 
 

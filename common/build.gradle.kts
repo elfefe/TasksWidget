@@ -29,8 +29,6 @@ kotlin {
 
                 implementation(compose("org.jetbrains.compose.ui:ui-util"))
 
-                implementation("com.github.jeziellago:compose-markdown:0.3.2")
-
                 api("io.jsonwebtoken:jjwt-api:0.11.5")
                 runtimeOnly("io.jsonwebtoken:jjwt-impl:0.11.5")
                 runtimeOnly("io.jsonwebtoken:jjwt-orgjson:0.11.5")

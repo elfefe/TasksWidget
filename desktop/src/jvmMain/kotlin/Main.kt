@@ -1,3 +1,4 @@
+import androidx.compose.animation.core.animateDpAsState
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.List
 import androidx.compose.runtime.*
@@ -8,12 +9,26 @@ import androidx.compose.ui.unit.DpSize
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.*
 import com.elfefe.common.App
+import java.awt.Toolkit
 import java.awt.Window
 
 fun main() = application {
     var isVisible by remember { mutableStateOf(true) }
     var window: Window? = null
     val image = Icons.Default.List
+
+    val screenSize = Toolkit.getDefaultToolkit().screenSize
+    val windowWidth = (screenSize.width * 0.15f).dp
+    val windowMargin = 5.dp
+
+    var isScreenLeft by remember { mutableStateOf(true) }
+    val windowHorizontalPosition by animateDpAsState(
+        if (isScreenLeft) windowMargin
+        else screenSize.width.dp - windowWidth - windowMargin
+    )
+
+    var windowExpanded by remember { mutableStateOf(true) }
+    val windowHeight by animateDpAsState(if (windowExpanded) 990.dp else 29.dp)
 
     Tray(
         icon = rememberVectorPainter(
@@ -39,20 +54,22 @@ fun main() = application {
     Window(
         onCloseRequest = ::exitApplication,
         state = WindowState(
-            position = WindowPosition(5.dp, 5.dp),
-            size = DpSize(256.dp, 990.dp)
+            position = WindowPosition(windowHorizontalPosition, 5.dp),
+            size = DpSize(windowWidth, windowHeight)
         ),
         visible = isVisible,
         title = "Tasks",
         transparent = true,
         undecorated = true,
         resizable = false,
-        focusable = true
+        focusable = true,
+        alwaysOnTop = true
     ) {
         window = this.window
-        this.window.isMinimized = true
-        App {
-            isVisible = it
-        }
+        App(
+            { isVisible = it },
+            { windowExpanded = it },
+            { isScreenLeft = !isScreenLeft }
+        )
     }
 }

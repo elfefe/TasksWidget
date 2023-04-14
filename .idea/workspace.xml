@@ -10,61 +10,12 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="342136dd-9d95-4b6b-84e1-4a9c7fc0eeb8" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/common/src/commonMain/kotlin/com/elfefe/common/App.kt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/common/src/commonMain/kotlin/com/elfefe/common/firebase/authentication/model/JWToken.kt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/common/src/commonMain/kotlin/com/elfefe/common/firebase/authentication/model/Payload.kt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/common/src/commonMain/kotlin/com/elfefe/common/firebase/authentication/model/User.kt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/common/src/commonMain/kotlin/com/elfefe/common/logs/LogState.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/.gitignore" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/artifacts/KillianToolbox_jvm_1_0_SNAPSHOT.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/artifacts/SMQToolbox_jvm_1_0_SNAPSHOT.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/artifacts/common_desktop_1_0_SNAPSHOT.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/artifacts/desktop_jvm_1_0_SNAPSHOT.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/codeStyles/Project.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/codeStyles/codeStyleConfig.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/gradle.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/inspectionProfiles/Project_Default.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/kotlinc.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/vcs.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/android/build.gradle.kts" beforeDir="false" afterPath="$PROJECT_DIR$/android/build.gradle.kts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/android/src/main/AndroidManifest.xml" beforeDir="false" afterPath="$PROJECT_DIR$/android/src/main/AndroidManifest.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/android/src/main/java/fr/exem/android/MainActivity.kt" beforeDir="false" afterPath="$PROJECT_DIR$/android/src/main/java/com/elfefe/android/MainActivity.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/build.gradle.kts" beforeDir="false" afterPath="$PROJECT_DIR$/build.gradle.kts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/gradle.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/gradle.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/common/build.gradle.kts" beforeDir="false" afterPath="$PROJECT_DIR$/common/build.gradle.kts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/common/src/androidMain/AndroidManifest.xml" beforeDir="false" afterPath="$PROJECT_DIR$/common/src/androidMain/AndroidManifest.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/common/src/androidMain/kotlin/fr/exem/common/platform.kt" beforeDir="false" afterPath="$PROJECT_DIR$/common/src/androidMain/kotlin/com/elfefe/common/platform.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/common/src/commonMain/kotlin/fr/exem/common/App.kt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/common/src/commonMain/kotlin/fr/exem/common/context.kt" beforeDir="false" afterPath="$PROJECT_DIR$/common/src/commonMain/kotlin/com/elfefe/common/context.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/common/src/commonMain/kotlin/fr/exem/common/drawer/Drawer.kt" beforeDir="false" afterPath="$PROJECT_DIR$/common/src/commonMain/kotlin/com/elfefe/common/ui/drawer/Drawer.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/common/src/commonMain/kotlin/fr/exem/common/firebase/authentication/Auth.kt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/common/src/commonMain/kotlin/fr/exem/common/firebase/authentication/OAuthConsoleApp.kt" beforeDir="false" afterPath="$PROJECT_DIR$/common/src/commonMain/kotlin/com/elfefe/common/firebase/authentication/OAuthConsoleApp.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/common/src/commonMain/kotlin/fr/exem/common/firebase/authentication/model/AndroidClientInfo.kt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/common/src/commonMain/kotlin/fr/exem/common/firebase/authentication/model/AndroidInfo.kt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/common/src/commonMain/kotlin/fr/exem/common/firebase/authentication/model/ApiKey.kt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/common/src/commonMain/kotlin/fr/exem/common/firebase/authentication/model/AppinviteService.kt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/common/src/commonMain/kotlin/fr/exem/common/firebase/authentication/model/Client.kt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/common/src/commonMain/kotlin/fr/exem/common/firebase/authentication/model/ClientInfo.kt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/common/src/commonMain/kotlin/fr/exem/common/firebase/authentication/model/GoogleService.kt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/common/src/commonMain/kotlin/fr/exem/common/firebase/authentication/model/OauthClient.kt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/common/src/commonMain/kotlin/fr/exem/common/firebase/authentication/model/OtherPlatformOauthClient.kt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/common/src/commonMain/kotlin/fr/exem/common/firebase/authentication/model/ProjectInfo.kt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/common/src/commonMain/kotlin/fr/exem/common/firebase/authentication/model/Services.kt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/common/src/commonMain/kotlin/fr/exem/common/pager/Pager.kt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/common/src/commonMain/kotlin/fr/exem/common/pager/page/Excel.kt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/common/src/commonMain/kotlin/fr/exem/common/pager/page/PageImpl.kt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/common/src/commonMain/kotlin/fr/exem/common/pager/page/Ssh.kt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/common/src/commonMain/kotlin/fr/exem/common/platform.kt" beforeDir="false" afterPath="$PROJECT_DIR$/common/src/commonMain/kotlin/com/elfefe/common/platform.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/common/src/commonMain/kotlin/fr/exem/common/quality/s4/GeTe007.kt" beforeDir="false" afterPath="$PROJECT_DIR$/common/src/commonMain/kotlin/com/elfefe/common/excel/gete007/Users.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/common/src/commonMain/kotlin/fr/exem/common/theme/Color.kt" beforeDir="false" afterPath="$PROJECT_DIR$/common/src/commonMain/kotlin/com/elfefe/common/ui/theme/Color.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/common/src/commonMain/kotlin/fr/exem/common/theme/Theme.kt" beforeDir="false" afterPath="$PROJECT_DIR$/common/src/commonMain/kotlin/com/elfefe/common/ui/theme/Theme.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/common/src/commonMain/kotlin/fr/exem/common/theme/Type.kt" beforeDir="false" afterPath="$PROJECT_DIR$/common/src/commonMain/kotlin/com/elfefe/common/ui/theme/Type.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/common/src/commonMain/kotlin/fr/exem/common/utils/excel.kt" beforeDir="false" afterPath="$PROJECT_DIR$/common/src/commonMain/kotlin/com/elfefe/common/excel/excel.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/common/src/desktopMain/kotlin/fr/exem/common/DesktopApp.kt" beforeDir="false" afterPath="$PROJECT_DIR$/common/src/desktopMain/kotlin/com/elfefe/common/DesktopApp.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/common/src/desktopMain/kotlin/fr/exem/common/platform.kt" beforeDir="false" afterPath="$PROJECT_DIR$/common/src/desktopMain/kotlin/com/elfefe/common/platform.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/common/src/commonMain/kotlin/com/elfefe/common/App.kt" beforeDir="false" afterPath="$PROJECT_DIR$/common/src/commonMain/kotlin/com/elfefe/common/App.kt" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/desktop/build.gradle.kts" beforeDir="false" afterPath="$PROJECT_DIR$/desktop/build.gradle.kts" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/desktop/src/jvmMain/kotlin/Main.kt" beforeDir="false" afterPath="$PROJECT_DIR$/desktop/src/jvmMain/kotlin/Main.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/settings.gradle.kts" beforeDir="false" afterPath="$PROJECT_DIR$/settings.gradle.kts" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -83,9 +34,55 @@
         <task path="$PROJECT_DIR$">
           <activation />
         </task>
+        <task path="$PROJECT_DIR$/desktop">
+          <activation />
+        </task>
         <projects_view>
           <tree_state>
-            <expand />
+            <expand>
+              <path>
+                <item name="" type="6a2764b6:ExternalProjectsStructure$RootNode" />
+                <item name="TasksWidget" type="f1a62948:ProjectNode" />
+              </path>
+              <path>
+                <item name="" type="6a2764b6:ExternalProjectsStructure$RootNode" />
+                <item name="TasksWidget" type="f1a62948:ProjectNode" />
+                <item name="desktop" type="2d1252cf:ModuleNode" />
+              </path>
+              <path>
+                <item name="" type="6a2764b6:ExternalProjectsStructure$RootNode" />
+                <item name="TasksWidget" type="f1a62948:ProjectNode" />
+                <item name="desktop" type="2d1252cf:ModuleNode" />
+                <item name="Tasks" type="e4a08cd1:TasksNode" />
+              </path>
+              <path>
+                <item name="" type="6a2764b6:ExternalProjectsStructure$RootNode" />
+                <item name="TasksWidget" type="f1a62948:ProjectNode" />
+                <item name="desktop" type="2d1252cf:ModuleNode" />
+                <item name="Tasks" type="e4a08cd1:TasksNode" />
+                <item name="compose desktop" type="c8890929:TasksNode$1" />
+              </path>
+              <path>
+                <item name="" type="6a2764b6:ExternalProjectsStructure$RootNode" />
+                <item name="TasksWidget" type="f1a62948:ProjectNode" />
+                <item name="desktop" type="2d1252cf:ModuleNode" />
+                <item name="Dependencies" type="6de06a37:ExternalSystemViewDefaultContributor$MyDependenciesNode" />
+              </path>
+              <path>
+                <item name="" type="6a2764b6:ExternalProjectsStructure$RootNode" />
+                <item name="TasksWidget" type="f1a62948:ProjectNode" />
+                <item name="desktop" type="2d1252cf:ModuleNode" />
+                <item name="Dependencies" type="6de06a37:ExternalSystemViewDefaultContributor$MyDependenciesNode" />
+                <item name="runtimeClasspath" type="62daadca:ExternalSystemViewDefaultContributor$DependencyScopeExternalSystemNode" />
+              </path>
+              <path>
+                <item name="" type="6a2764b6:ExternalProjectsStructure$RootNode" />
+                <item name="TasksWidget" type="f1a62948:ProjectNode" />
+                <item name="desktop" type="2d1252cf:ModuleNode" />
+                <item name="Dependencies" type="6de06a37:ExternalSystemViewDefaultContributor$MyDependenciesNode" />
+                <item name="testRuntimeClasspath" type="62daadca:ExternalSystemViewDefaultContributor$DependencyScopeExternalSystemNode" />
+              </path>
+            </expand>
             <select />
           </tree_state>
         </projects_view>
@@ -114,21 +111,21 @@
   <component name="ProjectViewState">
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent"><![CDATA[{
-  "keyToString": {
-    "ASKED_ADD_EXTERNAL_FILES": "true",
-    "RunOnceActivity.OpenProjectViewOnStart": "true",
-    "RunOnceActivity.ShowReadmeOnStart": "true",
-    "RunOnceActivity.cidr.known.project.marker": "true",
-    "cidr.known.project.marker": "true",
-    "jdk.selected.JAVA_MODULE": "corretto-18",
-    "last_opened_file_path": "C:/Users/felix.boulereiff/IdeaProjects/TasksWidget",
-    "project.structure.last.edited": "SDKs",
-    "project.structure.proportion": "0.15",
-    "project.structure.side.proportion": "0.2",
-    "settings.editor.selected.configurable": "preferences.pluginManager"
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;ASKED_ADD_EXTERNAL_FILES&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.cidr.known.project.marker&quot;: &quot;true&quot;,
+    &quot;cidr.known.project.marker&quot;: &quot;true&quot;,
+    &quot;jdk.selected.JAVA_MODULE&quot;: &quot;corretto-18&quot;,
+    &quot;last_opened_file_path&quot;: &quot;C:/Users/felix.boulereiff/IdeaProjects/TasksWidget&quot;,
+    &quot;project.structure.last.edited&quot;: &quot;SDKs&quot;,
+    &quot;project.structure.proportion&quot;: &quot;0.15&quot;,
+    &quot;project.structure.side.proportion&quot;: &quot;0.2&quot;,
+    &quot;settings.editor.selected.configurable&quot;: &quot;preferences.pluginManager&quot;
   }
-}]]></component>
+}</component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
       <recent name="C:\Users\felix.boulereiff\IdeaProjects\SMQToolbox\common\src\commonMain\kotlin\fr\exem\common\theme" />
@@ -181,6 +178,72 @@
         <option name="Android.Gradle.BeforeRunTask" enabled="true" />
       </method>
     </configuration>
+    <configuration name="TasksWidget:desktop [packageDeb]" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
+      <ExternalSystemSettings>
+        <option name="executionName" />
+        <option name="externalProjectPath" value="$PROJECT_DIR$/desktop" />
+        <option name="externalSystemIdString" value="GRADLE" />
+        <option name="scriptParameters" />
+        <option name="taskDescriptions">
+          <list />
+        </option>
+        <option name="taskNames">
+          <list>
+            <option value="packageDeb" />
+          </list>
+        </option>
+        <option name="vmOptions" />
+      </ExternalSystemSettings>
+      <ExternalSystemDebugServerProcess>true</ExternalSystemDebugServerProcess>
+      <ExternalSystemReattachDebugProcess>true</ExternalSystemReattachDebugProcess>
+      <DebugAllEnabled>false</DebugAllEnabled>
+      <ForceTestExec>false</ForceTestExec>
+      <method v="2" />
+    </configuration>
+    <configuration name="TasksWidget:desktop [packageDmg]" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
+      <ExternalSystemSettings>
+        <option name="executionName" />
+        <option name="externalProjectPath" value="$PROJECT_DIR$/desktop" />
+        <option name="externalSystemIdString" value="GRADLE" />
+        <option name="scriptParameters" />
+        <option name="taskDescriptions">
+          <list />
+        </option>
+        <option name="taskNames">
+          <list>
+            <option value="packageDmg" />
+          </list>
+        </option>
+        <option name="vmOptions" />
+      </ExternalSystemSettings>
+      <ExternalSystemDebugServerProcess>true</ExternalSystemDebugServerProcess>
+      <ExternalSystemReattachDebugProcess>true</ExternalSystemReattachDebugProcess>
+      <DebugAllEnabled>false</DebugAllEnabled>
+      <ForceTestExec>false</ForceTestExec>
+      <method v="2" />
+    </configuration>
+    <configuration name="TasksWidget:desktop [packageMsi]" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
+      <ExternalSystemSettings>
+        <option name="executionName" />
+        <option name="externalProjectPath" value="$PROJECT_DIR$/desktop" />
+        <option name="externalSystemIdString" value="GRADLE" />
+        <option name="scriptParameters" />
+        <option name="taskDescriptions">
+          <list />
+        </option>
+        <option name="taskNames">
+          <list>
+            <option value="packageMsi" />
+          </list>
+        </option>
+        <option name="vmOptions" />
+      </ExternalSystemSettings>
+      <ExternalSystemDebugServerProcess>true</ExternalSystemDebugServerProcess>
+      <ExternalSystemReattachDebugProcess>true</ExternalSystemReattachDebugProcess>
+      <DebugAllEnabled>false</DebugAllEnabled>
+      <ForceTestExec>false</ForceTestExec>
+      <method v="2" />
+    </configuration>
     <configuration name="MainKt" type="JetRunConfigurationType" temporary="true" nameIsGenerated="true">
       <option name="MAIN_CLASS_NAME" value="MainKt" />
       <module name="TasksWidget.desktop.jvmMain" />
@@ -191,11 +254,17 @@
     </configuration>
     <list>
       <item itemvalue="Android App.android" />
+      <item itemvalue="Gradle.TasksWidget:desktop [packageDeb]" />
+      <item itemvalue="Gradle.TasksWidget:desktop [packageDmg]" />
+      <item itemvalue="Gradle.TasksWidget:desktop [packageMsi]" />
       <item itemvalue="Kotlin.MainKt" />
     </list>
     <recent_temporary>
       <list>
         <item itemvalue="Kotlin.MainKt" />
+        <item itemvalue="Gradle.TasksWidget:desktop [packageMsi]" />
+        <item itemvalue="Gradle.TasksWidget:desktop [packageDmg]" />
+        <item itemvalue="Gradle.TasksWidget:desktop [packageDeb]" />
       </list>
     </recent_temporary>
   </component>

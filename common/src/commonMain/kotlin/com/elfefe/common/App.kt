@@ -1,6 +1,7 @@
 package com.elfefe.common
 
 import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.expandVertically
 import androidx.compose.animation.shrinkVertically
 import androidx.compose.foundation.background
@@ -17,6 +18,7 @@ import androidx.compose.material.icons.filled.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.rotate
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
@@ -37,13 +39,16 @@ import java.util.*
 
 
 @Composable
-fun App(isVisible: (Boolean) -> Unit) {
+fun App(isVisible: (Boolean) -> Unit, isExpanded: (Boolean) -> Unit, changeSide: () -> Unit) {
     val scope = rememberCoroutineScope()
 
     var showDone by remember { mutableStateOf(false) }
     var showDescription by remember { mutableStateOf(true) }
 
     var tasks by remember { mutableStateOf(listOf<Tasks.Task>()) }
+
+    var expanded by remember { mutableStateOf(true) }
+    val expandRotation by animateFloatAsState(if (expanded) 180f else 0f)
 
     Tasks.tasksFlow.onEach {
         println("Update")
@@ -54,56 +59,85 @@ fun App(isVisible: (Boolean) -> Unit) {
     TasksTheme {
         Column(
             modifier = Modifier
-                .background(
-                    color = Color(0x00000000),
-                    shape = RoundedCornerShape(10.dp)
-                )
                 .fillMaxSize()
         ) {
             Row(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .height(20.dp),
-                horizontalArrangement = Arrangement.End
+                    .height(28.dp)
+                    .background(
+                        color = Color(0x66222222),
+                        shape = RoundedCornerShape(5.dp)
+                    ),
+                horizontalArrangement = Arrangement.SpaceBetween
             ) {
-                Icon(
-                    Icons.Default.Build,
-                    contentDescription = null,
-                    modifier = Modifier
-                        .clickable { showDescription = !showDescription },
-                    tint = if (showDescription) Color.White else Color.LightGray
-                )
-                Icon(
-                    Icons.Default.Edit,
-                    contentDescription = null,
-                    modifier = Modifier
-                        .clickable {
-                            showDone = !showDone
-                            Tasks.filter { if (showDone) true else !it.done }
-                        },
-                    tint = if (showDone) Color.White else Color.LightGray
-                )
-                Icon(
-                    Icons.Default.Add,
-                    contentDescription = null,
-                    modifier = Modifier
-                        .clickable {
-                            scope.launch(Dispatchers.IO) {
-                                Tasks.update(Tasks.Task())
-                                Tasks.refresh()
+                Row {
+                    Icon(
+                        Icons.Default.Build,
+                        contentDescription = null,
+                        modifier = Modifier
+                            .clickable { showDescription = !showDescription }
+                            .padding(3.dp),
+                        tint = if (showDescription) Color.White else Color.LightGray
+                    )
+                    Icon(
+                        Icons.Default.Edit,
+                        contentDescription = null,
+                        modifier = Modifier
+                            .clickable {
+                                showDone = !showDone
+                                Tasks.filter { if (showDone) true else !it.done }
                             }
-                        },
-                    tint = Color.White
-                )
-                Icon(
-                    Icons.Default.ExitToApp,
-                    contentDescription = null,
-                    modifier = Modifier
-                        .clickable {
-                            isVisible(false)
-                        },
-                    tint = Color.White
-                )
+                            .padding(3.dp),
+                        tint = if (showDone) Color.White else Color.LightGray
+                    )
+                    Icon(
+                        Icons.Default.Add,
+                        contentDescription = null,
+                        modifier = Modifier
+                            .clickable {
+                                scope.launch(Dispatchers.IO) {
+                                    Tasks.update(Tasks.Task())
+                                    Tasks.refresh()
+                                }
+                            }
+                            .padding(3.dp),
+                        tint = Color.White
+                    )
+                }
+
+                Row(horizontalArrangement = Arrangement.End) {
+                    Icon(
+                        Icons.Default.ArrowDropDown,
+                        contentDescription = null,
+                        modifier = Modifier
+                            .clickable {
+                                expanded = !expanded
+                                isExpanded(expanded)
+                            }
+                            .padding(3.dp)
+                            .rotate(expandRotation),
+                        tint = Color.White
+                    )
+                    Icon(
+                        Icons.Default.ExitToApp,
+                        contentDescription = null,
+                        modifier = Modifier
+                            .clickable {
+                                isVisible(false)
+                            }
+                            .padding(3.dp),
+                        tint = Color.White
+                    )
+                    Icon(
+                        Icons.Default.Place,
+                        contentDescription = null,
+                        modifier = Modifier
+                            .clickable(onClick = changeSide)
+                            .padding(3.dp),
+                        tint = Color.White
+                    )
+                }
             }
             LazyColumn(
                 modifier = Modifier
@@ -125,10 +159,10 @@ fun TaskCard(scope: CoroutineScope, task: Tasks.Task, showDescription: Boolean) 
 
     Card(
         modifier = Modifier
-            .width(246.dp)
+            .fillMaxWidth()
             .padding(5.dp),
         backgroundColor = Color.White,
-        elevation = 20.dp
+        elevation = 5.dp
     ) {
         Column(
             Modifier
@@ -159,11 +193,10 @@ fun TaskCard(scope: CoroutineScope, task: Tasks.Task, showDescription: Boolean) 
                         }
 
                         if (it.length <= 4 && it.last().digitToIntOrNull() != null)
-                            deadline = it
+                            deadline = it.replace("/", "")
+
                         if (it.length == 4 && !it.contains("/"))
                             deadline = it.substring(0, 2) + "/" + it.substring(2, 4)
-                        else if (it.last() == '/')
-                            deadline = it.substring(0, it.length - 1)
 
                         scope.launch(Dispatchers.IO) {
                             Tasks.update(task.apply { this.deadline = deadline })
@@ -273,6 +306,11 @@ object Tasks {
         var deadline: String = getDate(),
         var done: Boolean = false
     )
+}
+
+fun String.toMarkdown(): String {
+
+    return ""
 }
 
 fun getDate(): String {

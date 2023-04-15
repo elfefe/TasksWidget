@@ -13,15 +13,21 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.material.Card
 import androidx.compose.material.Icon
+import androidx.compose.material.TextField
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.rotate
+import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.SolidColor
+import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.unit.Dp
+import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.elfefe.common.ui.theme.TasksTheme
@@ -34,24 +40,20 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
+import java.awt.Window
 import java.io.File
 import java.util.*
 
 
 @Composable
-fun App(isVisible: (Boolean) -> Unit, isExpanded: (Boolean) -> Unit, changeSide: () -> Unit) {
+fun App(windowInteractions: WindowInteractions) {
     val scope = rememberCoroutineScope()
-
-    var showDone by remember { mutableStateOf(false) }
-    var showDescription by remember { mutableStateOf(true) }
 
     var tasks by remember { mutableStateOf(listOf<Tasks.Task>()) }
 
-    var expanded by remember { mutableStateOf(true) }
-    val expandRotation by animateFloatAsState(if (expanded) 180f else 0f)
+    var showDescription by remember { mutableStateOf(true) }
 
     Tasks.tasksFlow.onEach {
-        println("Update")
         tasks = mutableListOf()
         tasks = it
     }.launchIn(scope)
@@ -61,84 +63,7 @@ fun App(isVisible: (Boolean) -> Unit, isExpanded: (Boolean) -> Unit, changeSide:
             modifier = Modifier
                 .fillMaxSize()
         ) {
-            Row(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .height(28.dp)
-                    .background(
-                        color = Color(0x66222222),
-                        shape = RoundedCornerShape(5.dp)
-                    ),
-                horizontalArrangement = Arrangement.SpaceBetween
-            ) {
-                Row {
-                    Icon(
-                        Icons.Default.Build,
-                        contentDescription = null,
-                        modifier = Modifier
-                            .clickable { showDescription = !showDescription }
-                            .padding(3.dp),
-                        tint = if (showDescription) Color.White else Color.LightGray
-                    )
-                    Icon(
-                        Icons.Default.Edit,
-                        contentDescription = null,
-                        modifier = Modifier
-                            .clickable {
-                                showDone = !showDone
-                                Tasks.filter { if (showDone) true else !it.done }
-                            }
-                            .padding(3.dp),
-                        tint = if (showDone) Color.White else Color.LightGray
-                    )
-                    Icon(
-                        Icons.Default.Add,
-                        contentDescription = null,
-                        modifier = Modifier
-                            .clickable {
-                                scope.launch(Dispatchers.IO) {
-                                    Tasks.update(Tasks.Task())
-                                    Tasks.refresh()
-                                }
-                            }
-                            .padding(3.dp),
-                        tint = Color.White
-                    )
-                }
-
-                Row(horizontalArrangement = Arrangement.End) {
-                    Icon(
-                        Icons.Default.ArrowDropDown,
-                        contentDescription = null,
-                        modifier = Modifier
-                            .clickable {
-                                expanded = !expanded
-                                isExpanded(expanded)
-                            }
-                            .padding(3.dp)
-                            .rotate(expandRotation),
-                        tint = Color.White
-                    )
-                    Icon(
-                        Icons.Default.ExitToApp,
-                        contentDescription = null,
-                        modifier = Modifier
-                            .clickable {
-                                isVisible(false)
-                            }
-                            .padding(3.dp),
-                        tint = Color.White
-                    )
-                    Icon(
-                        Icons.Default.Place,
-                        contentDescription = null,
-                        modifier = Modifier
-                            .clickable(onClick = changeSide)
-                            .padding(3.dp),
-                        tint = Color.White
-                    )
-                }
-            }
+            Toolbar(scope, windowInteractions, ToolbarInteractions { showDescription = it })
             LazyColumn(
                 modifier = Modifier
                     .fillMaxSize()
@@ -146,6 +71,160 @@ fun App(isVisible: (Boolean) -> Unit, isExpanded: (Boolean) -> Unit, changeSide:
                 items(tasks, key = { it.title }) { task ->
                     TaskCard(scope, task, showDescription)
                 }
+            }
+        }
+    }
+}
+
+data class WindowInteractions(
+    val window: Window,
+    val isVisible: (Boolean) -> Unit,
+    val isExpanded: (Boolean) -> Unit,
+    val changeSide: () -> Unit
+)
+
+data class ToolbarInteractions(
+    val showDescription: (Boolean) -> Unit,
+)
+
+@Composable
+fun Toolbar(scope: CoroutineScope, windowInteractions: WindowInteractions, toolbarInteractions: ToolbarInteractions) {
+
+    var showDone by remember { mutableStateOf(false) }
+    var showDescription by remember { mutableStateOf(true) }
+
+    var expanded by remember { mutableStateOf(true) }
+    val expandRotation by animateFloatAsState(if (expanded) 180f else 0f)
+
+    var showSearch by remember { mutableStateOf(false) }
+
+    var searching by remember { mutableStateOf("") }
+
+    Column(
+        modifier = Modifier
+            .fillMaxWidth()
+            .background(
+                color = Color(0x66222222),
+                shape = RoundedCornerShape(5.dp)
+            )
+    ) {
+        Row(
+            modifier = Modifier
+                .fillMaxWidth()
+                .height(28.dp),
+            horizontalArrangement = Arrangement.SpaceBetween
+        ) {
+            Row {
+                Icon(
+                    Icons.Default.Build,
+                    contentDescription = null,
+                    modifier = Modifier
+                        .clickable {
+                            showDescription = !showDescription
+                            toolbarInteractions.showDescription(showDescription)
+                        }
+                        .padding(3.dp),
+                    tint = if (showDescription) Color.White else Color.LightGray
+                )
+                Icon(
+                    Icons.Default.Edit,
+                    contentDescription = null,
+                    modifier = Modifier
+                        .clickable {
+                            showDone = !showDone
+                            Tasks.filter { if (showDone) true else !it.done }
+                        }
+                        .padding(3.dp),
+                    tint = if (showDone) Color.White else Color.LightGray
+                )
+                Icon(
+                    Icons.Default.Add,
+                    contentDescription = null,
+                    modifier = Modifier
+                        .clickable {
+                            scope.launch(Dispatchers.IO) {
+                                Tasks.update(Tasks.Task())
+                                Tasks.refresh()
+                            }
+                        }
+                        .padding(3.dp),
+                    tint = Color.White
+                )
+                Icon(
+                    Icons.Default.Search,
+                    contentDescription = null,
+                    modifier = Modifier
+                        .clickable {
+                            showSearch = !showSearch
+                        }
+                        .padding(3.dp),
+                    tint = Color.White
+                )
+            }
+
+            Row(horizontalArrangement = Arrangement.End) {
+                Icon(
+                    Icons.Default.ArrowDropDown,
+                    contentDescription = null,
+                    modifier = Modifier
+                        .clickable {
+                            expanded = !expanded
+                            windowInteractions.isExpanded(expanded)
+                        }
+                        .padding(3.dp)
+                        .rotate(expandRotation),
+                    tint = Color.White
+                )
+                Icon(
+                    Icons.Default.ExitToApp,
+                    contentDescription = null,
+                    modifier = Modifier
+                        .clickable {
+                            windowInteractions.isVisible(false)
+                        }
+                        .padding(3.dp),
+                    tint = Color.White
+                )
+                Icon(
+                    Icons.Default.Place,
+                    contentDescription = null,
+                    modifier = Modifier
+                        .clickable(onClick = windowInteractions.changeSide)
+                        .padding(3.dp),
+                    tint = Color.White
+                )
+            }
+        }
+        AnimatedVisibility(visible = showSearch, enter = expandVertically(), exit = shrinkVertically()) {
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(28.dp)
+                    .background(
+                        color = Color(0xAA111111),
+                        shape = RoundedCornerShape(5.dp)
+                    )
+            ) {
+                BasicTextField(
+                    value = searching,
+                    onValueChange = {
+                        searching = it
+                        scope.launch {
+                            Tasks.filter { task ->
+                                task.title.contains(searching, true) ||
+                                task.deadline.contains(searching, true) ||
+                                task.description.contains(searching, true)
+                            }
+                        }
+                    },
+                    textStyle = TextStyle(
+                        color = Color.White
+                    ),
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(8.dp, 5.dp),
+                    cursorBrush = SolidColor(Color.White)
+                )
             }
         }
     }
@@ -203,15 +282,15 @@ fun TaskCard(scope: CoroutineScope, task: Tasks.Task, showDescription: Boolean) 
                         }
                     },
                     modifier = Modifier
-                        .width(30.dp),
+                        .padding(10.scaledDp(), 0.dp),
                     textStyle = TextStyle(
                         color = if (isDeadlineToday) Color.Red else Color.DarkGray,
-                        fontSize = 10.sp
+                        fontSize = 10.scaledSp()
                     ),
                     singleLine = true
                 )
 
-                Spacer(modifier = Modifier.width(3.dp))
+                Spacer(modifier = Modifier.width(3.scaledDp()))
 
                 BasicTextField(
                     value = title,
@@ -243,6 +322,8 @@ fun TaskCard(scope: CoroutineScope, task: Tasks.Task, showDescription: Boolean) 
             }
             AnimatedVisibility(
                 visible = showDescription,
+                modifier = Modifier
+                    .fillMaxWidth(),
                 enter = expandVertically(),
                 exit = shrinkVertically()
             ) {
@@ -257,7 +338,9 @@ fun TaskCard(scope: CoroutineScope, task: Tasks.Task, showDescription: Boolean) 
                             scope.launch(Dispatchers.IO) {
                                 Tasks.update(task.apply { this.description = it })
                             }
-                        }
+                        },
+                        modifier = Modifier
+                            .fillMaxSize()
                     )
                 }
             }
@@ -308,9 +391,24 @@ object Tasks {
     )
 }
 
-fun String.toMarkdown(): String {
+@Composable
+fun Int.scaledSp(): TextUnit {
+    val value: Int = this
+    return with(LocalDensity.current) {
+        val fontScale = this.fontScale
+        val textSize = value / fontScale
+        textSize.sp
+    }
+}
 
-    return ""
+@Composable
+fun Int.scaledDp(): Dp {
+    val value: Int = this
+    return with(LocalDensity.current) {
+        val fontScale = this.fontScale
+        val textSize = value / fontScale
+        textSize.dp
+    }
 }
 
 fun getDate(): String {

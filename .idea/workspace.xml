@@ -10,11 +10,16 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="342136dd-9d95-4b6b-84e1-4a9c7fc0eeb8" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/.idea/artifacts/desktop_jvm_1_1_0.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/License.md" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/README.md" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/common/src/commonMain/resources/logo-taskswidget-tray.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/common/src/commonMain/resources/logo-taskswidget.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/artifacts/common_desktop_1_0_SNAPSHOT.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/artifacts/common_desktop_1_0_SNAPSHOT.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/gradle.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/gradle.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/desktop/build.gradle.kts" beforeDir="false" afterPath="$PROJECT_DIR$/desktop/build.gradle.kts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/build.gradle.kts" beforeDir="false" afterPath="$PROJECT_DIR$/build.gradle.kts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/common/build.gradle.kts" beforeDir="false" afterPath="$PROJECT_DIR$/common/build.gradle.kts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/common/src/commonMain/kotlin/com/elfefe/common/App.kt" beforeDir="false" afterPath="$PROJECT_DIR$/common/src/commonMain/kotlin/com/elfefe/common/App.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/desktop/src/jvmMain/kotlin/Main.kt" beforeDir="false" afterPath="$PROJECT_DIR$/desktop/src/jvmMain/kotlin/Main.kt" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -118,19 +123,25 @@
     "RunOnceActivity.cidr.known.project.marker": "true",
     "SHARE_PROJECT_CONFIGURATION_FILES": "true",
     "cidr.known.project.marker": "true",
+    "ignore.virus.scanning.warn.message": "true",
     "jdk.selected.JAVA_MODULE": "corretto-18",
-    "last_opened_file_path": "C:/Users/felix.boulereiff/IdeaProjects/TasksWidget",
-    "project.structure.last.edited": "SDKs",
+    "last_opened_file_path": "C:/Users/fbou-/IdeaProjects/TasksWidget/common/src/commonMain/resources",
+    "project.structure.last.edited": "Modules",
     "project.structure.proportion": "0.15",
     "project.structure.side.proportion": "0.2",
-    "settings.editor.selected.configurable": "preferences.pluginManager"
+    "settings.editor.selected.configurable": "reference.projectsettings.compiler.javacompiler"
   }
 }]]></component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
+      <recent name="C:\Users\fbou-\IdeaProjects\TasksWidget\common\src\commonMain\resources" />
+      <recent name="C:\Users\fbou-\IdeaProjects\TasksWidget\desktop\src\jvmMain\resources" />
+      <recent name="C:\Users\fbou-\IdeaProjects\TasksWidget\desktop\src" />
       <recent name="C:\Users\felix.boulereiff\IdeaProjects\SMQToolbox\common\src\commonMain\kotlin\fr\exem\common\theme" />
     </key>
     <key name="MoveFile.RECENT_KEYS">
+      <recent name="C:\Users\fbou-\IdeaProjects\TasksWidget\common\src\commonMain\resources" />
+      <recent name="C:\Users\fbou-\IdeaProjects\TasksWidget" />
       <recent name="C:\Users\felix.boulereiff\IdeaProjects\TasksWidget\common\src\main\res\drawable" />
       <recent name="C:\Users\felix.boulereiff\IdeaProjects\SMQToolbox\common\src\commonMain\kotlin\fr\exem\common\excel" />
     </key>
@@ -142,7 +153,7 @@
       <recent name="fr.exem.common.ui.pager.page" />
     </key>
   </component>
-  <component name="RunManager" selected="Gradle.TasksWidget:desktop [packageMsi]">
+  <component name="RunManager" selected="Kotlin.MainKt">
     <configuration name="android" type="AndroidRunConfigurationType" factoryName="Android App">
       <module name="TasksWidget.android.main" />
       <option name="DEPLOY" value="true" />
@@ -261,8 +272,8 @@
     </list>
     <recent_temporary>
       <list>
-        <item itemvalue="Gradle.TasksWidget:desktop [packageMsi]" />
         <item itemvalue="Kotlin.MainKt" />
+        <item itemvalue="Gradle.TasksWidget:desktop [packageMsi]" />
         <item itemvalue="Gradle.TasksWidget:desktop [packageDmg]" />
         <item itemvalue="Gradle.TasksWidget:desktop [packageDeb]" />
       </list>
@@ -279,6 +290,9 @@
     </task>
     <servers />
   </component>
+  <component name="UnknownFeatures">
+    <option featureType="dependencySupport" implementationName="java:androidx.compose.runtime:runtime" />
+  </component>
   <component name="Vcs.Log.Tabs.Properties">
     <option name="TAB_STATES">
       <map>
@@ -292,5 +306,9 @@
   </component>
   <component name="VcsManagerConfiguration">
     <option name="ADD_EXTERNAL_FILES_SILENTLY" value="true" />
+  </component>
+  <component name="XSLT-Support.FileAssociations.UIState">
+    <expand />
+    <select />
   </component>
 </project>

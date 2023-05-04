@@ -1,26 +1,26 @@
 package com.elfefe.common
 
-import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.*
 import androidx.compose.animation.core.animateFloatAsState
-import androidx.compose.animation.expandVertically
-import androidx.compose.animation.shrinkVertically
+import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.material.Card
 import androidx.compose.material.Icon
-import androidx.compose.material.TextField
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.alpha
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.rotate
-import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.SolidColor
 import androidx.compose.ui.platform.LocalDensity
@@ -42,9 +42,11 @@ import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
 import java.awt.Window
 import java.io.File
+import java.text.SimpleDateFormat
 import java.util.*
 
 
+@OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun App(windowInteractions: WindowInteractions) {
     val scope = rememberCoroutineScope()
@@ -56,6 +58,8 @@ fun App(windowInteractions: WindowInteractions) {
     Tasks.tasksFlow.onEach {
         tasks = mutableListOf()
         tasks = it
+            .sortedByDescending { date -> fromDate(date.deadline) }
+            .sortedBy { date -> date.done }
     }.launchIn(scope)
 
     TasksTheme {
@@ -69,7 +73,7 @@ fun App(windowInteractions: WindowInteractions) {
                     .fillMaxSize()
             ) {
                 items(tasks, key = { it.title }) { task ->
-                    TaskCard(scope, task, showDescription)
+                    TaskCard(Modifier.animateItemPlacement(), scope, task, showDescription)
                 }
             }
         }
@@ -100,6 +104,8 @@ fun Toolbar(scope: CoroutineScope, windowInteractions: WindowInteractions, toolb
 
     var searching by remember { mutableStateOf("") }
 
+    Tasks.filter { if (showDone) true else !it.done }
+
     Column(
         modifier = Modifier
             .fillMaxWidth()
@@ -116,7 +122,7 @@ fun Toolbar(scope: CoroutineScope, windowInteractions: WindowInteractions, toolb
         ) {
             Row {
                 Icon(
-                    Icons.Default.Build,
+                    Icons.Default.Edit,
                     contentDescription = null,
                     modifier = Modifier
                         .clickable {
@@ -127,7 +133,7 @@ fun Toolbar(scope: CoroutineScope, windowInteractions: WindowInteractions, toolb
                     tint = if (showDescription) Color.White else Color.LightGray
                 )
                 Icon(
-                    Icons.Default.Edit,
+                    Icons.Default.CheckCircle,
                     contentDescription = null,
                     modifier = Modifier
                         .clickable {
@@ -212,8 +218,8 @@ fun Toolbar(scope: CoroutineScope, windowInteractions: WindowInteractions, toolb
                         scope.launch {
                             Tasks.filter { task ->
                                 task.title.contains(searching, true) ||
-                                task.deadline.contains(searching, true) ||
-                                task.description.contains(searching, true)
+                                        task.deadline.contains(searching, true) ||
+                                        task.description.contains(searching, true)
                             }
                         }
                     },
@@ -231,7 +237,7 @@ fun Toolbar(scope: CoroutineScope, windowInteractions: WindowInteractions, toolb
 }
 
 @Composable
-fun TaskCard(scope: CoroutineScope, task: Tasks.Task, showDescription: Boolean) {
+fun TaskCard(modifier: Modifier, scope: CoroutineScope, task: Tasks.Task, showDescription: Boolean) {
     var deadline by remember { mutableStateOf(task.deadline) }
     var title by remember { mutableStateOf(task.title) }
     var description by remember { mutableStateOf(task.description) }
@@ -239,10 +245,12 @@ fun TaskCard(scope: CoroutineScope, task: Tasks.Task, showDescription: Boolean) 
     Card(
         modifier = Modifier
             .fillMaxWidth()
-            .padding(5.dp),
+            .padding(5.dp)
+            .then(modifier),
         backgroundColor = Color.White,
         elevation = 5.dp
     ) {
+        val deadlineDate = deadlineDate(task.deadline)
         Column(
             Modifier
                 .fillMaxSize()
@@ -255,14 +263,6 @@ fun TaskCard(scope: CoroutineScope, task: Tasks.Task, showDescription: Boolean) 
                 verticalAlignment = Alignment.CenterVertically,
                 horizontalArrangement = Arrangement.SpaceAround
             ) {
-                val dayMonth = task.deadline.split("/")
-                val date = Calendar.getInstance()
-
-                val isDeadlineToday =
-                    dayMonth.size == 2 &&
-                            date.get(Calendar.DAY_OF_MONTH) == dayMonth[0].toInt() &&
-                            date.get(Calendar.MONTH) == dayMonth[1].toInt() - 1
-
                 BasicTextField(
                     value = deadline,
                     onValueChange = {
@@ -284,8 +284,12 @@ fun TaskCard(scope: CoroutineScope, task: Tasks.Task, showDescription: Boolean) 
                     modifier = Modifier
                         .padding(10.scaledDp(), 0.dp),
                     textStyle = TextStyle(
-                        color = if (isDeadlineToday) Color.Red else Color.DarkGray,
-                        fontSize = 10.scaledSp()
+                        color =
+                        if (task.done || deadlineDate == 1) Color.Black
+                        else if (deadlineDate == -1) Color(0xFFFFB900)
+                        else Color.Red,
+                        fontSize = 10.scaledSp(),
+                        fontWeight = FontWeight.SemiBold
                     ),
                     singleLine = true
                 )
@@ -301,7 +305,7 @@ fun TaskCard(scope: CoroutineScope, task: Tasks.Task, showDescription: Boolean) 
                         }
                     },
                     modifier = Modifier
-                        .width(170.dp),
+                        .weight(1f),
                     textStyle = TextStyle(fontWeight = FontWeight.SemiBold),
                     singleLine = true
                 )
@@ -310,6 +314,7 @@ fun TaskCard(scope: CoroutineScope, task: Tasks.Task, showDescription: Boolean) 
                     if (task.done) Icons.Default.Check else Icons.Default.Close,
                     contentDescription = null,
                     modifier = Modifier
+                        .clip(CircleShape)
                         .size(16.dp)
                         .clickable {
                             scope.launch(Dispatchers.IO) {
@@ -414,5 +419,23 @@ fun Int.scaledDp(): Dp {
 fun getDate(): String {
     val date = Calendar.getInstance()
     return date.get(Calendar.DAY_OF_MONTH).toString() + "/" + (date.get(Calendar.MONTH) + 1).toString()
+}
+
+fun fromDate(date: String): Long {
+    val dateOrder = listOf(Calendar.DAY_OF_MONTH, Calendar.MONTH, Calendar.YEAR)
+    date.split("/").let {
+        return Calendar.getInstance().apply {
+            for (i in it.indices) set(dateOrder[i], it[i].toInt())
+        }.timeInMillis
+    }
+}
+
+fun deadlineDate(date: String): Int {
+    val dateOrder = listOf(Calendar.DAY_OF_MONTH, Calendar.MONTH, Calendar.YEAR)
+    date.split("/").let {
+        return Calendar.getInstance().apply {
+            for (i in it.indices) set(dateOrder[i], it[i].toInt() - if (i == 1) 1 else 0)
+        }.compareTo(Calendar.getInstance())
+    }
 }
 

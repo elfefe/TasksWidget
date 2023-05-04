@@ -1,13 +1,9 @@
 import androidx.compose.animation.core.animateDpAsState
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.List
 import androidx.compose.runtime.*
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.toPainter
-import androidx.compose.ui.graphics.vector.RenderVectorGroup
-import androidx.compose.ui.graphics.vector.rememberVectorPainter
 import androidx.compose.ui.unit.DpSize
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.max
 import androidx.compose.ui.window.*
 import com.elfefe.common.App
 import com.elfefe.common.WindowInteractions
@@ -26,7 +22,7 @@ fun main() = application {
 
 
     val screenSize = Toolkit.getDefaultToolkit().screenSize
-    val windowWidth = (screenSize.width * 0.15f).dp
+    val windowWidth = kotlin.math.max(256f, screenSize.width * 0.15f).dp
     val windowMargin = 5.dp
 
     var isScreenLeft by remember { mutableStateOf(true) }

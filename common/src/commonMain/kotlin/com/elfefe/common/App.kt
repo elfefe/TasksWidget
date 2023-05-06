@@ -5,6 +5,7 @@ import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.gestures.detectDragGestures
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
@@ -23,6 +24,8 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.rotate
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.SolidColor
+import androidx.compose.ui.input.pointer.onPointerEvent
+import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
@@ -46,7 +49,6 @@ import java.text.SimpleDateFormat
 import java.util.*
 
 
-@OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun App(windowInteractions: WindowInteractions) {
     val scope = rememberCoroutineScope()
@@ -65,15 +67,17 @@ fun App(windowInteractions: WindowInteractions) {
     TasksTheme {
         Column(
             modifier = Modifier
-                .fillMaxSize()
+                .fillMaxSize(),
+            horizontalAlignment = Alignment.CenterHorizontally
         ) {
             Toolbar(scope, windowInteractions, ToolbarInteractions { showDescription = it })
             LazyColumn(
                 modifier = Modifier
-                    .fillMaxSize()
+                    .fillMaxWidth()
+                    .weight(1f)
             ) {
                 items(tasks, key = { it.title }) { task ->
-                    TaskCard(Modifier.animateItemPlacement(), scope, task, showDescription)
+                    TaskCard(Modifier, scope, task, showDescription)
                 }
             }
         }
@@ -84,7 +88,8 @@ data class WindowInteractions(
     val window: Window,
     val isVisible: (Boolean) -> Unit,
     val isExpanded: (Boolean) -> Unit,
-    val changeSide: () -> Unit
+    val changeSide: (Boolean, Float) -> Unit,
+    val changeHeight: (Float) -> Unit = {},
 )
 
 data class ToolbarInteractions(
@@ -195,8 +200,16 @@ fun Toolbar(scope: CoroutineScope, windowInteractions: WindowInteractions, toolb
                     Icons.Default.Place,
                     contentDescription = null,
                     modifier = Modifier
-                        .clickable(onClick = windowInteractions.changeSide)
-                        .padding(3.dp),
+                        .padding(3.dp)
+                        .pointerInput(Unit) {
+                            detectDragGestures(
+                                onDragStart = {
+                                    windowInteractions.changeSide(true, it.x)
+                                }
+                            ) { change, dragAmount ->
+                                windowInteractions.changeSide(false, 0f)
+                            }
+                        },
                     tint = Color.White
                 )
             }

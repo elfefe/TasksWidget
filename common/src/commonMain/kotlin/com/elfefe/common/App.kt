@@ -377,6 +377,9 @@ object Tasks {
     init {
         if (file.exists()) {
             _tasksFlow.value = queryTasks()
+        } else {
+            file.createNewFile()
+            file.writeText(Gson().toJson(listOf<Task>()))
         }
     }
 

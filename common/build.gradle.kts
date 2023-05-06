@@ -46,8 +46,8 @@ kotlin {
                 implementation("org.apache.poi:poi:5.2.0")
                 implementation("org.apache.poi:poi-ooxml:5.2.0")
 
-                implementation("androidx.constraintlayout:constraintlayout:2.2.0-alpha09")
-                implementation("androidx.constraintlayout:constraintlayout-compose:1.1.0-alpha09")
+                implementation("androidx.constraintlayout:constraintlayout:2.2.0-alpha07")
+                implementation("androidx.constraintlayout:constraintlayout-compose:1.1.0-alpha07")
             }
         }
         val commonTest by getting {

@@ -10,232 +10,9 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="342136dd-9d95-4b6b-84e1-4a9c7fc0eeb8" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/wix311/LICENSE.TXT" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/wix311/LuxTasks.dll" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/wix311/Microsoft.Deployment.Compression.Cab.dll" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/wix311/Microsoft.Deployment.Compression.dll" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/wix311/Microsoft.Deployment.Resources.dll" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/wix311/Microsoft.Deployment.WindowsInstaller.Package.dll" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/wix311/Microsoft.Deployment.WindowsInstaller.dll" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/wix311/ThmViewer.exe" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/wix311/WixBalExtension.dll" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/wix311/WixComPlusExtension.dll" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/wix311/WixCop.exe" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/wix311/WixDependencyExtension.dll" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/wix311/WixDifxAppExtension.dll" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/wix311/WixDirectXExtension.dll" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/wix311/WixFirewallExtension.dll" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/wix311/WixGamingExtension.dll" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/wix311/WixHttpExtension.dll" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/wix311/WixIIsExtension.dll" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/wix311/WixLuxExtension.dll" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/wix311/WixMsmqExtension.dll" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/wix311/WixNetFxExtension.dll" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/wix311/WixPSExtension.dll" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/wix311/WixSqlExtension.dll" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/wix311/WixTagExtension.dll" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/wix311/WixTasks.dll" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/wix311/WixUIExtension.dll" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/wix311/WixUtilExtension.dll" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/wix311/WixVSExtension.MSBuild12.dll" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/wix311/WixVSExtension.MSBuild14.dll" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/wix311/WixVSExtension.dll" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/wix311/candle.exe" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/wix311/candle.exe.config" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/wix311/darice.cub" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/wix311/dark.exe" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/wix311/dark.exe.config" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/wix311/difxapp_x64.wixlib" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/wix311/difxapp_x86.wixlib" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/wix311/doc/DTF.chm" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/wix311/doc/DTFAPI.chm" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/wix311/doc/Dependency.xsd" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/wix311/doc/WiX.chm" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/wix311/doc/bal.xsd" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/wix311/doc/complus.xsd" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/wix311/doc/difxapp.xsd" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/wix311/doc/firewall.xsd" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/wix311/doc/gaming.xsd" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/wix311/doc/http.xsd" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/wix311/doc/iis.xsd" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/wix311/doc/lux.xsd" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/wix311/doc/msmq.xsd" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/wix311/doc/netfx.xsd" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/wix311/doc/ps.xsd" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/wix311/doc/sql.xsd" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/wix311/doc/tag.xsd" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/wix311/doc/thmutil.xsd" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/wix311/doc/util.xsd" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/wix311/doc/vs.xsd" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/wix311/doc/wix.xsd" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/wix311/doc/wixloc.xsd" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/wix311/heat.exe" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/wix311/heat.exe.config" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/wix311/insignia.exe" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/wix311/insignia.exe.config" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/wix311/light.exe" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/wix311/light.exe.config" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/wix311/lit.exe" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/wix311/lit.exe.config" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/wix311/lux.exe" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/wix311/lux.exe.config" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/wix311/lux.targets" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/wix311/melt.exe" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/wix311/melt.exe.config" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/wix311/mergemod.cub" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/wix311/mergemod.dll" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/wix311/mspatchc.dll" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/wix311/nit.exe" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/wix311/nit.exe.config" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/wix311/pyro.exe" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/wix311/pyro.exe.config" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/wix311/retina.exe" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/wix311/retina.exe.config" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/wix311/sdk/BootstrapperCore.config" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/wix311/sdk/BootstrapperCore.dll" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/wix311/sdk/BootstrapperCore.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/wix311/sdk/DocCompiler.exe" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/wix311/sdk/MakeSfxCA.exe" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/wix311/sdk/MakeSfxCA.exe.config" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/wix311/sdk/Microsoft.Deployment.Compression.Cab.dll" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/wix311/sdk/Microsoft.Deployment.Compression.Cab.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/wix311/sdk/Microsoft.Deployment.Compression.Zip.dll" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/wix311/sdk/Microsoft.Deployment.Compression.Zip.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/wix311/sdk/Microsoft.Deployment.Compression.dll" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/wix311/sdk/Microsoft.Deployment.Compression.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/wix311/sdk/Microsoft.Deployment.Resources.dll" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/wix311/sdk/Microsoft.Deployment.Resources.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/wix311/sdk/Microsoft.Deployment.WindowsInstaller.Linq.dll" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/wix311/sdk/Microsoft.Deployment.WindowsInstaller.Linq.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/wix311/sdk/Microsoft.Deployment.WindowsInstaller.Package.dll" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/wix311/sdk/Microsoft.Deployment.WindowsInstaller.Package.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/wix311/sdk/Microsoft.Deployment.WindowsInstaller.dll" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/wix311/sdk/Microsoft.Deployment.WindowsInstaller.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/wix311/sdk/MsgGen.exe" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/wix311/sdk/XsdGen.exe" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/wix311/sdk/XsdStitch.exe" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/wix311/sdk/inc/BalBaseBootstrapperApplication.h" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/wix311/sdk/inc/IBootstrapperApplication.h" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/wix311/sdk/inc/IBootstrapperBAFunction.h" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/wix311/sdk/inc/IBootstrapperEngine.h" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/wix311/sdk/inc/aclutil.h" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/wix311/sdk/inc/apputil.h" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/wix311/sdk/inc/apuputil.h" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/wix311/sdk/inc/atomutil.h" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/wix311/sdk/inc/balcondition.h" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/wix311/sdk/inc/balinfo.h" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/wix311/sdk/inc/balretry.h" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/wix311/sdk/inc/balutil.h" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/wix311/sdk/inc/buffutil.h" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/wix311/sdk/inc/butil.h" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/wix311/sdk/inc/cabcutil.h" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/wix311/sdk/inc/cabutil.h" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/wix311/sdk/inc/certutil.h" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/wix311/sdk/inc/conutil.h" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/wix311/sdk/inc/cryputil.h" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/wix311/sdk/inc/custommsierrors.h" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/wix311/sdk/inc/deputil.h" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/wix311/sdk/inc/dictutil.h" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/wix311/sdk/inc/dirutil.h" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/wix311/sdk/inc/dlutil.h" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/wix311/sdk/inc/dutil.h" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/wix311/sdk/inc/eseutil.h" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/wix311/sdk/inc/fileutil.h" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/wix311/sdk/inc/gdiputil.h" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/wix311/sdk/inc/iis7util.h" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/wix311/sdk/inc/inetutil.h" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/wix311/sdk/inc/iniutil.h" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/wix311/sdk/inc/jsonutil.h" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/wix311/sdk/inc/locutil.h" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/wix311/sdk/inc/logutil.h" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/wix311/sdk/inc/memutil.h" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/wix311/sdk/inc/metautil.h" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/wix311/sdk/inc/osutil.h" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/wix311/sdk/inc/pathutil.h" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/wix311/sdk/inc/perfutil.h" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/wix311/sdk/inc/polcutil.h" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/wix311/sdk/inc/procutil.h" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/wix311/sdk/inc/regutil.h" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/wix311/sdk/inc/resrutil.h" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/wix311/sdk/inc/reswutil.h" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/wix311/sdk/inc/rexutil.h" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/wix311/sdk/inc/rmutil.h" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/wix311/sdk/inc/rssutil.h" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/wix311/sdk/inc/sceutil.h" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/wix311/sdk/inc/shelutil.h" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/wix311/sdk/inc/sqlutil.h" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/wix311/sdk/inc/srputil.h" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/wix311/sdk/inc/strutil.h" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/wix311/sdk/inc/svcutil.h" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/wix311/sdk/inc/thmutil.h" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/wix311/sdk/inc/timeutil.h" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/wix311/sdk/inc/uriutil.h" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/wix311/sdk/inc/userutil.h" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/wix311/sdk/inc/wcalog.h" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/wix311/sdk/inc/wcautil.h" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/wix311/sdk/inc/wcawow64.h" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/wix311/sdk/inc/wcawrapquery.h" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/wix311/sdk/inc/wiutil.h" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/wix311/sdk/inc/wuautil.h" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/wix311/sdk/inc/xmlutil.h" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/wix311/sdk/vs2010/lib/x64/deputil.lib" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/wix311/sdk/vs2010/lib/x64/dutil.lib" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/wix311/sdk/vs2010/lib/x64/wcautil.lib" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/wix311/sdk/vs2010/lib/x86/balutil.lib" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/wix311/sdk/vs2010/lib/x86/deputil.lib" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/wix311/sdk/vs2010/lib/x86/dutil.lib" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/wix311/sdk/vs2010/lib/x86/wcautil.lib" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/wix311/sdk/vs2012/lib/x64/deputil.lib" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/wix311/sdk/vs2012/lib/x64/dutil.lib" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/wix311/sdk/vs2012/lib/x64/wcautil.lib" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/wix311/sdk/vs2012/lib/x86/balutil.lib" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/wix311/sdk/vs2012/lib/x86/deputil.lib" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/wix311/sdk/vs2012/lib/x86/dutil.lib" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/wix311/sdk/vs2012/lib/x86/wcautil.lib" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/wix311/sdk/vs2013/lib/x64/deputil.lib" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/wix311/sdk/vs2013/lib/x64/dutil.lib" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/wix311/sdk/vs2013/lib/x64/wcautil.lib" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/wix311/sdk/vs2013/lib/x86/balutil.lib" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/wix311/sdk/vs2013/lib/x86/deputil.lib" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/wix311/sdk/vs2013/lib/x86/dutil.lib" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/wix311/sdk/vs2013/lib/x86/wcautil.lib" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/wix311/sdk/vs2015/lib/x64/deputil.lib" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/wix311/sdk/vs2015/lib/x64/dutil.lib" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/wix311/sdk/vs2015/lib/x64/wcautil.lib" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/wix311/sdk/vs2015/lib/x86/balutil.lib" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/wix311/sdk/vs2015/lib/x86/deputil.lib" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/wix311/sdk/vs2015/lib/x86/dutil.lib" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/wix311/sdk/vs2015/lib/x86/wcautil.lib" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/wix311/sdk/vs2017/lib/x64/deputil.lib" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/wix311/sdk/vs2017/lib/x64/dutil.lib" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/wix311/sdk/vs2017/lib/x64/wcautil.lib" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/wix311/sdk/vs2017/lib/x86/balutil.lib" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/wix311/sdk/vs2017/lib/x86/deputil.lib" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/wix311/sdk/vs2017/lib/x86/dutil.lib" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/wix311/sdk/vs2017/lib/x86/wcautil.lib" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/wix311/sdk/wix.ca.targets" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/wix311/sdk/wix.nativeca.targets" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/wix311/sdk/x64/sfxca.dll" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/wix311/sdk/x86/sfxca.dll" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/wix311/shine.exe" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/wix311/shine.exe.config" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/wix311/smoke.exe" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/wix311/smoke.exe.config" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/wix311/torch.exe" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/wix311/torch.exe.config" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/wix311/wconsole.dll" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/wix311/winterop.dll" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/wix311/wix.dll" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/wix311/wix.targets" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/wix311/wix200x.targets" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/wix311/wix2010.targets" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/wix311/x86/burn.exe" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/kotlinc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/kotlinc.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/common/build.gradle.kts" beforeDir="false" afterPath="$PROJECT_DIR$/common/build.gradle.kts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/common/src/commonMain/kotlin/com/elfefe/common/App.kt" beforeDir="false" afterPath="$PROJECT_DIR$/common/src/commonMain/kotlin/com/elfefe/common/App.kt" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/desktop/src/jvmMain/kotlin/Main.kt" beforeDir="false" afterPath="$PROJECT_DIR$/desktop/src/jvmMain/kotlin/Main.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/gradle.properties" beforeDir="false" afterPath="$PROJECT_DIR$/gradle.properties" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -316,22 +93,22 @@
   <component name="ProjectViewState">
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent"><![CDATA[{
-  "keyToString": {
-    "ASKED_ADD_EXTERNAL_FILES": "true",
-    "RunOnceActivity.OpenProjectViewOnStart": "true",
-    "RunOnceActivity.ShowReadmeOnStart": "true",
-    "RunOnceActivity.cidr.known.project.marker": "true",
-    "SHARE_PROJECT_CONFIGURATION_FILES": "true",
-    "cidr.known.project.marker": "true",
-    "jdk.selected.JAVA_MODULE": "corretto-18",
-    "last_opened_file_path": "C:/Users/fbou-/IdeaProjects/TasksWidget/desktop/src/jvmMain",
-    "project.structure.last.edited": "Project",
-    "project.structure.proportion": "0.15",
-    "project.structure.side.proportion": "0.2",
-    "settings.editor.selected.configurable": "reference.settingsdialog.project.gradle"
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;ASKED_ADD_EXTERNAL_FILES&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.cidr.known.project.marker&quot;: &quot;true&quot;,
+    &quot;SHARE_PROJECT_CONFIGURATION_FILES&quot;: &quot;true&quot;,
+    &quot;cidr.known.project.marker&quot;: &quot;true&quot;,
+    &quot;jdk.selected.JAVA_MODULE&quot;: &quot;corretto-18&quot;,
+    &quot;last_opened_file_path&quot;: &quot;C:/Users/fbou-/IdeaProjects/TasksWidget/desktop/src/jvmMain&quot;,
+    &quot;project.structure.last.edited&quot;: &quot;Project&quot;,
+    &quot;project.structure.proportion&quot;: &quot;0.15&quot;,
+    &quot;project.structure.side.proportion&quot;: &quot;0.2&quot;,
+    &quot;settings.editor.selected.configurable&quot;: &quot;reference.settingsdialog.project.gradle&quot;
   }
-}]]></component>
+}</component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
       <recent name="C:\Users\fbou-\IdeaProjects\TasksWidget\desktop\src\jvmMain" />
@@ -349,7 +126,7 @@
       <recent name="fr.exem.common.ui.pager.page" />
     </key>
   </component>
-  <component name="RunManager" selected="Gradle.TasksWidget:desktop [packageMsi]">
+  <component name="RunManager" selected="Kotlin.MainKt">
     <configuration name="android" type="AndroidRunConfigurationType" factoryName="Android App">
       <module name="TasksWidget.android.main" />
       <option name="DEPLOY" value="true" />
@@ -468,8 +245,8 @@
     </list>
     <recent_temporary>
       <list>
-        <item itemvalue="Gradle.TasksWidget:desktop [packageMsi]" />
         <item itemvalue="Kotlin.MainKt" />
+        <item itemvalue="Gradle.TasksWidget:desktop [packageMsi]" />
         <item itemvalue="Gradle.TasksWidget:desktop [packageDeb]" />
         <item itemvalue="Gradle.TasksWidget:desktop [packageDmg]" />
       </list>

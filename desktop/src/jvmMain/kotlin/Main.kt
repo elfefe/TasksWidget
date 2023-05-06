@@ -1,4 +1,4 @@
-import androidx.compose.animation.core.animateDpAsState
+import androidx.compose.animation.core.*
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -6,9 +6,12 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.DpSize
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.max
+import androidx.compose.ui.unit.min
 import androidx.compose.ui.window.*
 import com.elfefe.common.App
 import com.elfefe.common.WindowInteractions
+import java.awt.MouseInfo
 import java.awt.Toolkit
 import java.awt.Window
 
@@ -22,14 +25,21 @@ fun main() = application {
     val windowWidth = kotlin.math.max(256f, screenSize.width * 0.15f).dp
     val windowMargin = 5.dp
 
-    var isScreenLeft by remember { mutableStateOf(true) }
+    var windowHorizontalMove by remember { mutableStateOf(0.dp) }
     val windowHorizontalPosition by animateDpAsState(
-        if (isScreenLeft) windowMargin
-        else screenSize.width.dp - windowWidth - windowMargin
+        min(screenSize.width.dp - windowWidth - windowMargin, max(windowMargin, windowHorizontalMove))
     )
+    var mousePositionStart = 0.dp
 
     var windowExpanded by remember { mutableStateOf(true) }
-    val windowHeight by animateDpAsState(if (windowExpanded) 990.dp else 29.dp)
+    val windowHeight by animateDpAsState(
+        if (windowExpanded) 990.dp else 29.dp,
+        tween(
+            durationMillis = 500,
+            delayMillis = 0,
+            easing = EaseInOutCubic
+        )
+    )
 
     Tray(
         icon = painterResource("logo-taskswidget-tray.png"),
@@ -59,13 +69,15 @@ fun main() = application {
     ) {
         window = this.window
 
-
         App(
             WindowInteractions(
                 this.window,
                 { isVisible = it },
                 { windowExpanded = it },
-                { isScreenLeft = !isScreenLeft }
+                { init, offset ->
+                    if (init) mousePositionStart = offset.dp
+                    windowHorizontalMove = MouseInfo.getPointerInfo().location.x.dp - windowWidth + mousePositionStart
+                }
             )
         )
     }

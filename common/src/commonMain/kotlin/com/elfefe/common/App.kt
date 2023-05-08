@@ -45,8 +45,10 @@ import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
 import java.awt.Window
 import java.io.File
+import java.nio.file.Paths
 import java.text.SimpleDateFormat
 import java.util.*
+import javax.swing.filechooser.FileSystemView
 
 
 @Composable
@@ -367,7 +369,7 @@ fun TaskCard(modifier: Modifier, scope: CoroutineScope, task: Tasks.Task, showDe
 }
 
 object Tasks {
-    private val path = System.getProperty("user.home") + "\\Documents" + "\\tasks.json"
+    private val path = FileSystemView.getFileSystemView().defaultDirectory.path + File.separator +"tasks.json"
     private val file = File(path)
     private var currentFilter: (Task) -> Boolean = { true }
 
@@ -375,6 +377,7 @@ object Tasks {
     val tasksFlow: StateFlow<List<Task>> = _tasksFlow
 
     init {
+        println(path)
         if (file.exists()) {
             _tasksFlow.value = queryTasks()
         } else {

@@ -8,7 +8,7 @@ plugins {
 }
 
 group = "com.elfefe"
-version = "1.2.1"
+version = "1.2.2"
 
 val ktorVersion = "2.2.3"
 
@@ -48,6 +48,8 @@ kotlin {
 
                 implementation("androidx.constraintlayout:constraintlayout:2.2.0-alpha07")
                 implementation("androidx.constraintlayout:constraintlayout-compose:1.1.0-alpha07")
+
+                implementation("com.guardsquare:proguard-gradle:7.2.2")
             }
         }
         val commonTest by getting {

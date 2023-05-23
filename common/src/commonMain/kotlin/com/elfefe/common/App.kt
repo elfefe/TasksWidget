@@ -297,7 +297,8 @@ fun TaskCard(modifier: Modifier, scope: CoroutineScope, task: Tasks.Task, showDe
                         }
                     },
                     modifier = Modifier
-                        .padding(10.scaledDp(), 0.dp),
+                        .width(IntrinsicSize.Max)
+                        .padding(10.dp, 0.dp),
                     textStyle = TextStyle(
                         color =
                         if (task.done || deadlineDate == 1) Color.Black
@@ -309,7 +310,7 @@ fun TaskCard(modifier: Modifier, scope: CoroutineScope, task: Tasks.Task, showDe
                     singleLine = true
                 )
 
-                Spacer(modifier = Modifier.width(3.scaledDp()))
+                Spacer(modifier = Modifier.width(3.dp))
 
                 BasicTextField(
                     value = title,

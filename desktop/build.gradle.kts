@@ -7,7 +7,7 @@ plugins {
 }
 
 group = "com.elfefe"
-version = "1.2.2"
+version = "1.2.3"
 
 
 kotlin {
@@ -32,7 +32,7 @@ compose.desktop {
         nativeDistributions {
             targetFormats(TargetFormat.Dmg, TargetFormat.Msi, TargetFormat.Deb)
             packageName = "TasksWidget"
-            packageVersion = "1.2.2"
+            packageVersion = "1.2.3"
         }
     }
 }

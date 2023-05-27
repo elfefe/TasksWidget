@@ -17,4 +17,6 @@ plugins {
     id("com.android.library") apply false
     id("org.jetbrains.compose") apply false
     id("org.openjfx.javafxplugin") version("0.0.13")
+    id("com.google.gms.google-services") version("4.3.10") apply false
+    id("com.google.firebase.crashlytics") version("2.9.5") apply false
 }

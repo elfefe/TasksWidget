@@ -5,6 +5,8 @@ plugins {
     kotlin("multiplatform")
     id("org.jetbrains.compose")
     id("com.android.library")
+    id("com.google.gms.google-services")
+    id("com.google.firebase.crashlytics")
 }
 
 group = "com.elfefe"
@@ -32,6 +34,10 @@ kotlin {
                 api("io.jsonwebtoken:jjwt-api:0.11.5")
                 runtimeOnly("io.jsonwebtoken:jjwt-impl:0.11.5")
                 runtimeOnly("io.jsonwebtoken:jjwt-orgjson:0.11.5")
+
+                implementation(platform("com.google.firebase:firebase-bom:32.0.0"))
+                implementation("com.google.firebase:firebase-analytics-ktx")
+                implementation("com.google.firebase:firebase-crashlytics-ktx")
 
                 implementation("com.google.code.gson:gson:2.10.1")
 

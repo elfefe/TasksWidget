@@ -1,10 +1,10 @@
 package com.elfefe.common
 
-import androidx.compose.animation.*
+import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.core.animateFloatAsState
-import androidx.compose.foundation.ExperimentalFoundationApi
-import androidx.compose.foundation.background
-import androidx.compose.foundation.clickable
+import androidx.compose.animation.expandVertically
+import androidx.compose.animation.shrinkVertically
+import androidx.compose.foundation.*
 import androidx.compose.foundation.gestures.detectDragGestures
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
@@ -18,15 +18,15 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
+import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.rotate
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.SolidColor
-import androidx.compose.ui.input.pointer.onPointerEvent
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.platform.LocalDensity
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.Dp
@@ -45,8 +45,6 @@ import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
 import java.awt.Window
 import java.io.File
-import java.nio.file.Paths
-import java.text.SimpleDateFormat
 import java.util.*
 import javax.swing.filechooser.FileSystemView
 
@@ -70,18 +68,26 @@ fun App(windowInteractions: WindowInteractions) {
         Column(
             modifier = Modifier
                 .fillMaxSize(),
-            horizontalAlignment = Alignment.CenterHorizontally
+            horizontalAlignment = Alignment.CenterHorizontally,
+            verticalArrangement = Arrangement.Bottom
         ) {
-            Toolbar(scope, windowInteractions, ToolbarInteractions { showDescription = it })
             LazyColumn(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .weight(1f)
+                    .weight(1f),
+                reverseLayout = true
             ) {
                 items(tasks, key = { it.title }) { task ->
                     TaskCard(Modifier, scope, task, showDescription)
                 }
             }
+            Toolbar(
+                modifier = Modifier
+                    .wrapContentHeight(),
+                scope = scope,
+                windowInteractions = windowInteractions,
+                toolbarInteractions = ToolbarInteractions { showDescription = it }
+            )
         }
     }
 }
@@ -98,8 +104,14 @@ data class ToolbarInteractions(
     val showDescription: (Boolean) -> Unit,
 )
 
+@OptIn(ExperimentalComposeUiApi::class, ExperimentalFoundationApi::class)
 @Composable
-fun Toolbar(scope: CoroutineScope, windowInteractions: WindowInteractions, toolbarInteractions: ToolbarInteractions) {
+fun Toolbar(
+    modifier: Modifier,
+    scope: CoroutineScope,
+    windowInteractions: WindowInteractions,
+    toolbarInteractions: ToolbarInteractions,
+) {
 
     var showDone by remember { mutableStateOf(false) }
     var showDescription by remember { mutableStateOf(true) }
@@ -120,6 +132,7 @@ fun Toolbar(scope: CoroutineScope, windowInteractions: WindowInteractions, toolb
                 color = Color(0x66222222),
                 shape = RoundedCornerShape(5.dp)
             )
+            .then(modifier)
     ) {
         Row(
             modifier = Modifier
@@ -129,8 +142,15 @@ fun Toolbar(scope: CoroutineScope, windowInteractions: WindowInteractions, toolb
         ) {
             Row {
                 Icon(
+                    painter = painterResource("category.svg"),
+                    contentDescription = "Category",
+                    modifier = Modifier.padding(3.dp),
+                    tint = Color.White
+                )
+
+                Icon(
                     Icons.Default.Edit,
-                    contentDescription = null,
+                    contentDescription = "Description",
                     modifier = Modifier
                         .clickable {
                             showDescription = !showDescription
@@ -141,7 +161,7 @@ fun Toolbar(scope: CoroutineScope, windowInteractions: WindowInteractions, toolb
                 )
                 Icon(
                     Icons.Default.CheckCircle,
-                    contentDescription = null,
+                    contentDescription = if (showDone) "Hide done" else "Show done",
                     modifier = Modifier
                         .clickable {
                             showDone = !showDone
@@ -152,20 +172,25 @@ fun Toolbar(scope: CoroutineScope, windowInteractions: WindowInteractions, toolb
                 )
                 Icon(
                     Icons.Default.Add,
-                    contentDescription = null,
+                    contentDescription = "New task",
                     modifier = Modifier
-                        .clickable {
-                            scope.launch(Dispatchers.IO) {
-                                Tasks.update(Tasks.Task())
-                                Tasks.refresh()
+                        .combinedClickable(
+                            onClick = {
+                                scope.launch(Dispatchers.IO) {
+                                    Tasks.update(Tasks.Task())
+                                    Tasks.refresh()
+                                }
+                            },
+                            onLongClick = {
+
                             }
-                        }
+                        )
                         .padding(3.dp),
                     tint = Color.White
                 )
                 Icon(
                     Icons.Default.Search,
-                    contentDescription = null,
+                    contentDescription = "Search",
                     modifier = Modifier
                         .clickable {
                             showSearch = !showSearch
@@ -178,7 +203,7 @@ fun Toolbar(scope: CoroutineScope, windowInteractions: WindowInteractions, toolb
             Row(horizontalArrangement = Arrangement.End) {
                 Icon(
                     Icons.Default.ArrowDropDown,
-                    contentDescription = null,
+                    contentDescription = if (expanded) "Hide" else "Show",
                     modifier = Modifier
                         .clickable {
                             expanded = !expanded
@@ -190,7 +215,7 @@ fun Toolbar(scope: CoroutineScope, windowInteractions: WindowInteractions, toolb
                 )
                 Icon(
                     Icons.Default.ExitToApp,
-                    contentDescription = null,
+                    contentDescription = "Hide app",
                     modifier = Modifier
                         .clickable {
                             windowInteractions.isVisible(false)
@@ -200,7 +225,7 @@ fun Toolbar(scope: CoroutineScope, windowInteractions: WindowInteractions, toolb
                 )
                 Icon(
                     Icons.Default.Place,
-                    contentDescription = null,
+                    contentDescription = "Move app",
                     modifier = Modifier
                         .padding(3.dp)
                         .pointerInput(Unit) {
@@ -370,7 +395,7 @@ fun TaskCard(modifier: Modifier, scope: CoroutineScope, task: Tasks.Task, showDe
 }
 
 object Tasks {
-    private val path = FileSystemView.getFileSystemView().defaultDirectory.path + File.separator +"tasks.json"
+    private val path = FileSystemView.getFileSystemView().defaultDirectory.path + File.separator + "tasks.json"
     private val file = File(path)
     private var currentFilter: (Task) -> Boolean = { true }
 

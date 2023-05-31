@@ -4,16 +4,12 @@ import com.google.gson.Gson
 import com.jcraft.jsch.jce.SHA256
 import com.elfefe.common.firebase.authentication.model.JWToken
 import com.elfefe.common.firebase.authentication.model.Payload
-import com.elfefe.common.firebase.authentication.model.User
 import io.ktor.client.*
-import io.ktor.client.plugins.websocket.*
 import io.ktor.client.request.*
 import io.ktor.http.*
-import io.ktor.network.sockets.*
 import io.ktor.server.application.*
 import io.ktor.server.engine.*
 import io.ktor.server.netty.*
-import io.ktor.server.request.*
 import io.ktor.server.response.*
 import io.ktor.server.routing.*
 import io.ktor.util.*
@@ -47,7 +43,7 @@ private val HTML_HEADER =
         </html>""".trimIndent()
 
 
-class OAuthConsoleApp {
+class OAuthApi(private val scope: CoroutineScope) {
     private val AUTHORIZATION_ENDPOINT = "https://accounts.google.com/o/oauth2/v2/auth"
     private val TOKEN_ENDPOINT = "https://www.googleapis.com/oauth2/v4/token"
     private val USER_INFO_ENDPOINT = "https://www.googleapis.com/oauth2/v3/userinfo"
@@ -83,15 +79,15 @@ class OAuthConsoleApp {
     private val EQUALS = "="
     private val EMPTY_STRING = ""
 
-    @OptIn(InternalAPI::class)
-    fun auth(clientId: String, clientSecret: String, onConnected: (User) -> Unit) {
+    fun auth(clientId: String, clientSecret: String, onConnected: (JWToken, Payload) -> Unit) {
         val state = generateCodeVerifier()
         val codeVerifier = generateCodeVerifier()
 
         val codeChallenge = generateCodeChallenge(codeVerifier)
 
         val client = HttpClient()
-        val listening = CoroutineScope(Dispatchers.IO).launch {
+
+        scope.launch(Dispatchers.IO) {
             var asSent = false
             embeddedServer(
                 Netty,
@@ -113,17 +109,18 @@ class OAuthConsoleApp {
                                     setBody("code=$code&redirect_uri=$REDIRECT_URI&client_id=$clientId&code_verifier=$codeVerifier&client_secret=$clientSecret&scope=&grant_type=authorization_code")
                                 }
 
-                                val responseJson = response.content.toInputStream().readBytes().decodeToString()
 
-                                val jwToken = Gson().fromJson(responseJson, JWToken::class.java)
+                                val jwToken = Gson().fromJson(response.string, JWToken::class.java)
 
                                 val tokenSplit = jwToken.idToken.split(".")
 
                                 val user = Base64.getDecoder().decode(tokenSplit[1]).decodeToString()
 
-                                val payload = Gson().fromJson(user, Payload::class.java)
+                                val payload =  Gson().fromJson(user, Payload::class.java)
 
-                                onConnected(User(payload.givenName, payload.familyName, payload.email, payload.picture))
+                                scope.launch {
+                                    onConnected(jwToken, payload)
+                                }
                             }
                         }
                     }
@@ -131,11 +128,26 @@ class OAuthConsoleApp {
                 .start(wait = true)
         }
 
-        val authorizationRequest =
-            "$AUTHORIZATION_ENDPOINT?response_type=code&scope=openid%20profile%20email&redirect_uri=$REDIRECT_URI&client_id=$clientId&state=$state&code_challenge=$codeChallenge&code_challenge_method=$CODE_CHALLENGE_METHOD"
 
-        Desktop.getDesktop().browse(URI(authorizationRequest))
+        Desktop.getDesktop().browse(buildAuthUrl(clientId, state, codeChallenge))
     }
+
+    private fun buildPayload(content: String): Payload {
+
+        val jwToken = Gson().fromJson(content, JWToken::class.java)
+
+        val tokenSplit = jwToken.idToken.split(".")
+
+        val user = Base64.getDecoder().decode(tokenSplit[1]).decodeToString()
+
+        return Gson().fromJson(user, Payload::class.java)
+    }
+
+    private fun buildAuthUrl(
+        clientId: String,
+        state: String,
+        codeChallenge: String
+    ) = URI("$AUTHORIZATION_ENDPOINT?response_type=code&scope=openid%20profile%20email%20https://www.googleapis.com/auth/cloud-platform%20https://www.googleapis.com/auth/datastore&redirect_uri=$REDIRECT_URI&client_id=$clientId&state=$state&code_challenge=$codeChallenge&code_challenge_method=$CODE_CHALLENGE_METHOD")
 
     private fun generateCodeVerifier(): String {
         val secureRandom = SecureRandom()
@@ -152,3 +164,7 @@ class OAuthConsoleApp {
             Base64.getUrlEncoder().withoutPadding().encodeToString(digest())
         }
 }
+
+@OptIn(InternalAPI::class)
+private val io.ktor.client.statement.HttpResponse.string: String
+    get() = content.toInputStream().readBytes().decodeToString()

@@ -8,17 +8,17 @@ data class Payload(
     val aud: String,
     val sub: String,
     val hd: String,
-    val email: String,
+    val email: String?,
     @SerializedName("email_verified")
     val emailVerified: Boolean,
     @SerializedName("at_hash")
     val atHash: String,
-    val name: String,
-    val picture: String,
+    val name: String?,
+    val picture: String?,
     @SerializedName("given_name")
-    val givenName: String,
+    val givenName: String?,
     @SerializedName("family_name")
-    val familyName: String,
+    val familyName: String?,
     val locale: String,
     val iat: Long,
     val exp: Long

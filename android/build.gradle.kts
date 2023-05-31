@@ -14,6 +14,10 @@ repositories {
 dependencies {
     implementation(project(":common"))
     implementation("androidx.activity:activity-compose:1.5.0")
+    implementation("dev.gitlive:firebase-auth:1.7.2")
+    implementation("dev.gitlive:firebase-firestore:1.7.2")
+    implementation("dev.gitlive:firebase-crashlytics:1.7.2")
+    implementation("dev.gitlive:firebase-crashlytics:1.7.2")
 }
 
 android {

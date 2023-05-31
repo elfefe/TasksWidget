@@ -1,8 +1,9 @@
 package com.elfefe.common
 
-import androidx.compose.animation.*
+import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.core.animateFloatAsState
-import androidx.compose.foundation.ExperimentalFoundationApi
+import androidx.compose.animation.expandVertically
+import androidx.compose.animation.shrinkVertically
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.gestures.detectDragGestures
@@ -19,20 +20,20 @@ import androidx.compose.material.icons.filled.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.rotate
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.SolidColor
-import androidx.compose.ui.input.pointer.onPointerEvent
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.platform.LocalDensity
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.elfefe.common.firebase.authentication.OAuthApi
 import com.elfefe.common.ui.theme.TasksTheme
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
@@ -45,8 +46,6 @@ import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
 import java.awt.Window
 import java.io.File
-import java.nio.file.Paths
-import java.text.SimpleDateFormat
 import java.util.*
 import javax.swing.filechooser.FileSystemView
 
@@ -171,6 +170,22 @@ fun Toolbar(scope: CoroutineScope, windowInteractions: WindowInteractions, toolb
                             showSearch = !showSearch
                         }
                         .padding(3.dp),
+                    tint = Color.White
+                )
+                Icon(
+                    painterResource("login.svg"),
+                    contentDescription = null,
+                    modifier = Modifier
+                        .padding(3.dp)
+                        .clickable {
+                            OAuthApi(scope).auth(
+                                "1086878445333-tgnhihe3rkaigfqs39umarbfsptb1lr5.apps.googleusercontent.com",
+                                "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"
+                            ) { jwToken, payload ->
+                                println(jwToken)
+                                println(payload)
+                            }
+                        },
                     tint = Color.White
                 )
             }

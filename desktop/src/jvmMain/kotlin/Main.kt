@@ -1,8 +1,15 @@
 import androidx.compose.animation.core.*
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.material.Text
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.input.key.Key.Companion.Window
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.DpSize
 import androidx.compose.ui.unit.dp
@@ -14,8 +21,6 @@ import com.elfefe.common.WindowInteractions
 import java.awt.MouseInfo
 import java.awt.Toolkit
 import java.awt.Window
-import java.io.File
-import java.nio.file.Paths
 
 
 fun main() = application {
@@ -54,6 +59,7 @@ fun main() = application {
             Item("Exit", onClick = ::exitApplication)
         },
     )
+
     Window(
         onCloseRequest = ::exitApplication,
         state = WindowState(

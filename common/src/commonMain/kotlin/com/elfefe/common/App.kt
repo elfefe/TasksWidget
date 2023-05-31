@@ -91,6 +91,7 @@ data class WindowInteractions(
     val isExpanded: (Boolean) -> Unit,
     val changeSide: (Boolean, Float) -> Unit,
     val changeHeight: (Float) -> Unit = {},
+    val showConfigs: (Boolean) -> Unit
 )
 
 data class ToolbarInteractions(
@@ -99,6 +100,8 @@ data class ToolbarInteractions(
 
 @Composable
 fun Toolbar(scope: CoroutineScope, windowInteractions: WindowInteractions, toolbarInteractions: ToolbarInteractions) {
+
+    var showConfigs by remember { mutableStateOf(false) }
 
     var showDone by remember { mutableStateOf(false) }
     var showDescription by remember { mutableStateOf(true) }
@@ -185,6 +188,17 @@ fun Toolbar(scope: CoroutineScope, windowInteractions: WindowInteractions, toolb
                                 println(jwToken)
                                 println(payload)
                             }
+                        },
+                    tint = Color.White
+                )
+                Icon(
+                    Icons.Default.Settings,
+                    contentDescription = null,
+                    modifier = Modifier
+                        .padding(3.dp)
+                        .clickable {
+                            showConfigs = !showConfigs
+                            windowInteractions.showConfigs(showConfigs)
                         },
                     tint = Color.White
                 )

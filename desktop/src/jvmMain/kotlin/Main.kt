@@ -25,6 +25,7 @@ import java.awt.Window
 
 fun main() = application {
     var isVisible by remember { mutableStateOf(true) }
+    var isConfigsVisible by remember { mutableStateOf(false) }
     var window: Window? = null
 
 
@@ -85,8 +86,31 @@ fun main() = application {
                 { init, offset ->
                     if (init) mousePositionStart = offset.dp
                     windowHorizontalMove = MouseInfo.getPointerInfo().location.x.dp - windowWidth + mousePositionStart
+                },
+                showConfigs = {
+                    isConfigsVisible = it
                 }
             )
         )
     }
+
+    if (isConfigsVisible)
+        Window(
+            onCloseRequest = {
+                isConfigsVisible = false
+            },
+            title = "Tasks - configs",
+            icon = painterResource("logo-taskswidget.png"),
+            resizable = true,
+            focusable = true
+        ) {
+            Column(
+                modifier = Modifier
+                    .fillMaxSize(),
+                verticalArrangement = Arrangement.Center,
+                horizontalAlignment = Alignment.CenterHorizontally
+            ) {
+                Text("Configs")
+            }
+        }
 }

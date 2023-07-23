@@ -29,8 +29,17 @@ fun main() = application {
     var window: Window? = null
 
 
+    var windowExpanded by remember { mutableStateOf(true) }
+
     val screenSize = Toolkit.getDefaultToolkit().screenSize
-    val windowWidth = kotlin.math.max(256f, screenSize.width * 0.15f).dp
+    val windowWidth by animateDpAsState(
+        if (windowExpanded) kotlin.math.max(256f, screenSize.width * 0.15f).dp else 86.dp,
+        tween(
+            durationMillis = 500,
+            delayMillis = 0,
+            easing = EaseInOutCubic
+        )
+    )
     val windowMargin = 5.dp
 
     var windowHorizontalMove by remember { mutableStateOf(0.dp) }
@@ -38,8 +47,6 @@ fun main() = application {
         min(screenSize.width.dp - windowWidth - windowMargin, max(windowMargin, windowHorizontalMove))
     )
     var mousePositionStart = 0.dp
-
-    var windowExpanded by remember { mutableStateOf(true) }
     val windowHeight by animateDpAsState(
         if (windowExpanded) 990.dp else 29.dp,
         tween(

@@ -38,4 +38,5 @@ android {
             isMinifyEnabled = false
         }
     }
+    namespace = "com.elfefe.android"
 }

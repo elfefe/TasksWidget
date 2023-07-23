@@ -4,6 +4,7 @@ import com.google.gson.Gson
 import com.jcraft.jsch.jce.SHA256
 import com.elfefe.common.firebase.authentication.model.JWToken
 import com.elfefe.common.firebase.authentication.model.Payload
+import io.jsonwebtoken.Jwts.header
 import io.ktor.client.*
 import io.ktor.client.request.*
 import io.ktor.http.*
@@ -44,40 +45,6 @@ private val HTML_HEADER =
 
 
 class OAuthApi(private val scope: CoroutineScope) {
-    private val AUTHORIZATION_ENDPOINT = "https://accounts.google.com/o/oauth2/v2/auth"
-    private val TOKEN_ENDPOINT = "https://www.googleapis.com/oauth2/v4/token"
-    private val USER_INFO_ENDPOINT = "https://www.googleapis.com/oauth2/v3/userinfo"
-    private val CLIENT_ID = ""
-    private val CLIENT_SECRET = ""
-    private val SCOPE = "openid profile"
-    private val REDIRECT_URI = "http://localhost:8080/"
-    private val CODE_CHALLENGE_METHOD = "S256"
-    private val GRANT_TYPE = "authorization_code"
-    private val RESPONSE_TYPE = "code"
-    private val ACCEPT = "Accept=text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8"
-    private val CONTENT_TYPE = "application/x-www-form-urlencoded"
-    private val AUTHORIZATION = "Authorization"
-    private val BEARER = "Bearer "
-    private val UTF_8 = "UTF-8"
-    private val ACCESS_TOKEN = "access_token"
-    private val ERROR = "error"
-    private val CODE = "code"
-    private val STATE_PARAM = "state"
-    private val CODE_VERIFIER_PARAM = "code_verifier"
-    private val CODE_CHALLENGE_PARAM = "code_challenge"
-    private val CODE_CHALLENGE_METHOD_PARAM = "code_challenge_method"
-    private val GRANT_TYPE_PARAM = "grant_type"
-    private val RESPONSE_TYPE_PARAM = "response_type"
-    private val REDIRECT_URI_PARAM = "redirect_uri"
-    private val CLIENT_ID_PARAM = "client_id"
-    private val SCOPE_PARAM = "scope"
-    private val STATE_PARAM_PARAM = "state"
-    private val CLIENT_SECRET_PARAM = "client_secret"
-    private val CODE_PARAM = "code"
-    private val QUESTION_MARK = "?"
-    private val AMPERSAND = "&"
-    private val EQUALS = "="
-    private val EMPTY_STRING = ""
 
     fun auth(clientId: String, clientSecret: String, onConnected: (JWToken, Payload) -> Unit) {
         val state = generateCodeVerifier()
@@ -106,9 +73,8 @@ class OAuthApi(private val scope: CoroutineScope) {
                                     accept(ContentType.Text.Html)
                                     accept(ContentType("application", "xhtml+xml"))
                                     accept(ContentType("application", "xml;q=0.9,*/*;q=0.8"))
-                                    setBody("code=$code&redirect_uri=$REDIRECT_URI&client_id=$clientId&code_verifier=$codeVerifier&client_secret=$clientSecret&scope=&grant_type=authorization_code")
+                                    setBody("code=$code&redirect_uri=$REDIRECT_URI&client_id=$clientId&code_verifier=$codeVerifier&client_secret=$clientSecret&scope=https://www.googleapis.com/auth/cloud-platform&grant_type=authorization_code")
                                 }
-
 
                                 val jwToken = Gson().fromJson(response.string, JWToken::class.java)
 
@@ -116,7 +82,7 @@ class OAuthApi(private val scope: CoroutineScope) {
 
                                 val user = Base64.getDecoder().decode(tokenSplit[1]).decodeToString()
 
-                                val payload =  Gson().fromJson(user, Payload::class.java)
+                                val payload = Gson().fromJson(user, Payload::class.java)
 
                                 scope.launch {
                                     onConnected(jwToken, payload)
@@ -131,6 +97,16 @@ class OAuthApi(private val scope: CoroutineScope) {
 
         Desktop.getDesktop().browse(buildAuthUrl(clientId, state, codeChallenge))
     }
+
+    fun get(url: String, headers: Map<String, String>, response: CoroutineScope.(String) -> Unit) =
+        scope.launch(Dispatchers.IO) {
+            response(
+                HttpClient().get(url) {
+                    header(headers)
+                }.string
+            )
+        }
+
 
     private fun buildPayload(content: String): Payload {
 
@@ -147,7 +123,8 @@ class OAuthApi(private val scope: CoroutineScope) {
         clientId: String,
         state: String,
         codeChallenge: String
-    ) = URI("$AUTHORIZATION_ENDPOINT?response_type=code&scope=openid%20profile%20email%20https://www.googleapis.com/auth/cloud-platform%20https://www.googleapis.com/auth/datastore&redirect_uri=$REDIRECT_URI&client_id=$clientId&state=$state&code_challenge=$codeChallenge&code_challenge_method=$CODE_CHALLENGE_METHOD")
+    ) =
+        URI("$AUTHORIZATION_ENDPOINT?response_type=code&scope=openid%20profile%20email%20https://www.googleapis.com/auth/cloud-platform%20https://www.googleapis.com/auth/datastore&redirect_uri=$REDIRECT_URI&client_id=$clientId&state=$state&code_challenge=$codeChallenge&code_challenge_method=$CODE_CHALLENGE_METHOD")
 
     private fun generateCodeVerifier(): String {
         val secureRandom = SecureRandom()
@@ -157,12 +134,49 @@ class OAuthApi(private val scope: CoroutineScope) {
     }
 
     private fun generateCodeChallenge(codeVerifier: String): String =
-         SHA256().run {
+        SHA256().run {
             val bytes = codeVerifier.toByteArray(StandardCharsets.US_ASCII)
             init()
             update(bytes, 0, bytes.size)
             Base64.getUrlEncoder().withoutPadding().encodeToString(digest())
         }
+
+    companion object {
+        private val AUTHORIZATION_ENDPOINT = "https://accounts.google.com/o/oauth2/v2/auth"
+        private val TOKEN_ENDPOINT = "https://www.googleapis.com/oauth2/v4/token"
+        private val USER_INFO_ENDPOINT = "https://www.googleapis.com/oauth2/v3/userinfo"
+        private val CLIENT_ID = ""
+        private val CLIENT_SECRET = ""
+        private val SCOPE = "openid profile"
+        private val REDIRECT_URI = "http://localhost:8080/"
+        private val CODE_CHALLENGE_METHOD = "S256"
+        private val GRANT_TYPE = "authorization_code"
+        private val RESPONSE_TYPE = "code"
+        private val ACCEPT = "Accept=text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8"
+        private val CONTENT_TYPE = "application/x-www-form-urlencoded"
+        val AUTHORIZATION = "Authorization"
+        private val BEARER = "Bearer "
+        private val UTF_8 = "UTF-8"
+        private val ACCESS_TOKEN = "access_token"
+        private val ERROR = "error"
+        private val CODE = "code"
+        private val STATE_PARAM = "state"
+        private val CODE_VERIFIER_PARAM = "code_verifier"
+        private val CODE_CHALLENGE_PARAM = "code_challenge"
+        private val CODE_CHALLENGE_METHOD_PARAM = "code_challenge_method"
+        private val GRANT_TYPE_PARAM = "grant_type"
+        private val RESPONSE_TYPE_PARAM = "response_type"
+        private val REDIRECT_URI_PARAM = "redirect_uri"
+        private val CLIENT_ID_PARAM = "client_id"
+        private val SCOPE_PARAM = "scope"
+        private val STATE_PARAM_PARAM = "state"
+        private val CLIENT_SECRET_PARAM = "client_secret"
+        private val CODE_PARAM = "code"
+        private val QUESTION_MARK = "?"
+        private val AMPERSAND = "&"
+        private val EQUALS = "="
+        private val EMPTY_STRING = ""
+    }
 }
 
 @OptIn(InternalAPI::class)

@@ -33,7 +33,9 @@ import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.elfefe.common.firebase.authentication.OAuthApi
+import com.elfefe.common.firebase.firestore.FirestoreApi
+import com.elfefe.common.model.Task
+import com.elfefe.common.model.User
 import com.elfefe.common.ui.theme.TasksTheme
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
@@ -54,7 +56,7 @@ import javax.swing.filechooser.FileSystemView
 fun App(windowInteractions: WindowInteractions) {
     val scope = rememberCoroutineScope()
 
-    var tasks by remember { mutableStateOf(listOf<Tasks.Task>()) }
+    var tasks by remember { mutableStateOf(listOf<Task>()) }
 
     var showDescription by remember { mutableStateOf(true) }
 
@@ -129,80 +131,93 @@ fun Toolbar(scope: CoroutineScope, windowInteractions: WindowInteractions, toolb
                 .height(28.dp),
             horizontalArrangement = Arrangement.SpaceBetween
         ) {
-            Row {
-                Icon(
-                    Icons.Default.Edit,
-                    contentDescription = null,
-                    modifier = Modifier
-                        .clickable {
-                            showDescription = !showDescription
-                            toolbarInteractions.showDescription(showDescription)
-                        }
-                        .padding(3.dp),
-                    tint = if (showDescription) Color.White else Color.LightGray
-                )
-                Icon(
-                    Icons.Default.CheckCircle,
-                    contentDescription = null,
-                    modifier = Modifier
-                        .clickable {
-                            showDone = !showDone
-                            Tasks.filter { if (showDone) true else !it.done }
-                        }
-                        .padding(3.dp),
-                    tint = if (showDone) Color.White else Color.LightGray
-                )
-                Icon(
-                    Icons.Default.Add,
-                    contentDescription = null,
-                    modifier = Modifier
-                        .clickable {
-                            scope.launch(Dispatchers.IO) {
-                                Tasks.update(Tasks.Task())
-                                Tasks.refresh()
+            if (expanded)
+                Row {
+                    Icon(
+                        Icons.Default.Edit,
+                        contentDescription = null,
+                        modifier = Modifier
+                            .clickable {
+                                showDescription = !showDescription
+                                toolbarInteractions.showDescription(showDescription)
                             }
-                        }
-                        .padding(3.dp),
-                    tint = Color.White
-                )
-                Icon(
-                    Icons.Default.Search,
-                    contentDescription = null,
-                    modifier = Modifier
-                        .clickable {
-                            showSearch = !showSearch
-                        }
-                        .padding(3.dp),
-                    tint = Color.White
-                )
-                Icon(
-                    painterResource("login.svg"),
-                    contentDescription = null,
-                    modifier = Modifier
-                        .padding(3.dp)
-                        .clickable {
-                            OAuthApi(scope).auth(
-                                "1086878445333-tgnhihe3rkaigfqs39umarbfsptb1lr5.apps.googleusercontent.com",
-                                "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"
-                            ) { jwToken, payload ->
-                                println(jwToken)
-                                println(payload)
+                            .padding(3.dp),
+                        tint = if (showDescription) Color.White else Color.LightGray
+                    )
+                    Icon(
+                        Icons.Default.CheckCircle,
+                        contentDescription = null,
+                        modifier = Modifier
+                            .clickable {
+                                showDone = !showDone
+                                Tasks.filter { if (showDone) true else !it.done }
                             }
-                        },
-                    tint = Color.White
-                )
-                Icon(
-                    Icons.Default.Settings,
-                    contentDescription = null,
-                    modifier = Modifier
-                        .padding(3.dp)
-                        .clickable {
-                            showConfigs = !showConfigs
-                            windowInteractions.showConfigs(showConfigs)
-                        },
-                    tint = Color.White
-                )
-            }
+                            .padding(3.dp),
+                        tint = if (showDone) Color.White else Color.LightGray
+                    )
+                    Icon(
+                        Icons.Default.Add,
+                        contentDescription = null,
+                        modifier = Modifier
+                            .clickable {
+                                scope.launch(Dispatchers.IO) {
+                                    Tasks.update(Task())
+                                    Tasks.refresh()
+                                }
+                            }
+                            .padding(3.dp),
+                        tint = Color.White
+                    )
+                    Icon(
+                        Icons.Default.Search,
+                        contentDescription = null,
+                        modifier = Modifier
+                            .clickable {
+                                showSearch = !showSearch
+                            }
+                            .padding(3.dp),
+                        tint = Color.White
+                    )
+                    Icon(
+                        painterResource("login.svg"),
+                        contentDescription = null,
+                        modifier = Modifier
+                            .padding(3.dp)
+                            .clickable {
+                                FirestoreApi.instance.connectTasks(
+                                    User("felion33@gmail.com", "Félix", "", mutableListOf())
+                                ) {
+                                    println(it)
+                                }
+//                            OAuthApi(scope).apply {
+//                                auth(
+//                                    "1086878445333-tgnhihe3rkaigfqs39umarbfsptb1lr5.apps.googleusercontent.com",
+//                                    "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"
+//                                ) { jwToken, payload ->
+//                                    println(jwToken)
+//                                    println(payload)
+//                                    val credentials = GoogleCredentials
+//                                        .create(AccessToken(jwToken.accessToken, Date(Date().time + jwToken.expiresIn.toLong())))
+//                                        .createScoped(
+//                                            "https://www.googleapis.com/auth/cloud-platform"
+//                                        )
+//                                }
+//                            }
+                            },
+                        tint = Color.White
+                    )
+                    Icon(
+                        Icons.Default.Settings,
+                        contentDescription = null,
+                        modifier = Modifier
+                            .padding(3.dp)
+                            .clickable {
+                                showConfigs = !showConfigs
+                                windowInteractions.showConfigs(showConfigs)
+                            },
+                        tint = Color.White
+                    )
+                }
 
             Row(horizontalArrangement = Arrangement.End) {
                 Icon(
@@ -281,7 +296,7 @@ fun Toolbar(scope: CoroutineScope, windowInteractions: WindowInteractions, toolb
 }
 
 @Composable
-fun TaskCard(modifier: Modifier, scope: CoroutineScope, task: Tasks.Task, showDescription: Boolean) {
+fun TaskCard(modifier: Modifier, scope: CoroutineScope, task: Task, showDescription: Boolean) {
     var deadline by remember { mutableStateOf(task.deadline) }
     var title by remember { mutableStateOf(task.title) }
     var description by remember { mutableStateOf(task.description) }
@@ -399,7 +414,7 @@ fun TaskCard(modifier: Modifier, scope: CoroutineScope, task: Tasks.Task, showDe
 }
 
 object Tasks {
-    private val path = FileSystemView.getFileSystemView().defaultDirectory.path + File.separator +"tasks.json"
+    private val path = FileSystemView.getFileSystemView().defaultDirectory.path + File.separator + "tasks.json"
     private val file = File(path)
     private var currentFilter: (Task) -> Boolean = { true }
 
@@ -436,13 +451,6 @@ object Tasks {
     fun refresh() {
         _tasksFlow.value = queryTasks().filter(currentFilter)
     }
-
-    class Task(
-        var title: String = "",
-        var description: String = "",
-        var deadline: String = getDate(),
-        var done: Boolean = false
-    )
 }
 
 @Composable

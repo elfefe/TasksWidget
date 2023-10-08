@@ -9,7 +9,6 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.input.key.Key.Companion.Window
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.DpSize
 import androidx.compose.ui.unit.dp
@@ -18,6 +17,7 @@ import androidx.compose.ui.unit.min
 import androidx.compose.ui.window.*
 import com.elfefe.common.App
 import com.elfefe.common.WindowInteractions
+import java.awt.GraphicsEnvironment
 import java.awt.MouseInfo
 import java.awt.Toolkit
 import java.awt.Window
@@ -32,8 +32,9 @@ fun main() = application {
     var windowExpanded by remember { mutableStateOf(true) }
 
     val screenSize = Toolkit.getDefaultToolkit().screenSize
+    val windowMaxSize = GraphicsEnvironment.getLocalGraphicsEnvironment().maximumWindowBounds
     val windowWidth by animateDpAsState(
-        if (windowExpanded) kotlin.math.max(256f, screenSize.width * 0.15f).dp else 86.dp,
+        if (windowExpanded) kotlin.math.max(256f, windowMaxSize.width * 0.15f).dp else 86.dp,
         tween(
             durationMillis = 500,
             delayMillis = 0,
@@ -47,8 +48,9 @@ fun main() = application {
         min(screenSize.width.dp - windowWidth - windowMargin, max(windowMargin, windowHorizontalMove))
     )
     var mousePositionStart = 0.dp
+    val windowMinHeight = 29.dp
     val windowHeight by animateDpAsState(
-        if (windowExpanded) 990.dp else 29.dp,
+        if (windowExpanded) windowMaxSize.height.dp else windowMinHeight,
         tween(
             durationMillis = 500,
             delayMillis = 0,

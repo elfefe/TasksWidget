@@ -6,15 +6,19 @@ import androidx.compose.animation.expandVertically
 import androidx.compose.animation.shrinkVertically
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.gestures.animateScrollBy
 import androidx.compose.foundation.gestures.detectDragGestures
+import androidx.compose.foundation.gestures.scrollBy
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.material.Card
 import androidx.compose.material.Icon
+import androidx.compose.material.Surface
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.*
 import androidx.compose.runtime.*
@@ -25,7 +29,10 @@ import androidx.compose.ui.draw.rotate
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.SolidColor
 import androidx.compose.ui.input.pointer.pointerInput
+import androidx.compose.ui.layout.onGloballyPositioned
+import androidx.compose.ui.layout.positionInWindow
 import androidx.compose.ui.platform.LocalDensity
+import androidx.compose.ui.platform.WindowInfo
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
@@ -46,10 +53,14 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
+import java.awt.MouseInfo
+import java.awt.Toolkit
 import java.awt.Window
 import java.io.File
 import java.util.*
 import javax.swing.filechooser.FileSystemView
+import kotlin.math.*
 
 
 @Composable
@@ -57,8 +68,13 @@ fun App(windowInteractions: WindowInteractions) {
     val scope = rememberCoroutineScope()
 
     var tasks by remember { mutableStateOf(listOf<Task>()) }
-
     var showDescription by remember { mutableStateOf(true) }
+
+    val listState = rememberLazyListState(0)
+
+    var sliderPosition by remember { mutableStateOf(0) }
+    var sliderHeight by remember { mutableStateOf(0) }
+    var sliderHandleHeight by remember { mutableStateOf(0) }
 
     Tasks.tasksFlow.onEach {
         tasks = mutableListOf()
@@ -73,14 +89,52 @@ fun App(windowInteractions: WindowInteractions) {
                 .fillMaxSize(),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
+
             Toolbar(scope, windowInteractions, ToolbarInteractions { showDescription = it })
-            LazyColumn(
+            Row(
                 modifier = Modifier
                     .fillMaxWidth()
                     .weight(1f)
             ) {
-                items(tasks, key = { it.title }) { task ->
-                    TaskCard(Modifier, scope, task, showDescription)
+                LazyColumn(
+                    modifier = Modifier
+                        .weight(1f),
+                    state = listState
+                ) {
+                    items(tasks, key = { it.title }) { task ->
+                        TaskCard(Modifier, scope, task, showDescription)
+                    }
+                }
+
+                Column(
+                    modifier = Modifier
+                        .fillMaxHeight()
+                        .width(8.dp)
+                        .background(Color.Transparent)
+                        .onGloballyPositioned { coords ->
+                            sliderHeight =
+                                Toolkit.getDefaultToolkit().screenSize.height - coords.positionInWindow().y.toInt()
+                        }.pointerInput(Unit) {
+                            detectDragGestures { change, _ ->
+                                change.consume()
+                                val position = min(max(MouseInfo.getPointerInfo().location.y, 0), sliderHeight)
+                                sliderPosition = min(max(MouseInfo.getPointerInfo().location.y - sliderHandleHeight / 2, 0), sliderHeight - sliderHandleHeight)
+                                val index = floor(tasks.size * (position.toFloat() / sliderHeight)).roundToInt()
+                                scope.launch { listState.scrollToItem(index) }
+                            }
+                        }
+                ) {
+                    Surface(
+                        modifier = Modifier
+                            .offset(x = 0.dp, y = sliderPosition.dp)
+                            .clip(RoundedCornerShape(4.dp))
+                            .background(color = Color.White)
+                            .height((sliderHeight / tasks.size.toFloat()).dp)
+                            .fillMaxWidth()
+                            .onGloballyPositioned { coords ->
+                                sliderHandleHeight = coords.size.height
+                            }
+                    ) {}
                 }
             }
         }

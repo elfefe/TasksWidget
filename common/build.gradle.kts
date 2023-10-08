@@ -7,7 +7,7 @@ plugins {
 }
 
 group = "com.elfefe"
-version = "1.2.3"
+version = "1.3.0"
 
 val ktorVersion = "2.2.3"
 

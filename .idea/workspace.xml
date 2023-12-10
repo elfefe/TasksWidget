@@ -9,9 +9,10 @@
     <option name="autoReloadType" value="NONE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="342136dd-9d95-4b6b-84e1-4a9c7fc0eeb8" name="Changes" comment="feat: &#10; - Removed useless scrollbar&#10; - More efficient tasks update&#10; - Prettified tasks.json&#10; - Tasks always sorted&#10; - added creation and edition date to tasks">
+    <list default="true" id="342136dd-9d95-4b6b-84e1-4a9c7fc0eeb8" name="Changes" comment="fix: &#10; - Better automatic focus&#10; - Done tasks crash">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/common/src/commonMain/kotlin/com/elfefe/common/view/App.kt" beforeDir="false" afterPath="$PROJECT_DIR$/common/src/commonMain/kotlin/com/elfefe/common/view/App.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/common/src/commonMain/kotlin/com/elfefe/common/view/toolbar.kt" beforeDir="false" afterPath="$PROJECT_DIR$/common/src/commonMain/kotlin/com/elfefe/common/view/toolbar.kt" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -312,7 +313,15 @@
       <option name="project" value="LOCAL" />
       <updated>1702209557204</updated>
     </task>
-    <option name="localTasksCounter" value="2" />
+    <task id="LOCAL-00002" summary="fix: &#10; - Better automatic focus&#10; - Done tasks crash">
+      <option name="closed" value="true" />
+      <created>1702210048595</created>
+      <option name="number" value="00002" />
+      <option name="presentableId" value="LOCAL-00002" />
+      <option name="project" value="LOCAL" />
+      <updated>1702210048596</updated>
+    </task>
+    <option name="localTasksCounter" value="3" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -329,7 +338,8 @@
   <component name="VcsManagerConfiguration">
     <option name="ADD_EXTERNAL_FILES_SILENTLY" value="true" />
     <MESSAGE value="feat: &#10; - Removed useless scrollbar&#10; - More efficient tasks update&#10; - Prettified tasks.json&#10; - Tasks always sorted&#10; - added creation and edition date to tasks" />
-    <option name="LAST_COMMIT_MESSAGE" value="feat: &#10; - Removed useless scrollbar&#10; - More efficient tasks update&#10; - Prettified tasks.json&#10; - Tasks always sorted&#10; - added creation and edition date to tasks" />
+    <MESSAGE value="fix: &#10; - Better automatic focus&#10; - Done tasks crash" />
+    <option name="LAST_COMMIT_MESSAGE" value="fix: &#10; - Better automatic focus&#10; - Done tasks crash" />
   </component>
   <component name="XSLT-Support.FileAssociations.UIState">
     <expand />

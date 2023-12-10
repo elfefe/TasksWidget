@@ -42,8 +42,6 @@ fun ColumnScope.Toolbar(scope: CoroutineScope, windowInteractions: WindowInterac
 
     var searching by remember { mutableStateOf("") }
 
-    Tasks.filter { if (showDone) true else !it.done }
-
     Column(
         modifier = Modifier
             .fillMaxWidth()
@@ -198,12 +196,10 @@ fun ColumnScope.Toolbar(scope: CoroutineScope, windowInteractions: WindowInterac
                     value = searching,
                     onValueChange = {
                         searching = it
-                        scope.launch {
-                            Tasks.filter { task ->
-                                task.title.contains(searching, true) ||
-                                        task.deadline.contains(searching, true) ||
-                                        task.description.contains(searching, true)
-                            }
+                        Tasks.filter { task ->
+                            task.title.contains(searching, false) ||
+                            task.deadline.contains(searching, false) ||
+                            task.description.contains(searching, false)
                         }
                     },
                     textStyle = TextStyle(

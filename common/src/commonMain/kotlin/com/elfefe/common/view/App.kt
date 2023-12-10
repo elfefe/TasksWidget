@@ -72,6 +72,7 @@ fun App(windowInteractions: WindowInteractions) {
             }
         }
     }
+    Tasks.filter { !it.done }
 
     TasksTheme {
         Column(

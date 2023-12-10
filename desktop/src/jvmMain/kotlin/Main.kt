@@ -15,8 +15,8 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.max
 import androidx.compose.ui.unit.min
 import androidx.compose.ui.window.*
-import com.elfefe.common.App
-import com.elfefe.common.WindowInteractions
+import com.elfefe.common.view.App
+import com.elfefe.common.view.WindowInteractions
 import java.awt.GraphicsEnvironment
 import java.awt.MouseInfo
 import java.awt.Toolkit

@@ -67,7 +67,8 @@ fun App(windowInteractions: WindowInteractions) {
         tasks = it
         scope.launch {
             Tasks.lastTask?.let { task ->
-                listState.scrollToItem(tasks.indexOf(task))
+                val index = tasks.indexOf(task)
+                listState.animateScrollToItem(if (index < 0) 0 else index)
             }
         }
     }

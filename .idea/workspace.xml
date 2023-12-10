@@ -10,19 +10,30 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="342136dd-9d95-4b6b-84e1-4a9c7fc0eeb8" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/gradle.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/gradle.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/artifacts/common_desktop_1_3_0.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/deploymentTargetDropDown.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/common/src/commonMain/kotlin/com/elfefe/common/controller/Tasks.kt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/common/src/commonMain/kotlin/com/elfefe/common/controller/TasksUtils.kt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/common/src/commonMain/kotlin/com/elfefe/common/view/slider.kt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/common/src/commonMain/kotlin/com/elfefe/common/view/taskCard.kt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/common/src/commonMain/kotlin/com/elfefe/common/view/tasksList.kt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/common/src/commonMain/kotlin/com/elfefe/common/view/toolbar.kt" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/build.gradle.kts" beforeDir="false" afterPath="$PROJECT_DIR$/build.gradle.kts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/android/src/main/java/com/elfefe/android/MainActivity.kt" beforeDir="false" afterPath="$PROJECT_DIR$/android/src/main/java/com/elfefe/android/MainActivity.kt" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/common/build.gradle.kts" beforeDir="false" afterPath="$PROJECT_DIR$/common/build.gradle.kts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/common/src/commonMain/kotlin/com/elfefe/common/App.kt" beforeDir="false" afterPath="$PROJECT_DIR$/common/src/commonMain/kotlin/com/elfefe/common/App.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/common/src/commonMain/kotlin/com/elfefe/common/App.kt" beforeDir="false" afterPath="$PROJECT_DIR$/common/src/commonMain/kotlin/com/elfefe/common/view/App.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/common/src/commonMain/kotlin/com/elfefe/common/firebase/firestore/FirestoreApi.kt" beforeDir="false" afterPath="$PROJECT_DIR$/common/src/commonMain/kotlin/com/elfefe/common/firebase/firestore/FirestoreApi.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/common/src/commonMain/kotlin/com/elfefe/common/model/Task.kt" beforeDir="false" afterPath="$PROJECT_DIR$/common/src/commonMain/kotlin/com/elfefe/common/model/Task.kt" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/desktop/src/jvmMain/kotlin/Main.kt" beforeDir="false" afterPath="$PROJECT_DIR$/desktop/src/jvmMain/kotlin/Main.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/gradle/wrapper/gradle-wrapper.properties" beforeDir="false" afterPath="$PROJECT_DIR$/gradle/wrapper/gradle-wrapper.properties" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
     <option name="LAST_RESOLUTION" value="IGNORE" />
   </component>
+  <component name="ExecutionTargetManager" SELECTED_TARGET="device_and_snapshot_combo_box_target[]" />
   <component name="ExternalProjectsData">
     <projectState path="$PROJECT_DIR$">
       <ProjectState />
@@ -52,9 +63,9 @@
   <component name="FileTemplateManagerImpl">
     <option name="RECENT_TEMPLATES">
       <list>
-        <option value="Kotlin File" />
-        <option value="Kotlin Class" />
         <option value="Kotlin Data Class" />
+        <option value="Kotlin Class" />
+        <option value="Kotlin File" />
       </list>
     </option>
   </component>
@@ -79,24 +90,28 @@
   <component name="ProjectViewState">
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent">{
-  &quot;keyToString&quot;: {
-    &quot;ASKED_ADD_EXTERNAL_FILES&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.cidr.known.project.marker&quot;: &quot;true&quot;,
-    &quot;SHARE_PROJECT_CONFIGURATION_FILES&quot;: &quot;true&quot;,
-    &quot;cidr.known.project.marker&quot;: &quot;true&quot;,
-    &quot;external.system.has.shared.sources&quot;: &quot;true&quot;,
-    &quot;ignore.virus.scanning.warn.message&quot;: &quot;true&quot;,
-    &quot;jdk.selected.JAVA_MODULE&quot;: &quot;corretto-18&quot;,
-    &quot;last_opened_file_path&quot;: &quot;C:/Users/fbou-/IdeaProjects/TasksWidget/common/src/commonMain/resources&quot;,
-    &quot;project.structure.last.edited&quot;: &quot;Project&quot;,
-    &quot;project.structure.proportion&quot;: &quot;0.15&quot;,
-    &quot;project.structure.side.proportion&quot;: &quot;0.2&quot;,
-    &quot;settings.editor.selected.configurable&quot;: &quot;preferences.pluginManager&quot;
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "ASKED_ADD_EXTERNAL_FILES": "true",
+    "Gradle.Download Sources.executor": "Run",
+    "Kotlin.MainKt.executor": "Run",
+    "RunOnceActivity.OpenProjectViewOnStart": "true",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "RunOnceActivity.cidr.known.project.marker": "true",
+    "SHARE_PROJECT_CONFIGURATION_FILES": "true",
+    "cidr.known.project.marker": "true",
+    "external.system.has.shared.sources": "true",
+    "git-widget-placeholder": "develop",
+    "ignore.virus.scanning.warn.message": "true",
+    "jdk.selected.JAVA_MODULE": "corretto-18",
+    "kotlin-language-version-configured": "true",
+    "last_opened_file_path": "C:/Users/fbou-/IdeaProjects/TasksWidget/common/src/commonMain/resources",
+    "project.structure.last.edited": "Project",
+    "project.structure.proportion": "0.15",
+    "project.structure.side.proportion": "0.2",
+    "settings.editor.selected.configurable": "preferences.pluginManager"
   }
-}</component>
+}]]></component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
       <recent name="C:\Users\fbou-\IdeaProjects\TasksWidget\common\src\commonMain\resources" />
@@ -104,6 +119,7 @@
       <recent name="C:\Users\felix.boulereiff\IdeaProjects\SMQToolbox\common\src\commonMain\kotlin\fr\exem\common\theme" />
     </key>
     <key name="MoveFile.RECENT_KEYS">
+      <recent name="C:\Users\fbou-\IdeaProjects\TasksWidget\common\src\commonMain\kotlin\com\elfefe\common\view" />
       <recent name="C:\Users\fbou-\IdeaProjects\TasksWidget" />
       <recent name="C:\Users\fbou-\IdeaProjects\TasksWidget\common" />
       <recent name="C:\Users\felix.boulereiff\IdeaProjects\TasksWidget\common\src\main\res\drawable" />
@@ -134,6 +150,7 @@
       <option name="ALL_USERS" value="false" />
       <option name="ALWAYS_INSTALL_WITH_PM" value="false" />
       <option name="CLEAR_APP_STORAGE" value="false" />
+      <option name="DYNAMIC_FEATURES_DISABLED_LIST" value="" />
       <option name="ACTIVITY_EXTRA_FLAGS" value="" />
       <option name="MODE" value="default_activity" />
       <option name="CLEAR_LOGCAT" value="false" />
@@ -278,12 +295,20 @@
     <recent_temporary>
       <list>
         <item itemvalue="Kotlin.MainKt" />
-        <item itemvalue="Gradle.TasksWidget [signingReport]" />
-        <item itemvalue="Gradle.TasksWidget:desktop [packageMsi]" />
         <item itemvalue="Gradle.TasksWidget:desktop [proguardReleaseJars]" />
+        <item itemvalue="Gradle.TasksWidget:desktop [packageMsi]" />
         <item itemvalue="Gradle.TasksWidget:desktop [createDistributable]" />
+        <item itemvalue="Gradle.TasksWidget [signingReport]" />
       </list>
     </recent_temporary>
+  </component>
+  <component name="SharedIndexes">
+    <attachedChunks>
+      <set>
+        <option value="jdk-11.0.21-corretto-11.0.21-8336523bb0d9-d3b62f98" />
+        <option value="jdk-19.0.2-corretto-19.0.2-8336523bb0d9-b81783ad" />
+      </set>
+    </attachedChunks>
   </component>
   <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
   <component name="TaskManager">

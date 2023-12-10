@@ -7,6 +7,7 @@ import com.google.auth.oauth2.GoogleCredentials
 import com.google.auth.oauth2.ServiceAccountCredentials
 import com.google.cloud.firestore.FirestoreOptions
 import com.google.gson.Gson
+import java.lang.Exception
 
 class FirestoreApi private constructor() {
     lateinit var credentials: GoogleCredentials

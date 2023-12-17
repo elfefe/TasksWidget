@@ -1,33 +1,46 @@
-import androidx.compose.animation.core.*
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.core.EaseInOutCubic
+import androidx.compose.animation.core.animateDpAsState
+import androidx.compose.animation.core.tween
+import androidx.compose.foundation.*
+import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.lazy.*
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Text
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
+import androidx.compose.material.TextButton
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.ClipboardManager
+import androidx.compose.ui.platform.LocalClipboardManager
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.unit.DpSize
-import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.max
-import androidx.compose.ui.unit.min
+import androidx.compose.ui.semantics.Role.Companion
+import androidx.compose.ui.text.AnnotatedString
+import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.unit.*
 import androidx.compose.ui.window.*
+import com.elfefe.common.controller.ConfigsAutoLoader
+import com.elfefe.common.controller.EmojiApi
+import com.elfefe.common.controller.EmojiCategory
 import com.elfefe.common.view.App
+import com.elfefe.common.view.Configs
 import com.elfefe.common.view.WindowInteractions
+import kotlinx.coroutines.*
 import java.awt.GraphicsEnvironment
 import java.awt.MouseInfo
 import java.awt.Toolkit
 import java.awt.Window
+import javax.management.relation.Role
+import kotlin.concurrent.thread
 
 
+@OptIn(ExperimentalFoundationApi::class)
 fun main() = application {
     var isVisible by remember { mutableStateOf(true) }
     var isConfigsVisible by remember { mutableStateOf(false) }
     var window: Window? = null
-
 
     var windowExpanded by remember { mutableStateOf(true) }
 
@@ -57,6 +70,10 @@ fun main() = application {
             easing = EaseInOutCubic
         )
     )
+
+    EmojiApi.preloadEmojis()
+
+    ConfigsAutoLoader(rememberCoroutineScope()).launch()
 
     Tray(
         icon = painterResource("logo-taskswidget-tray.png"),
@@ -113,13 +130,6 @@ fun main() = application {
             resizable = true,
             focusable = true
         ) {
-            Column(
-                modifier = Modifier
-                    .fillMaxSize(),
-                verticalArrangement = Arrangement.Center,
-                horizontalAlignment = Alignment.CenterHorizontally
-            ) {
-                Text("Configs")
-            }
+            Configs()
         }
 }

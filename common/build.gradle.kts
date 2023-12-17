@@ -4,6 +4,7 @@ plugins {
     kotlin("multiplatform")
     id("org.jetbrains.compose")
     id("com.android.library")
+    kotlin("plugin.serialization") version embeddedKotlinVersion
 }
 
 group = "com.elfefe"
@@ -35,6 +36,10 @@ kotlin {
                 runtimeOnly("io.jsonwebtoken:jjwt-impl:0.11.5")
                 runtimeOnly("io.jsonwebtoken:jjwt-orgjson:0.11.5")
 
+                implementation("org.burnoutcrew.composereorderable:reorderable:0.9.6")
+
+                implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.6.2")
+
                 implementation("com.google.code.gson:gson:2.10.1")
 
                 implementation("io.ktor:ktor-client-core:$ktorVersion")
@@ -42,6 +47,9 @@ kotlin {
 
                 implementation("io.ktor:ktor-server-core:$ktorVersion")
                 implementation("io.ktor:ktor-server-netty:$ktorVersion")
+
+                implementation("io.ktor:ktor-client-content-negotiation:$ktorVersion")
+                implementation("io.ktor:ktor-serialization-gson:$ktorVersion")
 
                 implementation("com.jcraft:jsch:0.1.55")
 
@@ -91,4 +99,7 @@ android {
         targetCompatibility = JavaVersion.VERSION_1_8
     }
     namespace = "com.elfefe.common"
+}
+dependencies {
+    implementation("androidx.navigation:navigation-compose:2.7.6")
 }

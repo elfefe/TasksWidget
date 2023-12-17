@@ -10,3 +10,9 @@ data class Task(
     val created: Long = System.currentTimeMillis(),
     var edited: Long = System.currentTimeMillis()
 )
+
+data class TaskFieldOrder(
+    val name: String,
+    var priority: Int,
+    var active: Boolean
+)

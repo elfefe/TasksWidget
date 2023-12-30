@@ -1,9 +1,9 @@
-package com.elfefe.common.firebase.authentication
+package com.elfefe.common.controller.firebase.authentication
 
 import com.google.gson.Gson
 import com.jcraft.jsch.jce.SHA256
-import com.elfefe.common.firebase.authentication.model.JWToken
-import com.elfefe.common.firebase.authentication.model.Payload
+import com.elfefe.common.controller.firebase.authentication.model.JWToken
+import com.elfefe.common.controller.firebase.authentication.model.Payload
 import io.jsonwebtoken.Jwts.header
 import io.ktor.client.*
 import io.ktor.client.request.*

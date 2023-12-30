@@ -24,9 +24,9 @@ import androidx.compose.ui.window.*
 import com.elfefe.common.controller.ConfigsAutoLoader
 import com.elfefe.common.controller.EmojiApi
 import com.elfefe.common.controller.EmojiCategory
-import com.elfefe.common.view.App
-import com.elfefe.common.view.Configs
-import com.elfefe.common.view.WindowInteractions
+import com.elfefe.common.ui.view.App
+import com.elfefe.common.ui.view.Configs
+import com.elfefe.common.ui.view.WindowInteractions
 import kotlinx.coroutines.*
 import java.awt.GraphicsEnvironment
 import java.awt.MouseInfo

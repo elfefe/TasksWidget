@@ -1,4 +1,4 @@
-package com.elfefe.common.view
+package com.elfefe.common.ui.view
 
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.expandVertically

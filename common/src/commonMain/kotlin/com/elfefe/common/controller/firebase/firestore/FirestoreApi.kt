@@ -1,4 +1,4 @@
-package com.elfefe.common.firebase.firestore
+package com.elfefe.common.controller.firebase.firestore
 
 import androidx.compose.ui.res.useResource
 import com.elfefe.common.model.Task

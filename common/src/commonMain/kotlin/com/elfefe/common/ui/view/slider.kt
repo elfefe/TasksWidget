@@ -1,4 +1,4 @@
-package com.elfefe.common.view
+package com.elfefe.common.ui.view
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.gestures.detectDragGestures

@@ -1,9 +1,10 @@
-package com.elfefe.common.view
+package com.elfefe.common.ui.view
 
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
+import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
@@ -20,7 +21,12 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.rotate
+import androidx.compose.ui.geometry.Offset
+import androidx.compose.ui.geometry.Size
+import androidx.compose.ui.graphics.BlendMode
+import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.TileMode
 import androidx.compose.ui.platform.ClipboardManager
 import androidx.compose.ui.platform.LocalClipboardManager
 import androidx.compose.ui.text.AnnotatedString
@@ -40,7 +46,8 @@ import org.burnoutcrew.reorderable.reorderable
 
 enum class ConfigNavDestination(val text: String) {
     EMOTES("Emotes"),
-    CARDS("Cards")
+    CARDS("Cards"),
+    THEMES("Theme"),
 }
 
 @Composable
@@ -68,6 +75,7 @@ fun AnimatedNavigation(visible: Boolean, page: @Composable () -> Unit) {
 fun Navigator(destination: ConfigNavDestination) {
     AnimatedNavigation(destination == ConfigNavDestination.EMOTES) { Emotes() }
     AnimatedNavigation(destination == ConfigNavDestination.CARDS) { Cards() }
+    AnimatedNavigation(destination == ConfigNavDestination.THEMES) { Theme() }
 }
 
 @Composable
@@ -271,5 +279,97 @@ fun CardsOrderCondition(modifier: Modifier, elevation: Dp, taskField: TaskFieldO
                 )
             }
         }
+    }
+}
+
+@Composable
+fun Theme() {
+    Column(
+        modifier = Modifier
+            .padding(16.dp)
+            .fillMaxSize(),
+        verticalArrangement = Arrangement.Top,
+        horizontalAlignment = Alignment.Start
+    ) {
+        Column {
+            Text(
+                text = "Background",
+                fontWeight = FontWeight.Thin,
+                fontSize = 18.sp,
+                color = Color.DarkGray
+            )
+            ThemeColor("Color")
+            Text(
+                text = "Icons",
+                fontWeight = FontWeight.Thin,
+                fontSize = 18.sp,
+                color = Color.DarkGray
+            )
+            ThemeColor("Color")
+            Text(
+                text = "Card",
+                fontWeight = FontWeight.Thin,
+                fontSize = 18.sp,
+                color = Color.DarkGray
+            )
+            Text(
+                text = "Backgound",
+                fontWeight = FontWeight.Thin,
+                fontSize = 16.sp,
+                color = Color.DarkGray
+            )
+            ThemeColor("Color")
+            Text(
+                text = "Text",
+                fontWeight = FontWeight.Thin,
+                fontSize = 16.sp,
+                color = Color.DarkGray
+            )
+            ThemeColor("Color")
+        }
+    }
+}
+
+@Composable
+fun ThemeColor(name: String) {
+    Column {
+        Text(
+            text = name,
+            fontWeight = FontWeight.Thin,
+            fontSize = 12.sp,
+            color = Color.DarkGray
+        )
+        Canvas(modifier = Modifier.size(128.dp, 32.dp)) {
+            drawRect(
+                brush = Brush.horizontalGradient(
+                    listOf(
+                        Color(0xFFFF0000),
+                        Color(0xFFFFFF00),
+                        Color(0xFF00FF00),
+                        Color(0xFF00FFFF),
+                        Color(0xFF0000FF),
+                        Color(0xFFFF00FF),
+                    ),
+                    tileMode = TileMode.Clamp
+                ),
+                size = size
+            )
+            drawRect(
+                color = Color.DarkGray,
+                size = Size(2f, size.height)
+            )
+        }
+
+//        Canvas(modifier = Modifier.size(128.dp, 32.dp)) {
+//            drawRect(
+//                brush = Brush.horizontalGradient(listOf(Color(0xFF000000), Color(0x00000000))),
+//                topLeft = Offset(0f, 1f),
+//                size = Size(size.width, size.height - 2)
+//            )
+//            drawRect(
+//                color = Color.DarkGray,
+//                size = Size(2f, size.height)
+//            )
+//        }
     }
 }

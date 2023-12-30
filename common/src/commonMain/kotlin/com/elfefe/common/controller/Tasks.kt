@@ -38,7 +38,7 @@ object Tasks {
         get() = GsonBuilder().setPrettyPrinting().create()
 
 
-    var sorting: MutableList<Task>.() -> Unit = { }
+    var sorting: MutableList<Task>.() -> Unit = { sortByDescending { it.deadline } }
 
     init {
         if (file.exists()) {
@@ -116,7 +116,7 @@ object Tasks {
         private fun updateTasksSort() {
             sorting = {
                 sortWith(
-                    compareBy<Task> { null }.apply {
+                    compareBy<Task> { it.done }.apply {
                         configs.taskFieldOrders.sortedByDescending { it.priority }.forEach { taskFieldOrder ->
                             when (taskFieldOrder.name) {
                                 "title" ->
@@ -157,7 +157,11 @@ object Tasks {
 
             updateJob = scope.launch {
                 while (waitingTasks.isNotEmpty()) {
-                    try { file.writeText(json.toJson(_configs)) }
+                    try {
+                        val config = json.toJson(_configs)
+                        if (config.isNotBlank())
+                        file.writeText(config)
+                    }
                     catch (e: Exception) { continue }
                 }
                 updateJob?.cancelAndJoin()

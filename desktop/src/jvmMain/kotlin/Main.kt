@@ -73,7 +73,7 @@ fun main() = application {
 
     EmojiApi.preloadEmojis()
 
-    ConfigsAutoLoader(rememberCoroutineScope()).launch()
+//    ConfigsAutoLoader(rememberCoroutineScope()).launch()
 
     Tray(
         icon = painterResource("logo-taskswidget-tray.png"),

@@ -28,6 +28,7 @@ import androidx.compose.ui.platform.LocalClipboardManager
 import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 
@@ -210,14 +211,13 @@ fun CardsOrder() {
                 taskField.priority < 0 -> -sortOrders.value.size + index - 1
                 else -> 0
             }
-            ReorderableItem(state, key = taskField) { isDragging ->
-                println()
-                val height = animateDpAsState(if (isDragging) 42.dp else 32.dp)
+            ReorderableItem(state, key = taskField) {
                 CardsOrderCondition(
                     modifier = Modifier
                         .padding(8.dp)
                         .width(128.dp)
-                        .height(height.value),
+                        .height(if (state.draggingItemIndex == index) 42.dp else 32.dp),
+                    elevation = if (state.draggingItemIndex == index) 8.dp else 2.dp,
                     taskField = taskField
                 )
             }
@@ -227,8 +227,8 @@ fun CardsOrder() {
 }
 
 @Composable
-fun CardsOrderCondition(modifier: Modifier, taskField: TaskFieldOrder) {
-    Card(modifier = modifier) {
+fun CardsOrderCondition(modifier: Modifier, elevation: Dp, taskField: TaskFieldOrder) {
+    Card(modifier = modifier, elevation = elevation) {
         Row(
             verticalAlignment = Alignment.CenterVertically,
             horizontalArrangement = Arrangement.SpaceBetween

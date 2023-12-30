@@ -1,7 +1,6 @@
 package com.elfefe.common.view
 
 import androidx.compose.animation.AnimatedVisibility
-import androidx.compose.animation.core.animateDpAsState
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
@@ -21,7 +20,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.rotate
-import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.ClipboardManager
 import androidx.compose.ui.platform.LocalClipboardManager
@@ -34,7 +32,6 @@ import androidx.compose.ui.unit.sp
 
 import com.elfefe.common.controller.EmojiApi
 import com.elfefe.common.controller.Tasks
-import com.elfefe.common.model.Task
 import com.elfefe.common.model.TaskFieldOrder
 import org.burnoutcrew.reorderable.ReorderableItem
 import org.burnoutcrew.reorderable.detectReorderAfterLongPress
@@ -191,7 +188,7 @@ fun Cards() {
 
 @Composable
 fun CardsOrder() {
-    val sortOrders = remember { mutableStateOf(Tasks.Configs.configs.taskFieldOrders.sortedByDescending { it.priority }) }
+    val sortOrders = remember { mutableStateOf(Tasks.Configs.configs.taskFieldsOrder.sortedByDescending { it.priority }) }
 
     val state = rememberReorderableLazyListState(onMove = { from, to ->
         sortOrders.value = sortOrders.value.toMutableList().apply {
@@ -214,9 +211,8 @@ fun CardsOrder() {
             ReorderableItem(state, key = taskField) {
                 CardsOrderCondition(
                     modifier = Modifier
-                        .padding(8.dp)
-                        .width(128.dp)
-                        .height(if (state.draggingItemIndex == index) 42.dp else 32.dp),
+                        .width(256.dp)
+                        .height(if (state.draggingItemIndex == index) 48.dp else 42.dp),
                     elevation = if (state.draggingItemIndex == index) 8.dp else 2.dp,
                     taskField = taskField
                 )
@@ -238,7 +234,7 @@ fun CardsOrderCondition(modifier: Modifier, elevation: Dp, taskField: TaskFieldO
             val orderRotationAnimation by animateFloatAsState(if (orderRotation == 0f) 180f else 0f)
 
             fun updateConfigs() {
-                Tasks.Configs.configs.taskFieldOrders.filter { it.name == taskField.name }.onEach {
+                Tasks.Configs.configs.taskFieldsOrder.filter { it.name == taskField.name }.onEach {
                     it.active = taskField.active
                     it.priority = taskField.priority
                 }

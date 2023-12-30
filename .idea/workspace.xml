@@ -9,12 +9,11 @@
     <option name="autoReloadType" value="NONE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="342136dd-9d95-4b6b-84e1-4a9c7fc0eeb8" name="Changes" comment="feat: &#10; - Emotes in configs&#10; - Modifiable sorting order in configs">
+    <list default="true" id="342136dd-9d95-4b6b-84e1-4a9c7fc0eeb8" name="Changes" comment="fix:&#10; - refresh when done trigger">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/common/src/commonMain/kotlin/com/elfefe/common/controller/Tasks.kt" beforeDir="false" afterPath="$PROJECT_DIR$/common/src/commonMain/kotlin/com/elfefe/common/controller/Tasks.kt" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/common/src/commonMain/kotlin/com/elfefe/common/model/Configs.kt" beforeDir="false" afterPath="$PROJECT_DIR$/common/src/commonMain/kotlin/com/elfefe/common/model/Configs.kt" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/common/src/commonMain/kotlin/com/elfefe/common/view/configs.kt" beforeDir="false" afterPath="$PROJECT_DIR$/common/src/commonMain/kotlin/com/elfefe/common/view/configs.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/desktop/src/jvmMain/kotlin/Main.kt" beforeDir="false" afterPath="$PROJECT_DIR$/desktop/src/jvmMain/kotlin/Main.kt" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -343,7 +342,23 @@
       <option name="project" value="LOCAL" />
       <updated>1702835339561</updated>
     </task>
-    <option name="localTasksCounter" value="5" />
+    <task id="LOCAL-00005" summary="fix:&#10; - default sort by deadline&#10; - cards configs effect">
+      <option name="closed" value="true" />
+      <created>1703947856823</created>
+      <option name="number" value="00005" />
+      <option name="presentableId" value="LOCAL-00005" />
+      <option name="project" value="LOCAL" />
+      <updated>1703947856823</updated>
+    </task>
+    <task id="LOCAL-00006" summary="fix:&#10; - refresh when done trigger">
+      <option name="closed" value="true" />
+      <created>1703948174296</created>
+      <option name="number" value="00006" />
+      <option name="presentableId" value="LOCAL-00006" />
+      <option name="project" value="LOCAL" />
+      <updated>1703948174296</updated>
+    </task>
+    <option name="localTasksCounter" value="7" />
     <servers />
   </component>
   <component name="UnknownFeatures">
@@ -368,7 +383,9 @@
     <MESSAGE value="fix: &#10; - Better automatic focus&#10; - Done tasks crash" />
     <MESSAGE value="fix: &#10; - Searching system" />
     <MESSAGE value="feat: &#10; - Emotes in configs&#10; - Modifiable sorting order in configs" />
-    <option name="LAST_COMMIT_MESSAGE" value="feat: &#10; - Emotes in configs&#10; - Modifiable sorting order in configs" />
+    <MESSAGE value="fix:&#10; - default sort by deadline&#10; - cards configs effect" />
+    <MESSAGE value="fix:&#10; - refresh when done trigger" />
+    <option name="LAST_COMMIT_MESSAGE" value="fix:&#10; - refresh when done trigger" />
   </component>
   <component name="XSLT-Support.FileAssociations.UIState">
     <expand />

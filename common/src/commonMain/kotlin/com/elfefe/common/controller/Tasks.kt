@@ -6,8 +6,6 @@ import com.google.gson.Gson
 import com.google.gson.GsonBuilder
 import com.google.gson.reflect.TypeToken
 import kotlinx.coroutines.*
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.StateFlow
 import java.io.File
 import java.util.concurrent.ConcurrentLinkedQueue
 import javax.swing.filechooser.FileSystemView
@@ -117,7 +115,7 @@ object Tasks {
             sorting = {
                 sortWith(
                     compareBy<Task> { it.done }.apply {
-                        configs.taskFieldOrders.sortedByDescending { it.priority }.forEach { taskFieldOrder ->
+                        configs.taskFieldsOrder.sortedByDescending { it.priority }.forEach { taskFieldOrder ->
                             when (taskFieldOrder.name) {
                                 "title" ->
                                     if (taskFieldOrder.active)
@@ -157,12 +155,12 @@ object Tasks {
 
             updateJob = scope.launch {
                 while (waitingTasks.isNotEmpty()) {
+                    delay(50)
                     try {
                         val config = json.toJson(_configs)
                         if (config.isNotBlank())
                         file.writeText(config)
-                    }
-                    catch (e: Exception) { continue }
+                    } catch (e: Exception) { continue }
                 }
                 updateJob?.cancelAndJoin()
             }

@@ -8,7 +8,7 @@ data class Configs(
         TaskFieldOrder(name = "description", priority = 0, active = false),
         TaskFieldOrder(name = "deadline", priority = 2, active = true),
         TaskFieldOrder(name = "done", priority = -1, active = true),
-        TaskFieldOrder(name = "created", priority = 1, active = true),
+        TaskFieldOrder(name = "created", priority = 0, active = true),
         TaskFieldOrder(name = "edited", priority = 0, active = false),
     ),
 )

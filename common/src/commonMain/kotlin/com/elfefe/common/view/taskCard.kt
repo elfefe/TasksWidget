@@ -105,6 +105,7 @@ fun TaskCard(modifier: Modifier, task: Task, showDescription: Boolean) {
                         .size(16.dp)
                         .clickable {
                             Tasks.update(task.apply { done = !done })
+                            Tasks.refresh()
                         },
                     tint = if (task.done) Color.Green else Color.Red
                 )

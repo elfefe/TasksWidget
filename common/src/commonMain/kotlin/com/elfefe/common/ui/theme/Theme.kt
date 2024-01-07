@@ -4,7 +4,6 @@ import androidx.compose.material.Colors
 import androidx.compose.material.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.graphics.Color
-import com.elfefe.wavescout.ui.theme.*
 
 
 private val lightColorScheme = Colors(

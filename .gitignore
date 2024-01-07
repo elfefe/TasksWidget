@@ -5,6 +5,8 @@ build/
 !**/src/test/**/build/
 wix311/
 
+/common/src/commonMain/resources/version
+
 ### IntelliJ IDEA ###
 .idea/modules.xml
 .idea/jarRepositories.xml

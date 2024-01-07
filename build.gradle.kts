@@ -1,7 +1,7 @@
-group "com.elfefe"
-version "1.3.0"
-
 allprojects {
+    group = "com.elfefe"
+    version = "1.2.5"
+
     repositories {
         google()
         mavenCentral()

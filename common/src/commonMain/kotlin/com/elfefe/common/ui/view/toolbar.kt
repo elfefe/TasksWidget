@@ -46,7 +46,7 @@ fun ColumnScope.Toolbar(scope: CoroutineScope, windowInteractions: WindowInterac
         modifier = Modifier
             .fillMaxWidth()
             .background(
-                color = Color(0x66222222),
+                color = Tasks.Configs.configs.themeColors.primary,
                 shape = RoundedCornerShape(5.dp)
             )
     ) {
@@ -67,7 +67,7 @@ fun ColumnScope.Toolbar(scope: CoroutineScope, windowInteractions: WindowInterac
                                 toolbarInteractions.showDescription(showDescription)
                             }
                             .padding(3.dp),
-                        tint = if (showDescription) Color.White else Color.LightGray
+                        tint = if (showDescription) Tasks.Configs.configs.themeColors.onPrimary else Color.LightGray
                     )
                     Icon(
                         Icons.Default.CheckCircle,
@@ -78,7 +78,7 @@ fun ColumnScope.Toolbar(scope: CoroutineScope, windowInteractions: WindowInterac
                                 Tasks.filter { if (showDone) true else !it.done }
                             }
                             .padding(3.dp),
-                        tint = if (showDone) Color.White else Color.LightGray
+                        tint = if (showDone) Tasks.Configs.configs.themeColors.onPrimary else Color.LightGray
                     )
                     Icon(
                         Icons.Default.Add,
@@ -88,7 +88,7 @@ fun ColumnScope.Toolbar(scope: CoroutineScope, windowInteractions: WindowInterac
                                 Tasks.update(Task())
                             }
                             .padding(3.dp),
-                        tint = Color.White
+                        tint = Tasks.Configs.configs.themeColors.onPrimary
                     )
                     Icon(
                         Icons.Default.Search,
@@ -98,7 +98,7 @@ fun ColumnScope.Toolbar(scope: CoroutineScope, windowInteractions: WindowInterac
                                 showSearch = !showSearch
                             }
                             .padding(3.dp),
-                        tint = Color.White
+                        tint = Tasks.Configs.configs.themeColors.onPrimary
                     )
 //                    Icon(
 //                        painterResource("login.svg"),
@@ -137,7 +137,7 @@ fun ColumnScope.Toolbar(scope: CoroutineScope, windowInteractions: WindowInterac
                                 showConfigs = !showConfigs
                                 windowInteractions.showConfigs(showConfigs)
                             },
-                        tint = Color.White
+                        tint = Tasks.Configs.configs.themeColors.onPrimary
                     )
                 }
 
@@ -152,7 +152,7 @@ fun ColumnScope.Toolbar(scope: CoroutineScope, windowInteractions: WindowInterac
                         }
                         .padding(3.dp)
                         .rotate(expandRotation),
-                    tint = Color.White
+                    tint = Tasks.Configs.configs.themeColors.onPrimary
                 )
                 Icon(
                     Icons.Default.ExitToApp,
@@ -162,7 +162,7 @@ fun ColumnScope.Toolbar(scope: CoroutineScope, windowInteractions: WindowInterac
                             windowInteractions.isVisible(false)
                         }
                         .padding(3.dp),
-                    tint = Color.White
+                    tint = Tasks.Configs.configs.themeColors.onPrimary
                 )
                 Icon(
                     Icons.Default.Place,
@@ -178,7 +178,7 @@ fun ColumnScope.Toolbar(scope: CoroutineScope, windowInteractions: WindowInterac
                                 windowInteractions.changeSide(false, 0f)
                             }
                         },
-                    tint = Color.White
+                    tint = Tasks.Configs.configs.themeColors.onPrimary
                 )
             }
         }
@@ -188,7 +188,9 @@ fun ColumnScope.Toolbar(scope: CoroutineScope, windowInteractions: WindowInterac
                     .fillMaxWidth()
                     .height(28.dp)
                     .background(
-                        color = Color(0xAA111111),
+                        color = Tasks.Configs.configs.themeColors.primary.run {
+                            Color(red, green, blue, .6f)
+                        },
                         shape = RoundedCornerShape(5.dp)
                     )
             ) {
@@ -203,12 +205,12 @@ fun ColumnScope.Toolbar(scope: CoroutineScope, windowInteractions: WindowInterac
                         }
                     },
                     textStyle = TextStyle(
-                        color = Color.White
+                        color = Tasks.Configs.configs.themeColors.onPrimary
                     ),
                     modifier = Modifier
                         .fillMaxWidth()
                         .padding(8.dp, 5.dp),
-                    cursorBrush = SolidColor(Color.White)
+                    cursorBrush = SolidColor(Tasks.Configs.configs.themeColors.onPrimary)
                 )
             }
         }

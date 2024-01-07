@@ -20,7 +20,6 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowDropDown
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
-import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.rotate
@@ -41,7 +40,7 @@ import androidx.compose.ui.unit.sp
 import com.elfefe.common.controller.EmojiApi
 import com.elfefe.common.controller.Tasks
 import com.elfefe.common.model.TaskFieldOrder
-import com.elfefe.wavescout.ui.theme.primary
+import com.elfefe.common.ui.theme.primary
 import org.burnoutcrew.reorderable.ReorderableItem
 import org.burnoutcrew.reorderable.detectReorderAfterLongPress
 import org.burnoutcrew.reorderable.rememberReorderableLazyListState
@@ -305,63 +304,88 @@ fun Theme() {
         ) {
             stickyHeader {
                 Text(
+                    text = "Primary",
+                    fontWeight = FontWeight.Thin,
+                    fontSize = 18.sp,
+                    color = Color.DarkGray
+                )
+            }
+            item {
+                ThemeColor {
+
+                }
+            }
+            stickyHeader {
+                Text(
+                    text = "On primary",
+                    fontWeight = FontWeight.Thin,
+                    fontSize = 18.sp,
+                    color = Color.DarkGray
+                )
+            }
+            item {
+                ThemeColor {
+
+                }
+            }
+            stickyHeader {
+                Text(
+                    text = "Secondary",
+                    fontWeight = FontWeight.Thin,
+                    fontSize = 18.sp,
+                    color = Color.DarkGray
+                )
+            }
+            item {
+                ThemeColor {
+
+                }
+            }
+            stickyHeader {
+                Text(
+                    text = "On secondary",
+                    fontWeight = FontWeight.Thin,
+                    fontSize = 16.sp,
+                    color = Color.DarkGray
+                )
+            }
+            item {
+                ThemeColor {
+
+                }
+            }
+            stickyHeader {
+                Text(
                     text = "Background",
                     fontWeight = FontWeight.Thin,
-                    fontSize = 18.sp,
+                    fontSize = 16.sp,
                     color = Color.DarkGray
                 )
             }
             item {
-                ThemeColor("Color")
+                ThemeColor {
+
+                }
             }
             stickyHeader {
                 Text(
-                    text = "Icons",
-                    fontWeight = FontWeight.Thin,
-                    fontSize = 18.sp,
-                    color = Color.DarkGray
-                )
-            }
-            item {
-                ThemeColor("Color")
-            }
-            stickyHeader {
-                Text(
-                    text = "Card",
-                    fontWeight = FontWeight.Thin,
-                    fontSize = 18.sp,
-                    color = Color.DarkGray
-                )
-            }
-            item {
-                Text(
-                    text = "Backgound",
+                    text = "On background",
                     fontWeight = FontWeight.Thin,
                     fontSize = 16.sp,
                     color = Color.DarkGray
                 )
             }
             item {
-                ThemeColor("Color")
-            }
-            stickyHeader {
-                Text(
-                    text = "Text",
-                    fontWeight = FontWeight.Thin,
-                    fontSize = 16.sp,
-                    color = Color.DarkGray
-                )
-            }
-            item {
-                ThemeColor("Color")
+                ThemeColor {
+
+                }
             }
         }
     }
 }
 
-@OptIn(ExperimentalComposeUiApi::class)
 @Composable
-fun ThemeColor(name: String) {
+fun ThemeColor(onColorChange: (Color) -> Unit) {
     Row(
         modifier = Modifier
             .padding(16.dp)
@@ -382,12 +406,6 @@ fun ThemeColor(name: String) {
             var darknessCursorPosition by remember { mutableStateOf(90f) }
             var alphaCursorPosition by remember { mutableStateOf(1f) }
 
-            Text(
-                text = name,
-                fontWeight = FontWeight.Thin,
-                fontSize = 12.sp,
-                color = Color.DarkGray
-            )
             Canvas(
                 modifier = Modifier
                     .fillMaxWidth()
@@ -436,10 +454,10 @@ fun ThemeColor(name: String) {
 
                 val fractionStep = 1f / (colorAlphaGradient.size - 1)
                 val minFraction = ((firstColorIndex + 1) / (colorAlphaGradient.size - 1f)) - fractionStep
-                val colorLerpFraction = max(0f, min(1f, (colorIndexNormalized - minFraction) * (colorAlphaGradient.size - 1f)))
+                val colorFraction = max(0f, min(1f, (colorIndexNormalized - minFraction) * (colorAlphaGradient.size - 1f)))
 
                 currentColor = if (colorAlphaGradient.lastIndex == firstColorIndex) colorAlphaGradient[firstColorIndex]
-                else lerp(colorAlphaGradient[firstColorIndex], colorAlphaGradient[firstColorIndex + 1], colorLerpFraction)
+                else lerp(colorAlphaGradient[firstColorIndex], colorAlphaGradient[firstColorIndex + 1], colorFraction)
             }
 
             Canvas(
@@ -495,6 +513,7 @@ fun ThemeColor(name: String) {
             modifier = Modifier
                 .size(64.dp)
         ) {
+            onColorChange(saturationColor)
             drawRoundRect(
                 color = saturationColor,
                 cornerRadius = CornerRadius(8f, 8f),

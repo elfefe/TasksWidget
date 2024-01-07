@@ -7,8 +7,8 @@ plugins {
     kotlin("plugin.serialization") version embeddedKotlinVersion
 }
 
-group = "com.elfefe"
-version = "1.3.0"
+group = project.group
+version = project.version
 
 val ktorVersion = "2.2.3"
 
@@ -100,6 +100,7 @@ android {
     }
     namespace = "com.elfefe.common"
 }
+
 dependencies {
     implementation("androidx.navigation:navigation-compose:2.7.6")
 }

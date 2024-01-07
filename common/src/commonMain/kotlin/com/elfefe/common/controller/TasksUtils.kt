@@ -1,5 +1,9 @@
 package com.elfefe.common.controller
 
+import androidx.compose.runtime.Composable
+import androidx.compose.ui.platform.LocalDensity
+import androidx.compose.ui.unit.TextUnit
+import androidx.compose.ui.unit.sp
 import java.util.*
 
 
@@ -23,5 +27,17 @@ fun deadlineDate(date: String): Int {
         return Calendar.getInstance().apply {
             for (i in it.indices) set(dateOrder[i], it[i].toInt() - if (i == 1) 1 else 0)
         }.compareTo(Calendar.getInstance())
+    }
+}
+
+
+
+@Composable
+fun Int.scaledSp(): TextUnit {
+    val value: Int = this
+    return with(LocalDensity.current) {
+        val fontScale = this.fontScale
+        val textSize = value / fontScale
+        textSize.sp
     }
 }

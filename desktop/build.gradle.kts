@@ -1,13 +1,14 @@
 import org.jetbrains.compose.compose
 import org.jetbrains.compose.desktop.application.dsl.TargetFormat
+import org.jetbrains.kotlin.cli.jvm.main
 
 plugins {
     kotlin("multiplatform")
     id("org.jetbrains.compose")
 }
 
-group = "com.elfefe"
-version = "1.2.4"
+group = project.group
+version = project.version
 
 
 kotlin {
@@ -29,10 +30,15 @@ kotlin {
 compose.desktop {
     application {
         mainClass = "MainKt"
+
         nativeDistributions {
             targetFormats(TargetFormat.Dmg, TargetFormat.Msi, TargetFormat.Deb)
             packageName = "TasksWidget"
-            packageVersion = "1.2.4"
+            packageVersion = project.version.toString()
         }
     }
+}
+
+tasks.withType(JavaExec::class.java) {
+    File("""common/src/commonMain/resources/version""").writeText(project.version.toString())
 }

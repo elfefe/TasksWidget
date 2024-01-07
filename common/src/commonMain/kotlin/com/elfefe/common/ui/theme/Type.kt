@@ -1,4 +1,4 @@
-package com.elfefe.wavescout.ui.theme
+package com.elfefe.common.ui.theme
 
 import androidx.compose.material.Typography
 import androidx.compose.ui.text.TextStyle

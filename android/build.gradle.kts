@@ -4,8 +4,8 @@ plugins {
     kotlin("android")
 }
 
-group "com.elfefe"
-version "1.0-SNAPSHOT"
+group = project.group
+version = project.version
 
 repositories {
     jcenter()

@@ -22,8 +22,8 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import com.elfefe.common.controller.Tasks
 import com.elfefe.common.controller.deadlineDate
+import com.elfefe.common.controller.scaledSp
 import com.elfefe.common.model.Task
-import kotlinx.coroutines.CoroutineScope
 
 @Composable
 fun TaskCard(modifier: Modifier, task: Task, showDescription: Boolean) {

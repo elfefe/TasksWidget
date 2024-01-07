@@ -5,8 +5,10 @@ import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
 import androidx.compose.foundation.Canvas
+import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.gestures.detectHorizontalDragGestures
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
@@ -18,15 +20,15 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowDropDown
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
+import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.rotate
+import androidx.compose.ui.geometry.CornerRadius
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.geometry.Size
-import androidx.compose.ui.graphics.BlendMode
-import androidx.compose.ui.graphics.Brush
-import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.TileMode
+import androidx.compose.ui.graphics.*
+import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.platform.ClipboardManager
 import androidx.compose.ui.platform.LocalClipboardManager
 import androidx.compose.ui.text.AnnotatedString
@@ -39,10 +41,14 @@ import androidx.compose.ui.unit.sp
 import com.elfefe.common.controller.EmojiApi
 import com.elfefe.common.controller.Tasks
 import com.elfefe.common.model.TaskFieldOrder
+import com.elfefe.wavescout.ui.theme.primary
 import org.burnoutcrew.reorderable.ReorderableItem
 import org.burnoutcrew.reorderable.detectReorderAfterLongPress
 import org.burnoutcrew.reorderable.rememberReorderableLazyListState
 import org.burnoutcrew.reorderable.reorderable
+import kotlin.math.floor
+import kotlin.math.max
+import kotlin.math.min
 
 enum class ConfigNavDestination(val text: String) {
     EMOTES("Emotes"),
@@ -196,7 +202,8 @@ fun Cards() {
 
 @Composable
 fun CardsOrder() {
-    val sortOrders = remember { mutableStateOf(Tasks.Configs.configs.taskFieldsOrder.sortedByDescending { it.priority }) }
+    val sortOrders =
+        remember { mutableStateOf(Tasks.Configs.configs.taskFieldsOrder.sortedByDescending { it.priority }) }
 
     val state = rememberReorderableLazyListState(onMove = { from, to ->
         sortOrders.value = sortOrders.value.toMutableList().apply {
@@ -282,6 +289,7 @@ fun CardsOrderCondition(modifier: Modifier, elevation: Dp, taskField: TaskFieldO
     }
 }
 
+@OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun Theme() {
     Column(
@@ -291,85 +299,207 @@ fun Theme() {
         verticalArrangement = Arrangement.Top,
         horizontalAlignment = Alignment.Start
     ) {
-        Column {
-            Text(
-                text = "Background",
-                fontWeight = FontWeight.Thin,
-                fontSize = 18.sp,
-                color = Color.DarkGray
-            )
-            ThemeColor("Color")
-            Text(
-                text = "Icons",
-                fontWeight = FontWeight.Thin,
-                fontSize = 18.sp,
-                color = Color.DarkGray
-            )
-            ThemeColor("Color")
-            Text(
-                text = "Card",
-                fontWeight = FontWeight.Thin,
-                fontSize = 18.sp,
-                color = Color.DarkGray
-            )
-            Text(
-                text = "Backgound",
-                fontWeight = FontWeight.Thin,
-                fontSize = 16.sp,
-                color = Color.DarkGray
-            )
-            ThemeColor("Color")
-            Text(
-                text = "Text",
-                fontWeight = FontWeight.Thin,
-                fontSize = 16.sp,
-                color = Color.DarkGray
-            )
-            ThemeColor("Color")
+        LazyColumn(
+            modifier = Modifier
+                .fillMaxSize()
+        ) {
+            stickyHeader {
+                Text(
+                    text = "Background",
+                    fontWeight = FontWeight.Thin,
+                    fontSize = 18.sp,
+                    color = Color.DarkGray
+                )
+            }
+            item {
+                ThemeColor("Color")
+            }
+            stickyHeader {
+                Text(
+                    text = "Icons",
+                    fontWeight = FontWeight.Thin,
+                    fontSize = 18.sp,
+                    color = Color.DarkGray
+                )
+            }
+            item {
+                ThemeColor("Color")
+            }
+            stickyHeader {
+                Text(
+                    text = "Card",
+                    fontWeight = FontWeight.Thin,
+                    fontSize = 18.sp,
+                    color = Color.DarkGray
+                )
+            }
+            item {
+                Text(
+                    text = "Backgound",
+                    fontWeight = FontWeight.Thin,
+                    fontSize = 16.sp,
+                    color = Color.DarkGray
+                )
+            }
+            item {
+                ThemeColor("Color")
+            }
+            stickyHeader {
+                Text(
+                    text = "Text",
+                    fontWeight = FontWeight.Thin,
+                    fontSize = 16.sp,
+                    color = Color.DarkGray
+                )
+            }
+            item {
+                ThemeColor("Color")
+            }
         }
     }
 }
 
+@OptIn(ExperimentalComposeUiApi::class)
 @Composable
 fun ThemeColor(name: String) {
-    Column {
-        Text(
-            text = name,
-            fontWeight = FontWeight.Thin,
-            fontSize = 12.sp,
-            color = Color.DarkGray
-        )
-        Canvas(modifier = Modifier.size(128.dp, 32.dp)) {
-            drawRect(
-                brush = Brush.horizontalGradient(
-                    listOf(
-                        Color(0xFFFF0000),
-                        Color(0xFFFFFF00),
-                        Color(0xFF00FF00),
-                        Color(0xFF00FFFF),
-                        Color(0xFF0000FF),
-                        Color(0xFFFF00FF),
-                    ),
-                    tileMode = TileMode.Clamp
-                ),
-                size = size
+    Row(
+        modifier = Modifier
+            .padding(16.dp)
+            .width(256.dp),
+        horizontalArrangement = Arrangement.SpaceBetween,
+        verticalAlignment = Alignment.CenterVertically
+    ) {
+        var currentColor by remember { mutableStateOf(Color.Transparent) }
+        var saturationColor by remember { mutableStateOf(Color.Transparent) }
+
+        Column(
+            modifier = Modifier
+                .width(180.dp),
+            verticalArrangement = Arrangement.Top,
+            horizontalAlignment = Alignment.Start
+        ) {
+            var colorCursorPosition by remember { mutableStateOf(0f) }
+            var darknessCursorPosition by remember { mutableStateOf(90f) }
+            var alphaCursorPosition by remember { mutableStateOf(1f) }
+
+            Text(
+                text = name,
+                fontWeight = FontWeight.Thin,
+                fontSize = 12.sp,
+                color = Color.DarkGray
             )
-            drawRect(
-                color = Color.DarkGray,
-                size = Size(2f, size.height)
+            Canvas(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(32.dp)
+                    .pointerInput(Unit) {
+                        detectHorizontalDragGestures { change, _ ->
+                            colorCursorPosition = change.position.x
+                        }
+                    }
+            ) {
+                val colorGradient =
+                    listOf(
+                        Color(1f,0f,0f),
+                        Color(1f,1f,0f),
+                        Color(0f,1f,0f),
+                        Color(0f,1f,1f),
+                        Color(0f,0f,1f),
+                        Color(1f,0f,1f),
+                    )
+                val colorAlphaGradient =
+                    listOf(
+                        Color(1f,0f,0f, alphaCursorPosition),
+                        Color(1f,1f,0f, alphaCursorPosition),
+                        Color(0f,1f,0f, alphaCursorPosition),
+                        Color(0f,1f,1f, alphaCursorPosition),
+                        Color(0f,0f,1f, alphaCursorPosition),
+                        Color(1f,0f,1f, alphaCursorPosition),
+                    )
+                drawRect(
+                    brush = Brush.horizontalGradient(
+                        colorGradient,
+                        tileMode = TileMode.Clamp
+                    ),
+                    size = size
+                )
+                drawRect(
+                    color = Color.DarkGray,
+                    topLeft = Offset(max(0f, min(size.width, colorCursorPosition)), 0f),
+                    size = Size(2f, size.height)
+                )
+
+                val colorIndexNormalized = (colorCursorPosition / size.width).let { if (it.isNaN()) 0f else it }
+                val firstColorIndex = max(0, min(colorAlphaGradient.size - 2 ,
+                    floor((colorIndexNormalized) * (colorAlphaGradient.size - 1)).toInt()
+                ))
+
+                val fractionStep = 1f / (colorAlphaGradient.size - 1)
+                val minFraction = ((firstColorIndex + 1) / (colorAlphaGradient.size - 1f)) - fractionStep
+                val colorLerpFraction = max(0f, min(1f, (colorIndexNormalized - minFraction) * (colorAlphaGradient.size - 1f)))
+
+                currentColor = if (colorAlphaGradient.lastIndex == firstColorIndex) colorAlphaGradient[firstColorIndex]
+                else lerp(colorAlphaGradient[firstColorIndex], colorAlphaGradient[firstColorIndex + 1], colorLerpFraction)
+            }
+
+            Canvas(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(32.dp)
+                    .pointerInput(Unit) {
+                        detectHorizontalDragGestures { change, _ ->
+                            darknessCursorPosition = change.position.x
+                        }
+                    }
+            ) {
+                val colorGradient = listOf(Color.Black, currentColor, Color.White)
+                val colorAlphaGradient = listOf(
+                    Color(0f, 0f, 0f, alphaCursorPosition),
+                    currentColor,
+                    Color(1f, 1f, 1f, alphaCursorPosition)
+                )
+                drawRect(
+                    brush = Brush.horizontalGradient(
+                        colorGradient,
+                        tileMode = TileMode.Clamp
+                    ),
+                    size = size
+                )
+                drawRect(
+                    color = Color.primary,
+                    topLeft = Offset(max(0f, min(size.width, darknessCursorPosition)), 0f),
+                    size = Size(2f, size.height)
+                )
+
+                val indexNormalized = (darknessCursorPosition / size.width).let {
+                    if (it.isNaN()) 0f else min(1f, max(0f, it)) }
+                val colorIndex = min(floor(indexNormalized * (colorAlphaGradient.size - 1)).toInt(), colorAlphaGradient.size - 2)
+
+                val fractionStep = 1f / (colorAlphaGradient.size - 1)
+                val minFraction = ((colorIndex + 1) / (colorAlphaGradient.size - 1f)) - fractionStep
+                val colorLerpFraction = max(0f, min(1f, (indexNormalized - minFraction) * (colorAlphaGradient.size - 1f)))
+
+                saturationColor = lerp(colorAlphaGradient[colorIndex], colorAlphaGradient[colorIndex + 1], colorLerpFraction)
+            }
+
+            Slider(
+                value = alphaCursorPosition,
+                onValueChange = { alphaCursorPosition = it },
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(32.dp)
             )
         }
 
-//        Canvas(modifier = Modifier.size(128.dp, 32.dp)) {
-//            drawRect(
-//                brush = Brush.horizontalGradient(listOf(Color(0xFF000000), Color(0x00000000))),
-//                topLeft = Offset(0f, 1f),
-//                size = Size(size.width, size.height - 2)
-//            )
-//            drawRect(
-//                color = Color.DarkGray,
-//                size = Size(2f, size.height)
-//            )
-//        }
+        Canvas(
+            modifier = Modifier
+                .size(64.dp)
+        ) {
+            drawRoundRect(
+                color = saturationColor,
+                cornerRadius = CornerRadius(8f, 8f),
+                size = size
+            )
+        }
     }
 }

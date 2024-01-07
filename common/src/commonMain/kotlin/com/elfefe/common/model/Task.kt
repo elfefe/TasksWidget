@@ -16,6 +16,7 @@ data class Task(
     var edited: Long = System.currentTimeMillis()
 )
 
+@JsonAdapter(TaskFieldOrderAdapter::class)
 data class TaskFieldOrder(
     val name: String,
     var priority: Int,
@@ -70,6 +71,36 @@ class ThemeColorsAdapter : TypeAdapter<ThemeColors> () {
             onSecondary = onSecondary,
             background = background,
             onBackground = onBackground,
+        )
+    }
+}
+
+class TaskFieldOrderAdapter : TypeAdapter<TaskFieldOrder> () {
+    override fun write(out: com.google.gson.stream.JsonWriter?, value: TaskFieldOrder?) {
+        out?.beginObject()
+        out?.name("name")?.value(value?.name)
+        out?.name("priority")?.value(value?.priority)
+        out?.name("active")?.value(value?.active)
+        out?.endObject()
+    }
+
+    override fun read(`in`: com.google.gson.stream.JsonReader?): TaskFieldOrder {
+        var name = ""
+        var priority = 0
+        var active = false
+        `in`?.beginObject()
+        while (`in`?.hasNext() == true) {
+            when (`in`.nextName()) {
+                "name" -> name = `in`.nextString()
+                "priority" -> priority = `in`.nextInt()
+                "active" -> active = `in`.nextBoolean()
+            }
+        }
+        `in`?.endObject()
+        return TaskFieldOrder(
+            name = name,
+            priority = priority,
+            active = active,
         )
     }
 }

@@ -42,6 +42,8 @@ kotlin {
 
                 implementation("com.google.code.gson:gson:2.10.1")
 
+                implementation("org.apache.httpcomponents:httpclient:4.5.14")
+
                 implementation("io.ktor:ktor-client-core:$ktorVersion")
                 implementation("io.ktor:ktor-client-cio:$ktorVersion")
 

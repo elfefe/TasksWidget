@@ -35,10 +35,11 @@ compose.desktop {
             targetFormats(TargetFormat.Dmg, TargetFormat.Msi, TargetFormat.Deb)
             packageName = "TasksWidget"
             packageVersion = project.version.toString()
+            modules("java.net.http")
         }
     }
 }
 
 tasks.withType(JavaExec::class.java) {
-    File("""common/src/commonMain/resources/version""").writeText(project.version.toString())
+    File("""resources/version""").writeText(project.version.toString())
 }

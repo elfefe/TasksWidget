@@ -33,9 +33,3 @@ fun TasksTheme(
         content = content
     )
 }
-
-object Theme {
-    val color: Colors
-        @Composable
-        get() = lightColorScheme
-}

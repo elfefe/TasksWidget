@@ -1,10 +1,10 @@
-package com.elfefe.wavescout.ui.theme
+package com.elfefe.common.ui.theme
 
 import androidx.compose.ui.graphics.Color
 
 
 val Color.Companion.primary: Color
-    get() = Color(0xFF_0077C9)
+    get() = Color(0x66222222)
 val Color.Companion.onPrimary: Color
     get() = White
 
@@ -19,9 +19,9 @@ val Color.Companion.onTertiary: Color
     get() = White
 
 val Color.Companion.background: Color
-    get() = Color(0xFF_F5F5F5)
+    get() = White
 val Color.Companion.onBackground: Color
-    get() = Color(0xFF_002840)
+    get() = Black
 
 val Color.Companion.surface: Color
     get() = Color(0xFF_E5F5FB)

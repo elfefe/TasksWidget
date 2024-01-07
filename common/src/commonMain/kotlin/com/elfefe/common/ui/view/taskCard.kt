@@ -36,7 +36,7 @@ fun TaskCard(modifier: Modifier, task: Task, showDescription: Boolean) {
             .fillMaxWidth()
             .padding(5.dp)
             .then(modifier),
-        backgroundColor = Color.White,
+        backgroundColor = Tasks.Configs.configs.themeColors.background,
         elevation = 5.dp
     ) {
         val deadlineDate = deadlineDate(task.deadline)
@@ -93,7 +93,7 @@ fun TaskCard(modifier: Modifier, task: Task, showDescription: Boolean) {
                     },
                     modifier = Modifier
                         .weight(1f),
-                    textStyle = TextStyle(fontWeight = FontWeight.SemiBold),
+                    textStyle = TextStyle(color = Tasks.Configs.configs.themeColors.onBackground, fontWeight = FontWeight.SemiBold),
                     singleLine = true
                 )
 
@@ -128,7 +128,8 @@ fun TaskCard(modifier: Modifier, task: Task, showDescription: Boolean) {
                             Tasks.update(task.apply { this.description = it })
                         },
                         modifier = Modifier
-                            .fillMaxSize()
+                            .fillMaxSize(),
+                        textStyle = TextStyle(color = Tasks.Configs.configs.themeColors.onBackground)
                     )
                 }
             }

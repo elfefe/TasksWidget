@@ -24,7 +24,6 @@ import androidx.compose.ui.unit.dp
 import com.elfefe.common.controller.Tasks
 import com.elfefe.common.model.Task
 import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.launch
 
 
 @Composable
@@ -100,42 +99,42 @@ fun ColumnScope.Toolbar(scope: CoroutineScope, windowInteractions: WindowInterac
                             .padding(3.dp),
                         tint = Tasks.Configs.configs.themeColors.onPrimary
                     )
-//                    Icon(
-//                        painterResource("login.svg"),
-//                        contentDescription = null,
-//                        modifier = Modifier
-//                            .padding(3.dp)
-//                            .clickable {
-//                                FirestoreApi.instance.connectTasks(
-//                                    User("felion33@gmail.com", "Félix", "", mutableListOf())
-//                                ) {
-//                                    println(it)
-//                                }
-////                            OAuthApi(scope).apply {
-////                                auth(
-////                                    "1086878445333-tgnhihe3rkaigfqs39umarbfsptb1lr5.apps.googleusercontent.com",
-////                                    "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"
-////                                ) { jwToken, payload ->
-////                                    println(jwToken)
-////                                    println(payload)
-////                                    val credentials = GoogleCredentials
-////                                        .create(AccessToken(jwToken.accessToken, Date(Date().time + jwToken.expiresIn.toLong())))
-////                                        .createScoped(
-////                                            "https://www.googleapis.com/auth/cloud-platform"
-////                                        )
-////                                }
-////                            }
-//                            },
-//                        tint = Color.White
-//                    )
+                    /*Icon(
+                        painterResource("login.svg"),
+                        contentDescription = null,
+                        modifier = Modifier
+                            .padding(3.dp)
+                            .clickable {
+                                FirestoreApi.instance.connectTasks(
+                                    User("felion33@gmail.com", "Félix", "", mutableListOf())
+                                ) {
+                                    println(it)
+                                }
+                            OAuthApi(scope).apply {
+                                auth(
+                                    "1086878445333-tgnhihe3rkaigfqs39umarbfsptb1lr5.apps.googleusercontent.com",
+                                    "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"
+                                ) { jwToken, payload ->
+                                    println(jwToken)
+                                    println(payload)
+                                    val credentials = GoogleCredentials
+                                        .create(AccessToken(jwToken.accessToken, Date(Date().time + jwToken.expiresIn.toLong())))
+                                        .createScoped(
+                                            "https://www.googleapis.com/auth/cloud-platform"
+                                        )
+                                }
+                            }
+                            },
+                        tint = Color.White
+                    )*/
                     Icon(
                         Icons.Default.Settings,
                         contentDescription = null,
                         modifier = Modifier
                             .padding(3.dp)
                             .clickable {
-                                showConfigs = !showConfigs
-                                windowInteractions.showConfigs(showConfigs)
+                                showConfigs = !(windowInteractions.showConfigs.value ?: false)
+                                windowInteractions.showConfigs.value = showConfigs
                             },
                         tint = Tasks.Configs.configs.themeColors.onPrimary
                     )
@@ -148,7 +147,7 @@ fun ColumnScope.Toolbar(scope: CoroutineScope, windowInteractions: WindowInterac
                     modifier = Modifier
                         .clickable {
                             expanded = !expanded
-                            windowInteractions.isExpanded(expanded)
+                            windowInteractions.expand.value = expanded
                         }
                         .padding(3.dp)
                         .rotate(expandRotation),
@@ -159,7 +158,7 @@ fun ColumnScope.Toolbar(scope: CoroutineScope, windowInteractions: WindowInterac
                     contentDescription = null,
                     modifier = Modifier
                         .clickable {
-                            windowInteractions.isVisible(false)
+                            windowInteractions.visibility.value = false
                         }
                         .padding(3.dp),
                     tint = Tasks.Configs.configs.themeColors.onPrimary
@@ -172,10 +171,10 @@ fun ColumnScope.Toolbar(scope: CoroutineScope, windowInteractions: WindowInterac
                         .pointerInput(Unit) {
                             detectDragGestures(
                                 onDragStart = {
-                                    windowInteractions.changeSide(true, it.x)
+                                    windowInteractions.moveWindow.value = WindowMovement(true, it.x)
                                 }
                             ) { change, dragAmount ->
-                                windowInteractions.changeSide(false, 0f)
+                                windowInteractions.moveWindow.value = WindowMovement(false, 0f)
                             }
                         },
                     tint = Tasks.Configs.configs.themeColors.onPrimary

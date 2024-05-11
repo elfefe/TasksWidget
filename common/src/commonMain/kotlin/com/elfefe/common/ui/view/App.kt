@@ -6,9 +6,6 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.onClick
 import androidx.compose.foundation.text.BasicText
-import androidx.compose.material.Button
-import androidx.compose.material.ButtonDefaults
-import androidx.compose.material.TextButton
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.ExperimentalComposeUiApi
@@ -77,7 +74,7 @@ fun App(windowInteractions: WindowInteractions) {
                             .header("X-GitHub-Api-Version", "2022-11-28")
                             .header(
                                 "Authorization",
-                                "Bearer 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"
+                                "Bearer"
                             )
                             .GET()
                             .build(),
@@ -88,7 +85,7 @@ fun App(windowInteractions: WindowInteractions) {
                 }
             }
 
-            AnimatedVisibility(windowInteractions.expanded and showStatus) {
+            AnimatedVisibility(windowInteractions.expand.value == true and showStatus) {
                 Row(
                     modifier = Modifier
                         .fillMaxWidth(),
@@ -102,7 +99,7 @@ fun App(windowInteractions: WindowInteractions) {
                     latestRelease?.run {
                         useResource("version") {
                             val version = it.readBytes().toString(Charsets.UTF_8)
-                            newVersionAvailable = tagName != version
+                            newVersionAvailable = tagName != version && tagName != null
 
                                 if (newVersionAvailable) searchingVersion = "New version available: $tagName"
                                 else {
@@ -116,7 +113,7 @@ fun App(windowInteractions: WindowInteractions) {
                         text = searchingVersion,
                         style = TextStyle(
                             color = Tasks.Configs.configs.themeColors.onPrimary,
-                            fontSize = 12.sp,
+                            fontSize = 11.sp,
                             fontWeight = FontWeight.Bold,
                             shadow = Shadow(
                                 color = shadowColor,
@@ -147,18 +144,37 @@ fun App(windowInteractions: WindowInteractions) {
 }
 
 data class WindowInteractions(
-    val window: Window,
-    val isVisible: (Boolean) -> Unit,
-    val isExpanded: (Boolean) -> Unit,
-    var expanded: Boolean = false,
-    val changeSide: (Boolean, Float) -> Unit,
-    val changeHeight: (Float) -> Unit = {},
-    val showConfigs: (Boolean) -> Unit
+    val window: Interactable<Window>,
+    val visibility: Interactable<Boolean>,
+    val expand: Interactable<Boolean>,
+    val moveWindow: Interactable<WindowMovement>,
+    val showConfigs: Interactable<Boolean>,
+    val popup: Interactable<Popup>
 )
+
+class Interactable<T>(value: T? = null, onChange: (T) -> Unit = {}) {
+
+    var value: T? = value
+        set(value) {
+            field = value
+            value?.let {
+                onChange(it)
+            }
+        }
+    var onChange: (T) -> Unit = onChange
+}
 
 data class ToolbarInteractions(
     val showDescription: (Boolean) -> Unit,
 )
+
+data class WindowMovement(val init: Boolean = false, val offset: Float = 0f)
+data class Popup(val show: Boolean = false, val text: String = "", val duration: Long = 0) {
+    companion object {
+        val HIDE = Popup()
+        fun show(text: String) = Popup(true, text, 3)
+    }
+}
 
 
 

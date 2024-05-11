@@ -4,6 +4,7 @@ import java.net.URI
 import java.net.http.HttpClient
 import java.net.http.HttpRequest
 import java.net.http.HttpResponse
+import java.util.concurrent.atomic.AtomicBoolean
 
 data class EmojiCategory(
     val name: String,
@@ -41,6 +42,7 @@ object EmojiApi {
     private val _emojis = mutableListOf<EmojiCategory>()
     val emojis: List<EmojiCategory>
         get() = _emojis
+    private  val loading = AtomicBoolean(false)
 
     private fun emojisParser(emojisData: String, onUpdate: (List<EmojiCategory>) -> Unit) {
         val categories: MutableList<EmojiCategory> = mutableListOf()
@@ -104,7 +106,9 @@ object EmojiApi {
     }
 
     fun preloadEmojis() {
+        if (loading.getAndSet(true)) return
         queryEmojis {
+            loading.set(false)
             _emojis.clear()
             _emojis.addAll(it)
         }

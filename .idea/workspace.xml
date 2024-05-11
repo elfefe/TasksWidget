@@ -9,23 +9,14 @@
     <option name="autoReloadType" value="NONE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="342136dd-9d95-4b6b-84e1-4a9c7fc0eeb8" name="Changes" comment="fix:&#10; - better project architecture&#10; - Color gradient">
-      <change afterPath="$PROJECT_DIR$/common/src/commonMain/kotlin/com/elfefe/common/controller/color/colors.kt" afterDir="false" />
+    <list default="true" id="342136dd-9d95-4b6b-84e1-4a9c7fc0eeb8" name="Changes" comment="fix:&#10; - Added toasts when copying emotes">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/android/src/main/java/com/elfefe/android/MainActivity.kt" beforeDir="false" afterPath="$PROJECT_DIR$/android/src/main/java/com/elfefe/android/MainActivity.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/common/src/commonMain/kotlin/com/elfefe/common/firebase/authentication/OAuthApi.kt" beforeDir="false" afterPath="$PROJECT_DIR$/common/src/commonMain/kotlin/com/elfefe/common/controller/firebase/authentication/OAuthApi.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/common/src/commonMain/kotlin/com/elfefe/common/firebase/authentication/model/JWToken.kt" beforeDir="false" afterPath="$PROJECT_DIR$/common/src/commonMain/kotlin/com/elfefe/common/controller/firebase/authentication/model/JWToken.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/common/src/commonMain/kotlin/com/elfefe/common/firebase/authentication/model/Payload.kt" beforeDir="false" afterPath="$PROJECT_DIR$/common/src/commonMain/kotlin/com/elfefe/common/controller/firebase/authentication/model/Payload.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/common/src/commonMain/kotlin/com/elfefe/common/firebase/authentication/model/User.kt" beforeDir="false" afterPath="$PROJECT_DIR$/common/src/commonMain/kotlin/com/elfefe/common/controller/firebase/authentication/model/User.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/common/src/commonMain/kotlin/com/elfefe/common/firebase/firestore/FirestoreApi.kt" beforeDir="false" afterPath="$PROJECT_DIR$/common/src/commonMain/kotlin/com/elfefe/common/controller/firebase/firestore/FirestoreApi.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/common/src/commonMain/kotlin/com/elfefe/common/logs/LogState.kt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/common/src/commonMain/kotlin/com/elfefe/common/view/App.kt" beforeDir="false" afterPath="$PROJECT_DIR$/common/src/commonMain/kotlin/com/elfefe/common/ui/view/App.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/common/src/commonMain/kotlin/com/elfefe/common/view/configs.kt" beforeDir="false" afterPath="$PROJECT_DIR$/common/src/commonMain/kotlin/com/elfefe/common/ui/view/configs.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/common/src/commonMain/kotlin/com/elfefe/common/view/slider.kt" beforeDir="false" afterPath="$PROJECT_DIR$/common/src/commonMain/kotlin/com/elfefe/common/ui/view/slider.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/common/src/commonMain/kotlin/com/elfefe/common/view/taskCard.kt" beforeDir="false" afterPath="$PROJECT_DIR$/common/src/commonMain/kotlin/com/elfefe/common/ui/view/taskCard.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/common/src/commonMain/kotlin/com/elfefe/common/view/tasksList.kt" beforeDir="false" afterPath="$PROJECT_DIR$/common/src/commonMain/kotlin/com/elfefe/common/ui/view/tasksList.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/common/src/commonMain/kotlin/com/elfefe/common/view/toolbar.kt" beforeDir="false" afterPath="$PROJECT_DIR$/common/src/commonMain/kotlin/com/elfefe/common/ui/view/toolbar.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/desktop/src/jvmMain/kotlin/Main.kt" beforeDir="false" afterPath="$PROJECT_DIR$/desktop/src/jvmMain/kotlin/Main.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/android/build.gradle.kts" beforeDir="false" afterPath="$PROJECT_DIR$/android/build.gradle.kts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/build.gradle.kts" beforeDir="false" afterPath="$PROJECT_DIR$/build.gradle.kts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/common/build.gradle.kts" beforeDir="false" afterPath="$PROJECT_DIR$/common/build.gradle.kts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/common/src/commonMain/kotlin/com/elfefe/common/ui/view/App.kt" beforeDir="false" afterPath="$PROJECT_DIR$/common/src/commonMain/kotlin/com/elfefe/common/ui/view/App.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/common/src/commonMain/resources/version" beforeDir="false" afterPath="$PROJECT_DIR$/common/src/commonMain/resources/version" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/desktop/resources/version" beforeDir="false" afterPath="$PROJECT_DIR$/desktop/resources/version" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -52,7 +43,36 @@
         </task>
         <projects_view>
           <tree_state>
-            <expand />
+            <expand>
+              <path>
+                <item name="" type="6a2764b6:ExternalProjectsStructure$RootNode" />
+                <item name="TasksWidget" type="f1a62948:ProjectNode" />
+              </path>
+              <path>
+                <item name="" type="6a2764b6:ExternalProjectsStructure$RootNode" />
+                <item name="TasksWidget" type="f1a62948:ProjectNode" />
+                <item name="desktop" type="2d1252cf:ModuleNode" />
+              </path>
+              <path>
+                <item name="" type="6a2764b6:ExternalProjectsStructure$RootNode" />
+                <item name="TasksWidget" type="f1a62948:ProjectNode" />
+                <item name="desktop" type="2d1252cf:ModuleNode" />
+                <item name="Tasks" type="e4a08cd1:TasksNode" />
+              </path>
+              <path>
+                <item name="" type="6a2764b6:ExternalProjectsStructure$RootNode" />
+                <item name="TasksWidget" type="f1a62948:ProjectNode" />
+                <item name="desktop" type="2d1252cf:ModuleNode" />
+                <item name="Tasks" type="e4a08cd1:TasksNode" />
+                <item name="compose desktop" type="c8890929:TasksNode$1" />
+              </path>
+              <path>
+                <item name="" type="6a2764b6:ExternalProjectsStructure$RootNode" />
+                <item name="TasksWidget" type="f1a62948:ProjectNode" />
+                <item name="desktop" type="2d1252cf:ModuleNode" />
+                <item name="Dependencies" type="6de06a37:ExternalSystemViewDefaultContributor$MyDependenciesNode" />
+              </path>
+            </expand>
             <select />
           </tree_state>
         </projects_view>
@@ -63,8 +83,8 @@
     <option name="RECENT_TEMPLATES">
       <list>
         <option value="Kotlin Data Class" />
-        <option value="Kotlin Class" />
         <option value="Kotlin File" />
+        <option value="Kotlin Class" />
       </list>
     </option>
   </component>
@@ -76,6 +96,18 @@
     </option>
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
+  <component name="GitHubPullRequestSearchHistory"><![CDATA[{
+  "lastFilter": {
+    "state": "OPEN",
+    "assignee": "elfefe"
+  }
+}]]></component>
+  <component name="GithubPullRequestsUISettings"><![CDATA[{
+  "selectedUrlAndAccountId": {
+    "url": "https://github.com/elfefe/TasksWidget",
+    "accountId": "2a514d48-648f-4bc8-a55f-10817b7f26ef"
+  }
+}]]></component>
   <component name="MarkdownSettingsMigration">
     <option name="stateVersion" value="1" />
   </component>
@@ -87,6 +119,7 @@
     <ConfirmationsSetting value="2" id="Add" />
   </component>
   <component name="ProjectViewState">
+    <option name="autoscrollFromSource" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
   <component name="PropertiesComponent"><![CDATA[{
@@ -94,7 +127,13 @@
     "ASKED_ADD_EXTERNAL_FILES": "true",
     "Gradle.Build TasksWidget.executor": "Run",
     "Gradle.Download Sources.executor": "Run",
+    "Gradle.TasksWidget:desktop [build].executor": "Run",
+    "Gradle.TasksWidget:desktop [packageDistributionForCurrentOS].executor": "Run",
     "Gradle.TasksWidget:desktop [packageMsi].executor": "Run",
+    "Gradle.TasksWidget:desktop [packageReleaseMsi].executor": "Run",
+    "Gradle.TasksWidget:desktop [package].executor": "Run",
+    "Gradle.TasksWidget:desktop [runDistributable].executor": "Run",
+    "Gradle.TasksWidget:desktop [run].executor": "Run",
     "Kotlin.MainKt.executor": "Run",
     "RunOnceActivity.OpenProjectViewOnStart": "true",
     "RunOnceActivity.ShowReadmeOnStart": "true",
@@ -106,25 +145,31 @@
     "ignore.virus.scanning.warn.message": "true",
     "jdk.selected.JAVA_MODULE": "corretto-18",
     "kotlin-language-version-configured": "true",
-    "last_opened_file_path": "C:/Users/fbou-/IdeaProjects/TasksWidget/common/src/commonMain/resources",
-    "project.structure.last.edited": "Project",
+    "last_opened_file_path": "C:/Users/fbou-/IdeaProjects/TasksWidget/common/src/desktopMain",
+    "project.structure.last.edited": "SDKs",
     "project.structure.proportion": "0.15",
     "project.structure.side.proportion": "0.2",
     "settings.editor.selected.configurable": "preferences.pluginManager"
+  },
+  "keyToStringList": {
+    "kotlin-gradle-user-dirs": [
+      "C:\\Users\\fbou-\\.gradle"
+    ]
   }
 }]]></component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
+      <recent name="C:\Users\fbou-\IdeaProjects\TasksWidget\common\src\desktopMain" />
       <recent name="C:\Users\fbou-\IdeaProjects\TasksWidget\common\src\commonMain\resources" />
       <recent name="C:\Users\fbou-\IdeaProjects\TasksWidget\desktop\src\jvmMain" />
       <recent name="C:\Users\felix.boulereiff\IdeaProjects\SMQToolbox\common\src\commonMain\kotlin\fr\exem\common\theme" />
     </key>
     <key name="MoveFile.RECENT_KEYS">
+      <recent name="C:\Users\fbou-\IdeaProjects\TasksWidget\desktop\resources" />
+      <recent name="C:\Users\fbou-\IdeaProjects\TasksWidget\common\src\commonMain\kotlin\com\elfefe\common\model\github" />
       <recent name="C:\Users\fbou-\IdeaProjects\TasksWidget\common\src\commonMain\kotlin\com\elfefe\common\view" />
       <recent name="C:\Users\fbou-\IdeaProjects\TasksWidget" />
       <recent name="C:\Users\fbou-\IdeaProjects\TasksWidget\common" />
-      <recent name="C:\Users\felix.boulereiff\IdeaProjects\TasksWidget\common\src\main\res\drawable" />
-      <recent name="C:\Users\felix.boulereiff\IdeaProjects\SMQToolbox\common\src\commonMain\kotlin\fr\exem\common\excel" />
     </key>
     <key name="MoveKotlinTopLevelDeclarationsDialog.RECENTS_KEY">
       <recent name="com.elfefe.common.model" />
@@ -140,7 +185,7 @@
       <command value="gradlew signingReport" />
     </option>
   </component>
-  <component name="RunManager" selected="Kotlin.MainKt">
+  <component name="RunManager" selected="Gradle.TasksWidget:desktop [packageMsi]">
     <configuration name="android" type="AndroidRunConfigurationType" factoryName="Android App">
       <module name="TasksWidget.android.main" />
       <option name="DEPLOY" value="true" />
@@ -179,29 +224,7 @@
         <option name="Android.Gradle.BeforeRunTask" enabled="true" />
       </method>
     </configuration>
-    <configuration name="TasksWidget [signingReport]" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
-      <ExternalSystemSettings>
-        <option name="executionName" />
-        <option name="externalProjectPath" value="$PROJECT_DIR$" />
-        <option name="externalSystemIdString" value="GRADLE" />
-        <option name="scriptParameters" value="" />
-        <option name="taskDescriptions">
-          <list />
-        </option>
-        <option name="taskNames">
-          <list>
-            <option value="signingReport" />
-          </list>
-        </option>
-        <option name="vmOptions" />
-      </ExternalSystemSettings>
-      <ExternalSystemDebugServerProcess>true</ExternalSystemDebugServerProcess>
-      <ExternalSystemReattachDebugProcess>true</ExternalSystemReattachDebugProcess>
-      <DebugAllEnabled>false</DebugAllEnabled>
-      <RunAsTest>false</RunAsTest>
-      <method v="2" />
-    </configuration>
-    <configuration name="TasksWidget:desktop [createDistributable]" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
+    <configuration name="TasksWidget:desktop [build]" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
       <ExternalSystemSettings>
         <option name="executionName" />
         <option name="externalProjectPath" value="$PROJECT_DIR$/desktop" />
@@ -212,7 +235,29 @@
         </option>
         <option name="taskNames">
           <list>
-            <option value="createDistributable" />
+            <option value="build" />
+          </list>
+        </option>
+        <option name="vmOptions" />
+      </ExternalSystemSettings>
+      <ExternalSystemDebugServerProcess>true</ExternalSystemDebugServerProcess>
+      <ExternalSystemReattachDebugProcess>true</ExternalSystemReattachDebugProcess>
+      <DebugAllEnabled>false</DebugAllEnabled>
+      <RunAsTest>false</RunAsTest>
+      <method v="2" />
+    </configuration>
+    <configuration name="TasksWidget:desktop [packageDistributionForCurrentOS]" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
+      <ExternalSystemSettings>
+        <option name="executionName" />
+        <option name="externalProjectPath" value="$PROJECT_DIR$/desktop" />
+        <option name="externalSystemIdString" value="GRADLE" />
+        <option name="scriptParameters" />
+        <option name="taskDescriptions">
+          <list />
+        </option>
+        <option name="taskNames">
+          <list>
+            <option value="packageDistributionForCurrentOS" />
           </list>
         </option>
         <option name="vmOptions" />
@@ -245,7 +290,7 @@
       <RunAsTest>false</RunAsTest>
       <method v="2" />
     </configuration>
-    <configuration name="TasksWidget:desktop [proguardReleaseJars]" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
+    <configuration name="TasksWidget:desktop [packageReleaseMsi]" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
       <ExternalSystemSettings>
         <option name="executionName" />
         <option name="externalProjectPath" value="$PROJECT_DIR$/desktop" />
@@ -256,7 +301,7 @@
         </option>
         <option name="taskNames">
           <list>
-            <option value="proguardReleaseJars" />
+            <option value="packageReleaseMsi" />
           </list>
         </option>
         <option name="vmOptions" />
@@ -287,31 +332,21 @@
     </configuration>
     <list>
       <item itemvalue="Android App.android" />
-      <item itemvalue="Gradle.TasksWidget [signingReport]" />
-      <item itemvalue="Gradle.TasksWidget:desktop [createDistributable]" />
-      <item itemvalue="Gradle.TasksWidget:desktop [proguardReleaseJars]" />
+      <item itemvalue="Gradle.TasksWidget:desktop [build]" />
       <item itemvalue="Gradle.TasksWidget:desktop [packageMsi]" />
+      <item itemvalue="Gradle.TasksWidget:desktop [packageReleaseMsi]" />
+      <item itemvalue="Gradle.TasksWidget:desktop [packageDistributionForCurrentOS]" />
       <item itemvalue="Kotlin.MainKt" />
     </list>
     <recent_temporary>
       <list>
-        <item itemvalue="Kotlin.MainKt" />
         <item itemvalue="Gradle.TasksWidget:desktop [packageMsi]" />
-        <item itemvalue="Gradle.TasksWidget:desktop [proguardReleaseJars]" />
-        <item itemvalue="Gradle.TasksWidget:desktop [createDistributable]" />
-        <item itemvalue="Gradle.TasksWidget [signingReport]" />
+        <item itemvalue="Kotlin.MainKt" />
+        <item itemvalue="Gradle.TasksWidget:desktop [packageReleaseMsi]" />
+        <item itemvalue="Gradle.TasksWidget:desktop [build]" />
+        <item itemvalue="Gradle.TasksWidget:desktop [packageDistributionForCurrentOS]" />
       </list>
     </recent_temporary>
-  </component>
-  <component name="SharedIndexes">
-    <attachedChunks>
-      <set>
-        <option value="jdk-11.0.21-corretto-11.0.21-8336523bb0d9-d3b62f98" />
-        <option value="jdk-19.0.2-corretto-19.0.2-249ae16d76d6-36550cda" />
-        <option value="jdk-19.0.2-corretto-19.0.2-8336523bb0d9-b81783ad" />
-        <option value="jdk-19.0.2-corretto-19.0.2-f644763e9732-1e16d6ec" />
-      </set>
-    </attachedChunks>
   </component>
   <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
   <component name="TaskManager">
@@ -378,7 +413,111 @@
       <option name="project" value="LOCAL" />
       <updated>1703948771116</updated>
     </task>
-    <option name="localTasksCounter" value="8" />
+    <task id="LOCAL-00008" summary="fix:&#10; - better project architecture&#10; - Color gradient">
+      <option name="closed" value="true" />
+      <created>1703953103077</created>
+      <option name="number" value="00008" />
+      <option name="presentableId" value="LOCAL-00008" />
+      <option name="project" value="LOCAL" />
+      <updated>1703953103077</updated>
+    </task>
+    <task id="LOCAL-00009" summary="fix:&#10; - Custom colors modification (rgb, saturation, alpha)">
+      <option name="closed" value="true" />
+      <created>1704643769385</created>
+      <option name="number" value="00009" />
+      <option name="presentableId" value="LOCAL-00009" />
+      <option name="project" value="LOCAL" />
+      <updated>1704643769385</updated>
+    </task>
+    <task id="LOCAL-00010" summary="fix:&#10; - Colors from config&#10; - Serialize colors">
+      <option name="closed" value="true" />
+      <created>1704646509292</created>
+      <option name="number" value="00010" />
+      <option name="presentableId" value="LOCAL-00010" />
+      <option name="project" value="LOCAL" />
+      <updated>1704646509292</updated>
+    </task>
+    <task id="LOCAL-00011" summary="fix:&#10; - Version management">
+      <option name="closed" value="true" />
+      <created>1704658282386</created>
+      <option name="number" value="00011" />
+      <option name="presentableId" value="LOCAL-00011" />
+      <option name="project" value="LOCAL" />
+      <updated>1704658282386</updated>
+    </task>
+    <task id="LOCAL-00012" summary="fix:&#10; - desktop issue">
+      <option name="closed" value="true" />
+      <created>1704659188352</created>
+      <option name="number" value="00012" />
+      <option name="presentableId" value="LOCAL-00012" />
+      <option name="project" value="LOCAL" />
+      <updated>1704659188352</updated>
+    </task>
+    <task id="LOCAL-00013" summary="fix:&#10; - update gitignore">
+      <option name="closed" value="true" />
+      <created>1715449667254</created>
+      <option name="number" value="00013" />
+      <option name="presentableId" value="LOCAL-00013" />
+      <option name="project" value="LOCAL" />
+      <updated>1715449667254</updated>
+    </task>
+    <task id="LOCAL-00014" summary="fix:&#10; - update gitignore">
+      <option name="closed" value="true" />
+      <created>1715449718576</created>
+      <option name="number" value="00014" />
+      <option name="presentableId" value="LOCAL-00014" />
+      <option name="project" value="LOCAL" />
+      <updated>1715449718576</updated>
+    </task>
+    <task id="LOCAL-00015" summary="fix:&#10; - update gitignore">
+      <option name="closed" value="true" />
+      <created>1715449764030</created>
+      <option name="number" value="00015" />
+      <option name="presentableId" value="LOCAL-00015" />
+      <option name="project" value="LOCAL" />
+      <updated>1715449764030</updated>
+    </task>
+    <task id="LOCAL-00016" summary="fix:&#10; - update gitignore">
+      <option name="closed" value="true" />
+      <created>1715449773069</created>
+      <option name="number" value="00016" />
+      <option name="presentableId" value="LOCAL-00016" />
+      <option name="project" value="LOCAL" />
+      <updated>1715449773069</updated>
+    </task>
+    <task id="LOCAL-00017" summary="fix:&#10; - Better performances">
+      <option name="closed" value="true" />
+      <created>1715449797253</created>
+      <option name="number" value="00017" />
+      <option name="presentableId" value="LOCAL-00017" />
+      <option name="project" value="LOCAL" />
+      <updated>1715449797253</updated>
+    </task>
+    <task id="LOCAL-00018" summary="fix:&#10; - Better performances">
+      <option name="closed" value="true" />
+      <created>1715449961163</created>
+      <option name="number" value="00018" />
+      <option name="presentableId" value="LOCAL-00018" />
+      <option name="project" value="LOCAL" />
+      <updated>1715449961163</updated>
+    </task>
+    <task id="LOCAL-00019" summary="fix:&#10; - Better performances&#10; - Moved configs to AppData">
+      <option name="closed" value="true" />
+      <created>1715449977891</created>
+      <option name="number" value="00019" />
+      <option name="presentableId" value="LOCAL-00019" />
+      <option name="project" value="LOCAL" />
+      <updated>1715449977891</updated>
+    </task>
+    <task id="LOCAL-00020" summary="fix:&#10; - Added toasts when copying emotes">
+      <option name="closed" value="true" />
+      <created>1715460771343</created>
+      <option name="number" value="00020" />
+      <option name="presentableId" value="LOCAL-00020" />
+      <option name="project" value="LOCAL" />
+      <updated>1715460771343</updated>
+    </task>
+    <option name="localTasksCounter" value="21" />
     <servers />
   </component>
   <component name="UnknownFeatures">
@@ -407,7 +546,16 @@
     <MESSAGE value="fix:&#10; - refresh when done trigger" />
     <MESSAGE value="fix:&#10; - better configs name&#10; - cards config design" />
     <MESSAGE value="fix:&#10; - better project architecture&#10; - Color gradient" />
-    <option name="LAST_COMMIT_MESSAGE" value="fix:&#10; - better project architecture&#10; - Color gradient" />
+    <MESSAGE value="fix:&#10; - Custom colors modification (rgb, saturation, alpha)" />
+    <MESSAGE value="fix:&#10; - Colors from config&#10; - Serialize colors" />
+    <MESSAGE value="fix:&#10; - Version management" />
+    <MESSAGE value="fix:&#10; - desktop issue" />
+    <MESSAGE value="fix:&#10; - update gitignore" />
+    <MESSAGE value="fix:&#10; - Better performances&#10; - Moved configs to appdata" />
+    <MESSAGE value="fix:&#10; - Better performances" />
+    <MESSAGE value="fix:&#10; - Better performances&#10; - Moved configs to AppData" />
+    <MESSAGE value="fix:&#10; - Added toasts when copying emotes" />
+    <option name="LAST_COMMIT_MESSAGE" value="fix:&#10; - Added toasts when copying emotes" />
   </component>
   <component name="XSLT-Support.FileAssociations.UIState">
     <expand />

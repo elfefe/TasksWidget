@@ -62,6 +62,8 @@ kotlin {
                 implementation("androidx.constraintlayout:constraintlayout-compose:1.1.0-alpha07")
 
                 implementation("com.guardsquare:proguard-gradle:7.2.2")
+
+                api("io.github.kevinnzou:compose-webview-multiplatform:1.9.6")
             }
         }
         val commonTest by getting {
@@ -72,7 +74,7 @@ kotlin {
         val androidMain by getting {
             dependencies {
                 api("androidx.appcompat:appcompat:1.6.1")
-                api("androidx.core:core-ktx:1.12.0")
+                api("androidx.core:core-ktx:1.13.1")
             }
         }
         val androidTest by getting {
@@ -104,5 +106,5 @@ android {
 }
 
 dependencies {
-    implementation("androidx.navigation:navigation-compose:2.7.6")
+    implementation("androidx.navigation:navigation-compose:2.7.7")
 }

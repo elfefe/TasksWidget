@@ -37,9 +37,22 @@ compose.desktop {
             packageVersion = project.version.toString()
             modules("java.net.http")
         }
+
+        jvmArgs("--add-opens", "java.desktop/sun.awt=ALL-UNNAMED")
+        jvmArgs("--add-opens", "java.desktop/java.awt.peer=ALL-UNNAMED")
     }
 }
 
 tasks.withType(JavaExec::class.java) {
-    File("""resources/version""").writeText(project.version.toString())
+    try {
+        File("""resources\version""").writeText(project.version.toString())
+    } catch (e: Exception) {
+        e.printStackTrace()
+    }
+    try {
+        File("""common\src\commonMain\resources\version""").writeText(project.version.toString())
+        File("""desktop\resources\version""").writeText(project.version.toString())
+    } catch (e: Exception) {
+        e.printStackTrace()
+    }
 }

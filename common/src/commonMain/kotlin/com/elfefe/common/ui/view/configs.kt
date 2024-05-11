@@ -9,6 +9,7 @@ import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.gestures.detectHorizontalDragGestures
+import androidx.compose.foundation.gestures.detectTapGestures
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
@@ -56,14 +57,14 @@ enum class ConfigNavDestination(val text: String) {
 }
 
 @Composable
-fun Configs() {
+fun Configs(windowInteractions: WindowInteractions) {
     var currentDestination: ConfigNavDestination by remember { mutableStateOf(ConfigNavDestination.EMOTES) }
 
     Row {
         NavigationBar {
             currentDestination = it
         }
-        Navigator(currentDestination)
+        Navigator(currentDestination, windowInteractions)
     }
 }
 
@@ -77,10 +78,10 @@ fun AnimatedNavigation(visible: Boolean, page: @Composable () -> Unit) {
 }
 
 @Composable
-fun Navigator(destination: ConfigNavDestination) {
-    AnimatedNavigation(destination == ConfigNavDestination.EMOTES) { Emotes() }
-    AnimatedNavigation(destination == ConfigNavDestination.CARDS) { Cards() }
-    AnimatedNavigation(destination == ConfigNavDestination.THEMES) { Theme() }
+fun Navigator(destination: ConfigNavDestination, windowInteractions: WindowInteractions) {
+    AnimatedNavigation(destination == ConfigNavDestination.EMOTES) { Emotes(windowInteractions) }
+    AnimatedNavigation(destination == ConfigNavDestination.CARDS) { Cards(windowInteractions) }
+    AnimatedNavigation(destination == ConfigNavDestination.THEMES) { Theme(windowInteractions) }
 }
 
 @Composable
@@ -115,7 +116,7 @@ fun NavigationBar(onNavigate: (ConfigNavDestination) -> Unit) {
 }
 
 @Composable
-fun Emotes() {
+fun Emotes(windowInteractions: WindowInteractions) {
     Column(
         modifier = Modifier
             .fillMaxSize(),
@@ -142,7 +143,8 @@ fun Emotes() {
 
                     TextButton(onClick = {
                         isSelected = !isSelected
-                    }) {
+                    }
+                    ){
                         Text(
                             text = category.name,
                             modifier = Modifier
@@ -173,6 +175,7 @@ fun Emotes() {
                                                     .clip(RoundedCornerShape(4.dp))
                                                     .clickable {
                                                         clipboardManager.setText(AnnotatedString(emoji.character))
+                                                        windowInteractions.popup.value = Popup.show("Copied ${emoji.character}")
                                                     }
                                             )
                                     }
@@ -187,7 +190,7 @@ fun Emotes() {
 }
 
 @Composable
-fun Cards() {
+fun Cards(windowInteractions: WindowInteractions) {
     Column(
         modifier = Modifier
             .padding(16.dp)
@@ -290,7 +293,7 @@ fun CardsOrderCondition(modifier: Modifier, elevation: Dp, taskField: TaskFieldO
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
-fun Theme() {
+fun Theme(windowInteractions: WindowInteractions) {
     Column(
         modifier = Modifier
             .padding(16.dp)

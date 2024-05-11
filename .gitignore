@@ -31,6 +31,10 @@ bin/
 !**/src/main/**/bin/
 !**/src/test/**/bin/
 
+kcef-bundle/
+cache/
+
+
 ### NetBeans ###
 /nbproject/private/
 /nbbuild/

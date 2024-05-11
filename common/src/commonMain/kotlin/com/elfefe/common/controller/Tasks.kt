@@ -12,16 +12,12 @@ import java.util.concurrent.ConcurrentLinkedQueue
 import javax.swing.filechooser.FileSystemView
 
 object Tasks {
-    const val FILE_NAME = "tasks.json"
-    const val DIRECTORY = "Tasks"
-
-    val directoryPath = FileSystemView.getFileSystemView().defaultDirectory.path + File.separator + DIRECTORY
-    val tasksPath = directoryPath + File.separator + FILE_NAME
-
-    private val file = File(tasksPath)
     var currentFilter: (Task) -> Boolean = { true }
 
-    private val scope = CoroutineScope(Dispatchers.IO)
+    var scope = CoroutineScope(Dispatchers.IO)
+        set(value) {
+            field = value
+        }
     private var updateJob: Job? = null
     private val waitingTasks = ConcurrentLinkedQueue<Task>()
 
@@ -40,17 +36,17 @@ object Tasks {
     var sorting: MutableList<Task>.() -> Unit = { sortByDescending { it.deadline } }
 
     init {
-        if (file.exists()) {
+        if (tasksFile.exists()) {
             _tasks.clear()
             _tasks.addAll(query())
         } else {
-            file.createNewFile()
-            file.writeText(json.toJson(listOf<Task>()))
+            tasksFile.createNewFile()
+            tasksFile.writeText(json.toJson(listOf<Task>()))
         }
         refresh()
     }
 
-    private fun query(): List<Task> = json.fromJson(file.readText(), object : TypeToken<List<Task>>() {}.type)
+    private fun query(): List<Task> = json.fromJson(tasksFile.readText(), object : TypeToken<List<Task>>() {}.type)
 
     fun update(task: Task) {
         lastTask = task
@@ -58,7 +54,7 @@ object Tasks {
 
         if (updateJob?.isActive == true) return
 
-        updateJob = scope.launch {
+        updateJob = scope.launch(Dispatchers.IO) {
             while (waitingTasks.isNotEmpty()) {
                 val waitedTask = waitingTasks.poll()
                 val index = _tasks.indexOfFirst { it.created == waitedTask.created }
@@ -68,7 +64,7 @@ object Tasks {
 
                 refresh()
 
-                try { file.writeText(json.toJson(_tasks)) }
+                try { tasksFile.writeText(json.toJson(_tasks)) }
                 catch (e: Exception) { continue }
             }
             updateJob?.cancelAndJoin()
@@ -87,11 +83,6 @@ object Tasks {
     }
 
     object Configs {
-        const val FILE_NAME = "configs.json"
-        val configsPath = directoryPath + File.separator + FILE_NAME
-        private val file = File(configsPath)
-
-
         private var _configs = Configs()
         val configs: com.elfefe.common.model.Configs = _configs
 
@@ -99,11 +90,11 @@ object Tasks {
         private val waitingTasks = ConcurrentLinkedQueue<com.elfefe.common.model.Configs>()
 
         init {
-            if (file.exists()) {
+            if (configsFile.exists()) {
                 _configs = query()
             } else {
-                file.createNewFile()
-                file.writeText(json.toJson(_configs))
+                configsFile.createNewFile()
+                configsFile.writeText(json.toJson(_configs))
             }
             refresh()
         }
@@ -154,21 +145,24 @@ object Tasks {
 
             if (updateJob?.isActive == true) return
 
-            updateJob = scope.launch {
+            updateJob = scope.launch(Dispatchers.IO) {
                 while (waitingTasks.isNotEmpty()) {
                     delay(50)
                     try {
                         val config = json.toJson(_configs)
                         if (config.isNotBlank())
-                        file.writeText(config)
+                            configsFile.writeText(config)
                     } catch (e: Exception) { continue }
                 }
                 updateJob?.cancelAndJoin()
             }
         }
 
-        private fun query(): com.elfefe.common.model.Configs =
-            json.fromJson(file.readText(), object : TypeToken<com.elfefe.common.model.Configs>() {}.type)
+        private fun query(): com.elfefe.common.model.Configs {
+            val configsText = configsFile.readText()
+            return if (configsText.isBlank()) Configs()
+            else json.fromJson(configsText, object : TypeToken<com.elfefe.common.model.Configs>() {}.type)
+        }
     }
 }
 

@@ -21,5 +21,7 @@ val publicDir: File by lazy {
     File(FileSystemView.getFileSystemView().defaultDirectory.path, APP_PUBLIC_DIR).apply { mkdirs() }
 }
 
+val tmpDir: File by lazy { File(appPrivateDir, "tmp").apply { mkdirs() } }
+
 val tasksFile: File by lazy { File(publicDir, TASKS_FILENAME).apply { createNewFile() } }
 val configsFile: File by lazy { File(appPrivateDir, CONFIGS_FILENAME).apply { createNewFile() } }

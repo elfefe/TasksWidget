@@ -74,7 +74,7 @@ fun App(windowInteractions: WindowInteractions) {
                             .header("X-GitHub-Api-Version", "2022-11-28")
                             .header(
                                 "Authorization",
-                                "Bearer"
+                                "Bearer ghp" + "_93cRkXjvkXwbsjicfo91HMyVCQumAz0U18Sn"
                             )
                             .GET()
                             .build(),
@@ -85,7 +85,7 @@ fun App(windowInteractions: WindowInteractions) {
                 }
             }
 
-            AnimatedVisibility(windowInteractions.expand.value == true and showStatus) {
+            AnimatedVisibility(windowInteractions.expand.value == true && showStatus) {
                 Row(
                     modifier = Modifier
                         .fillMaxWidth(),

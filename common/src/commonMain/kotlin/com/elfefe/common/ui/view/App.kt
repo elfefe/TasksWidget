@@ -21,17 +21,28 @@ import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.compose.ui.window.ApplicationScope
 import com.elfefe.common.controller.Tasks
+import com.elfefe.common.controller.appPrivateDir
+import com.elfefe.common.controller.tmpDir
 import com.elfefe.common.model.Task
 import com.elfefe.common.model.github.GithubLatestRelease
 import com.elfefe.common.ui.theme.TasksTheme
 import com.google.gson.Gson
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
+import org.apache.http.client.methods.HttpGet
+import org.apache.http.impl.client.HttpClientBuilder
+import org.apache.http.impl.client.LaxRedirectStrategy
 import java.awt.Window
+import java.io.File
 import java.net.URI
 import java.net.http.HttpClient
 import java.net.http.HttpRequest
 import java.net.http.HttpResponse
+import java.time.Duration
+import kotlin.io.path.fileSize
 
 
 @OptIn(ExperimentalFoundationApi::class, ExperimentalComposeUiApi::class)
@@ -101,11 +112,11 @@ fun App(windowInteractions: WindowInteractions) {
                             val version = it.readBytes().toString(Charsets.UTF_8)
                             newVersionAvailable = tagName != version && tagName != null
 
-                                if (newVersionAvailable) searchingVersion = "New version available: $tagName"
-                                else {
-                                    searchingVersion = "Up to date"
-                                    showStatus = false
-                                }
+                            if (newVersionAvailable) searchingVersion = "New version available: $tagName"
+                            else {
+                                searchingVersion = "Up to date"
+                                showStatus = false
+                            }
                         }
                     }
 
@@ -130,8 +141,42 @@ fun App(windowInteractions: WindowInteractions) {
                                 shadowColor = Color.Black
                                 showStatus = false
                                 if (newVersionAvailable)
-                                    latestRelease?.run {
-                                        htmlUrl?.let { uriHandler.openUri(it) }
+                                    scope.launch(Dispatchers.IO) {
+                                        latestRelease?.run {
+                                            assets.firstOrNull()?.run {
+                                                browserDownloadUrl?.let {
+                                                    windowInteractions.popup.value =
+                                                        Popup.show("Launched TasksWidget update ! \uD83D\uDE80")
+                                                    val updateFile = File(tmpDir, name ?: "TasksWidget.latest.msi")
+                                                    println(it)
+                                                    val client = HttpClientBuilder.create()
+                                                        .setRedirectStrategy(LaxRedirectStrategy())
+                                                        .build()
+                                                    client.execute(HttpGet(it)).use { response ->
+                                                        if (response.statusLine.statusCode == 201) {
+                                                            response.entity.content?.use { input ->
+                                                                updateFile.outputStream().use { output ->
+                                                                    input.copyTo(output)
+                                                                }
+                                                            }
+                                                            ProcessBuilder(
+                                                                "msiexec.exe",
+                                                                "/i",
+                                                                updateFile.absolutePath
+                                                            ).start()
+                                                            windowInteractions.application.exitApplication()
+                                                        } else {
+                                                            return@run null
+                                                        }
+                                                    }
+                                                }
+                                            } ?: run {
+                                                htmlUrl?.let { uriHandler.openUri(it) }
+                                                windowInteractions.popup.value =
+                                                    Popup(true, "The latest version of TasksWidget could not be updated manually.. \uD83D\uDE1E \n" +
+                                                            "Please download and install it manually !", 5)
+                                            }
+                                        }
                                     }
                             }
                     )
@@ -144,6 +189,7 @@ fun App(windowInteractions: WindowInteractions) {
 }
 
 data class WindowInteractions(
+    val application: ApplicationScope,
     val window: Interactable<Window>,
     val visibility: Interactable<Boolean>,
     val expand: Interactable<Boolean>,

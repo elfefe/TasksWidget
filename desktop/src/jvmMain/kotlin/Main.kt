@@ -10,6 +10,7 @@ import androidx.compose.material.Text
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.DpSize
@@ -43,6 +44,7 @@ fun ApplicationScope.TasksWidget() {
     Tasks.scope = rememberCoroutineScope()
 
     val windowInteractions = WindowInteractions(
+        application = this,
         window = Interactable(null),
         visibility = Interactable(true),
         expand = Interactable(true),
@@ -155,12 +157,23 @@ fun ApplicationScope.ConfigsWindow(windowInteractions: WindowInteractions) {
 @Composable
 fun ApplicationScope.PopupWindow(windowInteractions: WindowInteractions) {
     var isPopupVisible by remember { mutableStateOf(windowInteractions.popup.value?.show ?: false) }
+    var popupText by remember { mutableStateOf(windowInteractions.popup.value?.text ?: "")}
     val screenSize = Toolkit.getDefaultToolkit().screenSize.run { DpSize(width.dp, height.dp) }
-    windowInteractions.popup.onChange = { isPopupVisible = it.show }
+    val timer = Timer(onDone = {
+        windowInteractions.popup.value = Popup.HIDE
+    })
+
+    windowInteractions.popup.onChange = {
+        isPopupVisible = it.show
+        popupText = it.text
+
+        if (it.show) {
+            timer.cancel()
+            timer.start(windowInteractions.popup.value?.duration ?: 3)
+        }
+    }
+
     if (isPopupVisible) {
-        Timer(onDone = {
-            windowInteractions.popup.value = Popup.HIDE
-        }).start(windowInteractions.popup.value?.duration ?: 3)
         Window(
             state = WindowState(
                 position = WindowPosition(
@@ -168,7 +181,7 @@ fun ApplicationScope.PopupWindow(windowInteractions: WindowInteractions) {
                     screenSize.height - 100.dp
                 ),
                 size = DpSize(
-                    screenSize.width / 2, 30.dp
+                    screenSize.width / 2, 30.dp * (popupText.count { it == Char(10) } + 1)
                 )
             ),
             visible = true,
@@ -182,10 +195,13 @@ fun ApplicationScope.PopupWindow(windowInteractions: WindowInteractions) {
             alwaysOnTop = true
         ) {
             Column(
-                modifier = Modifier.fillMaxSize().background(color = Color.White, RoundedCornerShape(4.dp)),
+                modifier = Modifier
+                    .shadow(8.dp, shape = RoundedCornerShape(4.dp))
+                    .fillMaxSize(0.9f)
+                    .background(color = Color.White, RoundedCornerShape(4.dp)),
                 horizontalAlignment = Alignment.CenterHorizontally,
                 verticalArrangement = Arrangement.Center
-            ) { Text(windowInteractions.popup.value?.text ?: "") }
+            ) { Text(popupText) }
         }
     }
 }

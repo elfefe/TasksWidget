@@ -35,3 +35,11 @@ val Color.Companion.warning: Color
 
 val Color.Companion.valid: Color
     get() = Color(0xFF_00cc00 )
+
+val String.stringToColor: Color
+    get() = Color(
+        red = Integer.parseInt(substring(2, 4), 16) / 255f,
+        green = Integer.parseInt(substring(4, 6), 16) / 255f,
+        blue = Integer.parseInt(substring(6, 8), 16) / 255f,
+        alpha = Integer.parseInt(substring(0, 2), 16) / 255f
+    )

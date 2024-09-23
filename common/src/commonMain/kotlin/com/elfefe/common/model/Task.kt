@@ -36,12 +36,12 @@ data class ThemeColors(
 class ThemeColorsAdapter : TypeAdapter<ThemeColors> () {
     override fun write(out: com.google.gson.stream.JsonWriter?, value: ThemeColors?) {
         out?.beginObject()
-        out?.name("primary")?.value(value?.primary?.toArgb())
-        out?.name("onPrimary")?.value(value?.onPrimary?.toArgb())
-        out?.name("secondary")?.value(value?.secondary?.toArgb())
-        out?.name("onSecondary")?.value(value?.onSecondary?.toArgb())
-        out?.name("background")?.value(value?.background?.toArgb())
-        out?.name("onBackground")?.value(value?.onBackground?.toArgb())
+        out?.name("primary")?.value(value?.primary?.toArgb()?.let { Integer.toHexString(it) })
+        out?.name("onPrimary")?.value(value?.onPrimary?.toArgb()?.let { Integer.toHexString(it) })
+        out?.name("secondary")?.value(value?.secondary?.toArgb()?.let { Integer.toHexString(it) })
+        out?.name("onSecondary")?.value(value?.onSecondary?.toArgb()?.let { Integer.toHexString(it) })
+        out?.name("background")?.value(value?.background?.toArgb()?.let { Integer.toHexString(it) })
+        out?.name("onBackground")?.value(value?.onBackground?.toArgb()?.let { Integer.toHexString(it) })
         out?.endObject()
     }
 
@@ -54,13 +54,14 @@ class ThemeColorsAdapter : TypeAdapter<ThemeColors> () {
         var onBackground = Color.onBackground
         `in`?.beginObject()
         while (`in`?.hasNext() == true) {
-            when (`in`.nextName()) {
-                "primary" -> primary = Color(`in`.nextInt())
-                "onPrimary" -> onPrimary = Color(`in`.nextInt())
-                "secondary" -> secondary = Color(`in`.nextInt())
-                "onSecondary" -> onSecondary = Color(`in`.nextInt())
-                "background" -> background = Color(`in`.nextInt())
-                "onBackground" -> onBackground = Color(`in`.nextInt())
+            val next = `in`.nextName()
+            when (next) {
+                "primary" -> primary = `in`.nextString().stringToColor
+                "onPrimary" -> onPrimary = `in`.nextString().stringToColor
+                "secondary" -> secondary = `in`.nextString().stringToColor
+                "onSecondary" -> onSecondary = `in`.nextString().stringToColor
+                "background" -> background = `in`.nextString().stringToColor
+                "onBackground" -> onBackground = `in`.nextString().stringToColor
             }
         }
         `in`?.endObject()

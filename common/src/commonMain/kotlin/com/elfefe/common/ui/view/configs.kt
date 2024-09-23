@@ -9,12 +9,8 @@ import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.gestures.detectHorizontalDragGestures
-import androidx.compose.foundation.gestures.detectTapGestures
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.items
-import androidx.compose.foundation.lazy.itemsIndexed
-import androidx.compose.foundation.lazy.rememberLazyListState
+import androidx.compose.foundation.lazy.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
@@ -42,6 +38,7 @@ import com.elfefe.common.controller.EmojiApi
 import com.elfefe.common.controller.Tasks
 import com.elfefe.common.model.TaskFieldOrder
 import com.elfefe.common.ui.theme.primary
+import org.apache.xmlbeans.xml.stream.Space
 import org.burnoutcrew.reorderable.ReorderableItem
 import org.burnoutcrew.reorderable.detectReorderAfterLongPress
 import org.burnoutcrew.reorderable.rememberReorderableLazyListState
@@ -144,7 +141,7 @@ fun Emotes(windowInteractions: WindowInteractions) {
                     TextButton(onClick = {
                         isSelected = !isSelected
                     }
-                    ){
+                    ) {
                         Text(
                             text = category.name,
                             modifier = Modifier
@@ -175,7 +172,8 @@ fun Emotes(windowInteractions: WindowInteractions) {
                                                     .clip(RoundedCornerShape(4.dp))
                                                     .clickable {
                                                         clipboardManager.setText(AnnotatedString(emoji.character))
-                                                        windowInteractions.popup.value = Popup.show("Copied ${emoji.character}")
+                                                        windowInteractions.popup.value =
+                                                            Popup.show("Copied ${emoji.character}")
                                                     }
                                             )
                                     }
@@ -256,7 +254,7 @@ fun CardsOrderCondition(modifier: Modifier, elevation: Dp, taskField: TaskFieldO
                     it.priority = taskField.priority
                 }
 
-                Tasks.Configs.update(Tasks.Configs.configs)
+                Tasks.Configs.update()
             }
 
             Checkbox(checked = orderActive, onCheckedChange = {
@@ -305,90 +303,50 @@ fun Theme(windowInteractions: WindowInteractions) {
             modifier = Modifier
                 .fillMaxSize()
         ) {
-            stickyHeader {
-                Text(
-                    text = "Primary",
-                    fontWeight = FontWeight.Thin,
-                    fontSize = 18.sp,
-                    color = Color.DarkGray
-                )
+            themePartConfig("Primary", Tasks.Configs.configs.themeColors.primary) {
+                Tasks.Configs.configs.updateThemeColors(primary = it)
+                Tasks.Configs.update()
             }
-            item {
-                ThemeColor {
-
-                }
+            themePartConfig("On primary", Tasks.Configs.configs.themeColors.onPrimary) {
+                Tasks.Configs.configs.updateThemeColors(onPrimary = it)
+                Tasks.Configs.update()
             }
-            stickyHeader {
-                Text(
-                    text = "On primary",
-                    fontWeight = FontWeight.Thin,
-                    fontSize = 18.sp,
-                    color = Color.DarkGray
-                )
+            themePartConfig("Secondary", Tasks.Configs.configs.themeColors.secondary) {
+                Tasks.Configs.configs.updateThemeColors(secondary = it)
+                Tasks.Configs.update()
             }
-            item {
-                ThemeColor {
-
-                }
+            themePartConfig("On secondary", Tasks.Configs.configs.themeColors.onSecondary) {
+                Tasks.Configs.configs.updateThemeColors(onSecondary = it)
+                Tasks.Configs.update()
             }
-            stickyHeader {
-                Text(
-                    text = "Secondary",
-                    fontWeight = FontWeight.Thin,
-                    fontSize = 18.sp,
-                    color = Color.DarkGray
-                )
+            themePartConfig("Background", Tasks.Configs.configs.themeColors.background) {
+                Tasks.Configs.configs.updateThemeColors(background = it)
+                Tasks.Configs.update()
             }
-            item {
-                ThemeColor {
-
-                }
-            }
-            stickyHeader {
-                Text(
-                    text = "On secondary",
-                    fontWeight = FontWeight.Thin,
-                    fontSize = 16.sp,
-                    color = Color.DarkGray
-                )
-            }
-            item {
-                ThemeColor {
-
-                }
-            }
-            stickyHeader {
-                Text(
-                    text = "Background",
-                    fontWeight = FontWeight.Thin,
-                    fontSize = 16.sp,
-                    color = Color.DarkGray
-                )
-            }
-            item {
-                ThemeColor {
-
-                }
-            }
-            stickyHeader {
-                Text(
-                    text = "On background",
-                    fontWeight = FontWeight.Thin,
-                    fontSize = 16.sp,
-                    color = Color.DarkGray
-                )
-            }
-            item {
-                ThemeColor {
-
-                }
+            themePartConfig("On background", Tasks.Configs.configs.themeColors.onBackground) {
+                Tasks.Configs.configs.updateThemeColors(onBackground = it)
             }
         }
     }
 }
 
+@OptIn(ExperimentalFoundationApi::class)
+fun LazyListScope.themePartConfig(label: String, defaultColor: Color, onColorChange: (Color) -> Unit) {
+    stickyHeader {
+        Text(
+            text = label,
+            fontWeight = FontWeight.Thin,
+            fontSize = 18.sp,
+            color = Color.DarkGray
+        )
+    }
+    item {
+        ThemeColor(defaultColor, onColorChange)
+    }
+}
+
 @Composable
-fun ThemeColor(onColorChange: (Color) -> Unit) {
+fun ThemeColor(default: Color, onColorChange: (Color) -> Unit) {
     Row(
         modifier = Modifier
             .padding(16.dp)
@@ -396,8 +354,8 @@ fun ThemeColor(onColorChange: (Color) -> Unit) {
         horizontalArrangement = Arrangement.SpaceBetween,
         verticalAlignment = Alignment.CenterVertically
     ) {
-        var currentColor by remember { mutableStateOf(Color.Transparent) }
-        var saturationColor by remember { mutableStateOf(Color.Transparent) }
+        var currentColor by remember { mutableStateOf(default) }
+        var saturationColor by remember { mutableStateOf(default) }
 
         Column(
             modifier = Modifier
@@ -405,9 +363,19 @@ fun ThemeColor(onColorChange: (Color) -> Unit) {
             verticalArrangement = Arrangement.Top,
             horizontalAlignment = Alignment.Start
         ) {
+            val colorGradient = listOf(
+                Color(1f, 0f, 0f),
+                Color(1f, 1f, 0f),
+                Color(0f, 1f, 0f),
+                Color(0f, 1f, 1f),
+                Color(0f, 0f, 1f),
+                Color(1f, 0f, 1f),
+            )
+
             var colorCursorPosition by remember { mutableStateOf(0f) }
-            var darknessCursorPosition by remember { mutableStateOf(90f) }
-            var alphaCursorPosition by remember { mutableStateOf(1f) }
+            var darknessCursorPosition by remember { mutableStateOf((default.red + default.blue + default.green) / 3 * 180) }
+            var alphaCursorPosition by remember { mutableStateOf(default.alpha) }
+            var saturated by remember { mutableStateOf(default.red != default.blue && default.blue != default.green) }
 
             Canvas(
                 modifier = Modifier
@@ -419,24 +387,16 @@ fun ThemeColor(onColorChange: (Color) -> Unit) {
                         }
                     }
             ) {
-                val colorGradient =
-                    listOf(
-                        Color(1f,0f,0f),
-                        Color(1f,1f,0f),
-                        Color(0f,1f,0f),
-                        Color(0f,1f,1f),
-                        Color(0f,0f,1f),
-                        Color(1f,0f,1f),
-                    )
                 val colorAlphaGradient =
                     listOf(
-                        Color(1f,0f,0f, alphaCursorPosition),
-                        Color(1f,1f,0f, alphaCursorPosition),
-                        Color(0f,1f,0f, alphaCursorPosition),
-                        Color(0f,1f,1f, alphaCursorPosition),
-                        Color(0f,0f,1f, alphaCursorPosition),
-                        Color(1f,0f,1f, alphaCursorPosition),
+                        Color(1f, 0f, 0f, alphaCursorPosition),
+                        Color(1f, 1f, 0f, alphaCursorPosition),
+                        Color(0f, 1f, 0f, alphaCursorPosition),
+                        Color(0f, 1f, 1f, alphaCursorPosition),
+                        Color(0f, 0f, 1f, alphaCursorPosition),
+                        Color(1f, 0f, 1f, alphaCursorPosition),
                     )
+
                 drawRect(
                     brush = Brush.horizontalGradient(
                         colorGradient,
@@ -451,13 +411,17 @@ fun ThemeColor(onColorChange: (Color) -> Unit) {
                 )
 
                 val colorIndexNormalized = (colorCursorPosition / size.width).let { if (it.isNaN()) 0f else it }
-                val firstColorIndex = max(0, min(colorAlphaGradient.size - 2 ,
-                    floor((colorIndexNormalized) * (colorAlphaGradient.size - 1)).toInt()
-                ))
+                val firstColorIndex = max(
+                    0, min(
+                        colorAlphaGradient.size - 2,
+                        floor((colorIndexNormalized) * (colorAlphaGradient.size - 1)).toInt()
+                    )
+                )
 
                 val fractionStep = 1f / (colorAlphaGradient.size - 1)
                 val minFraction = ((firstColorIndex + 1) / (colorAlphaGradient.size - 1f)) - fractionStep
-                val colorFraction = max(0f, min(1f, (colorIndexNormalized - minFraction) * (colorAlphaGradient.size - 1f)))
+                val colorFraction =
+                    max(0f, min(1f, (colorIndexNormalized - minFraction) * (colorAlphaGradient.size - 1f)))
 
                 currentColor = if (colorAlphaGradient.lastIndex == firstColorIndex) colorAlphaGradient[firstColorIndex]
                 else lerp(colorAlphaGradient[firstColorIndex], colorAlphaGradient[firstColorIndex + 1], colorFraction)
@@ -473,10 +437,10 @@ fun ThemeColor(onColorChange: (Color) -> Unit) {
                         }
                     }
             ) {
-                val colorGradient = listOf(Color.Black, currentColor, Color.White)
+                val colorGradient = listOf(Color.Black, if (saturated) currentColor else Color.Gray, Color.White)
                 val colorAlphaGradient = listOf(
                     Color(0f, 0f, 0f, alphaCursorPosition),
-                    currentColor,
+                    if (saturated) currentColor else Color.Gray,
                     Color(1f, 1f, 1f, alphaCursorPosition)
                 )
                 drawRect(
@@ -493,23 +457,36 @@ fun ThemeColor(onColorChange: (Color) -> Unit) {
                 )
 
                 val indexNormalized = (darknessCursorPosition / size.width).let {
-                    if (it.isNaN()) 0f else min(1f, max(0f, it)) }
-                val colorIndex = min(floor(indexNormalized * (colorAlphaGradient.size - 1)).toInt(), colorAlphaGradient.size - 2)
+                    if (it.isNaN()) 0f else min(1f, max(0f, it))
+                }
+                val colorIndex =
+                    min(floor(indexNormalized * (colorAlphaGradient.size - 1)).toInt(), colorAlphaGradient.size - 2)
 
                 val fractionStep = 1f / (colorAlphaGradient.size - 1)
                 val minFraction = ((colorIndex + 1) / (colorAlphaGradient.size - 1f)) - fractionStep
-                val colorLerpFraction = max(0f, min(1f, (indexNormalized - minFraction) * (colorAlphaGradient.size - 1f)))
+                val colorLerpFraction =
+                    max(0f, min(1f, (indexNormalized - minFraction) * (colorAlphaGradient.size - 1f)))
 
-                saturationColor = lerp(colorAlphaGradient[colorIndex], colorAlphaGradient[colorIndex + 1], colorLerpFraction)
+                saturationColor =
+                    lerp(colorAlphaGradient[colorIndex], colorAlphaGradient[colorIndex + 1], colorLerpFraction)
             }
-
-            Slider(
-                value = alphaCursorPosition,
-                onValueChange = { alphaCursorPosition = it },
+            Row(
                 modifier = Modifier
                     .fillMaxWidth()
                     .height(32.dp)
-            )
+            ) {
+                Slider(
+                    value = alphaCursorPosition,
+                    onValueChange = { alphaCursorPosition = it },
+                    modifier = Modifier
+                        .fillMaxWidth(.8f)
+                        .fillMaxHeight()
+                )
+
+                Spacer(Modifier.width(4.dp))
+
+                Checkbox(saturated, { saturated = !saturated })
+            }
         }
 
         Canvas(

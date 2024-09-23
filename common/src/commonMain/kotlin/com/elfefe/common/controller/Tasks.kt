@@ -84,7 +84,12 @@ object Tasks {
 
     object Configs {
         private var _configs = Configs()
-        val configs: com.elfefe.common.model.Configs = _configs
+            set(value) {
+                field = value
+                update()
+            }
+        val configs: com.elfefe.common.model.Configs
+            get() = _configs
 
         private var updateJob: Job? = null
         private val waitingTasks = ConcurrentLinkedQueue<com.elfefe.common.model.Configs>()
@@ -92,6 +97,7 @@ object Tasks {
         init {
             if (configsFile.exists()) {
                 _configs = query()
+                println(_configs)
             } else {
                 configsFile.createNewFile()
                 configsFile.writeText(json.toJson(_configs))
@@ -140,20 +146,15 @@ object Tasks {
             }
         }
 
-        fun update(configs: com.elfefe.common.model.Configs) {
-            waitingTasks.add(configs)
-
+        fun update() {
             if (updateJob?.isActive == true) return
 
             updateJob = scope.launch(Dispatchers.IO) {
-                while (waitingTasks.isNotEmpty()) {
-                    delay(50)
-                    try {
-                        val config = json.toJson(_configs)
-                        if (config.isNotBlank())
-                            configsFile.writeText(config)
-                    } catch (e: Exception) { continue }
-                }
+                try {
+                    val config = json.toJson(configs)
+                    if (config.isNotBlank())
+                        configsFile.writeText(config)
+                } catch (e: Exception) {  }
                 updateJob?.cancelAndJoin()
             }
         }

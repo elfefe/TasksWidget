@@ -33,16 +33,15 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-
-import com.elfefe.common.controller.EmojiApi
-import com.elfefe.common.controller.Tasks
+import com.elfefe.common.controller.*
 import com.elfefe.common.model.TaskFieldOrder
 import com.elfefe.common.ui.theme.primary
-import org.apache.xmlbeans.xml.stream.Space
 import org.burnoutcrew.reorderable.ReorderableItem
 import org.burnoutcrew.reorderable.detectReorderAfterLongPress
 import org.burnoutcrew.reorderable.rememberReorderableLazyListState
 import org.burnoutcrew.reorderable.reorderable
+import java.io.File
+import java.nio.file.Files
 import kotlin.math.floor
 import kotlin.math.max
 import kotlin.math.min
@@ -51,6 +50,7 @@ enum class ConfigNavDestination(val text: String) {
     EMOTES("Emotes"),
     CARDS("Cards"),
     THEMES("Theme"),
+    GENERAL("Général"),
 }
 
 @Composable
@@ -79,6 +79,7 @@ fun Navigator(destination: ConfigNavDestination, windowInteractions: WindowInter
     AnimatedNavigation(destination == ConfigNavDestination.EMOTES) { Emotes(windowInteractions) }
     AnimatedNavigation(destination == ConfigNavDestination.CARDS) { Cards(windowInteractions) }
     AnimatedNavigation(destination == ConfigNavDestination.THEMES) { Theme(windowInteractions) }
+    AnimatedNavigation(destination == ConfigNavDestination.GENERAL) { General(windowInteractions) }
 }
 
 @Composable
@@ -254,6 +255,7 @@ fun CardsOrderCondition(modifier: Modifier, elevation: Dp, taskField: TaskFieldO
                     it.priority = taskField.priority
                 }
 
+                Tasks.refresh()
                 Tasks.Configs.update()
             }
 
@@ -289,7 +291,6 @@ fun CardsOrderCondition(modifier: Modifier, elevation: Dp, taskField: TaskFieldO
     }
 }
 
-@OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun Theme(windowInteractions: WindowInteractions) {
     Column(
@@ -325,6 +326,65 @@ fun Theme(windowInteractions: WindowInteractions) {
             }
             themePartConfig("On background", Tasks.Configs.configs.themeColors.onBackground) {
                 Tasks.Configs.configs.updateThemeColors(onBackground = it)
+            }
+        }
+    }
+}
+
+@Composable
+fun General(windowInteractions: WindowInteractions) {
+    Column(
+        modifier = Modifier
+            .padding(16.dp)
+            .fillMaxSize(),
+        verticalArrangement = Arrangement.Top,
+        horizontalAlignment = Alignment.Start
+    ) {
+        var startOnBoot by remember { mutableStateOf(false) }
+
+        Card(
+            modifier = Modifier
+                .height(256.dp)
+                .fillMaxWidth(),
+            elevation = 4.dp
+        ) {
+            Column(
+                modifier = Modifier
+                    .padding(8.dp)
+                    .fillMaxSize(),
+                horizontalAlignment = Alignment.Start,
+                verticalArrangement = Arrangement.Top
+            ) {
+                Row(
+                    verticalAlignment = Alignment.CenterVertically,
+                ) {
+                    Checkbox(checked = startOnBoot, onCheckedChange = {
+                        startOnBoot = it
+                        if (it) {
+                            try {
+                                if (appDir.exists())
+                                    Files.createSymbolicLink(
+                                        File("C:\\$userPath\\AppData\\Roaming\\Microsoft\\Windows\\Start Menu\\" +
+                                                "Programs\\Startup\\TasksWidget.exe").toPath(),
+                                        appDir.toPath(),
+                                    )
+                                else Files.deleteIfExists(File("$userPath\\AppData\\Roaming\\Microsoft\\" +
+                                        "Windows\\Start Menu\\Programs\\Startup\\TasksWidget.exe").toPath())
+                            } catch (e: Exception) {
+                                windowInteractions.popup.value = Popup.show(e.message ?: "Error while creating link")
+                            }
+                        }
+                    })
+
+                    Spacer(Modifier.width(16.dp))
+
+                    Text(
+                        text = "Lancer l'application au démarrage.",
+                        fontWeight = FontWeight.Normal,
+                        fontSize = 16.sp,
+                        color = Color.DarkGray
+                    )
+                }
             }
         }
     }
@@ -423,8 +483,13 @@ fun ThemeColor(default: Color, onColorChange: (Color) -> Unit) {
                 val colorFraction =
                     max(0f, min(1f, (colorIndexNormalized - minFraction) * (colorAlphaGradient.size - 1f)))
 
-                currentColor = if (colorAlphaGradient.lastIndex == firstColorIndex) colorAlphaGradient[firstColorIndex]
-                else lerp(colorAlphaGradient[firstColorIndex], colorAlphaGradient[firstColorIndex + 1], colorFraction)
+                currentColor =
+                    if (colorAlphaGradient.lastIndex == firstColorIndex) colorAlphaGradient[firstColorIndex]
+                    else lerp(
+                        colorAlphaGradient[firstColorIndex],
+                        colorAlphaGradient[firstColorIndex + 1],
+                        colorFraction
+                    )
             }
 
             Canvas(

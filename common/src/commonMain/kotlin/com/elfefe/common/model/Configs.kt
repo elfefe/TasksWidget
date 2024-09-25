@@ -5,8 +5,10 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.graphics.Color
 import com.elfefe.common.ui.theme.*
-import com.google.common.reflect.TypeToken
-import com.google.gson.*
+import com.google.gson.GsonBuilder
+import com.google.gson.JsonObject
+import com.google.gson.JsonParseException
+import com.google.gson.TypeAdapter
 import com.google.gson.annotations.JsonAdapter
 import com.google.gson.stream.JsonToken
 import com.google.gson.stream.JsonWriter
@@ -14,7 +16,7 @@ import com.google.gson.stream.JsonWriter
 
 @JsonAdapter(ConfigsAdapter::class)
 class Configs(
-    _taskFieldsOrder: List<TaskFieldOrder> = listOf(
+    taskFieldsOrder: List<TaskFieldOrder> = listOf(
         TaskFieldOrder(name = "title", priority = 0, active = false),
         TaskFieldOrder(name = "description", priority = 0, active = false),
         TaskFieldOrder(name = "deadline", priority = 2, active = true),
@@ -22,7 +24,7 @@ class Configs(
         TaskFieldOrder(name = "created", priority = 0, active = true),
         TaskFieldOrder(name = "edited", priority = 0, active = false),
     ),
-    _themeColors: ThemeColors = ThemeColors(
+    themeColors: ThemeColors = ThemeColors(
         primary = Color.primary,
         onPrimary = Color.onPrimary,
         secondary = Color.secondary,
@@ -31,8 +33,8 @@ class Configs(
         onBackground = Color.onBackground,
     )
 ) {
-    var themeColors: ThemeColors by mutableStateOf(_themeColors)
-    var taskFieldsOrder: List<TaskFieldOrder> by mutableStateOf(_taskFieldsOrder)
+    var taskFieldsOrder: List<TaskFieldOrder> by mutableStateOf(taskFieldsOrder)
+    var themeColors: ThemeColors by mutableStateOf(themeColors)
 
     fun updateThemeColors(
         primary: Color = themeColors.primary,
@@ -69,19 +71,32 @@ class ConfigsAdapter : TypeAdapter<Configs>() {
     }
 
     override fun read(`in`: com.google.gson.stream.JsonReader?): Configs {
-        `in`?.beginObject()
-        if (`in`?.nextName() == "orders") throw JsonParseException("Expected 'orders' as first field")
-        `in`?.beginArray()
         val taskFieldsOrders = mutableListOf<TaskFieldOrder>()
-        while (`in`?.peek() != JsonToken.END_ARRAY)
-            taskFieldsOrders.add(TaskFieldOrderAdapter().read(`in`))
-        `in`.endArray()
-        if (`in`.nextName() == "colors") throw JsonParseException("Expected 'colors' as second field")
-        val themeColors = ThemeColorsAdapter().read(`in`)
-        `in`.endObject()
+        var themeColors: ThemeColors = ThemeColors(
+            primary = Color.primary,
+        onPrimary = Color.onPrimary,
+        secondary = Color.secondary,
+        onSecondary = Color.onSecondary,
+        background = Color.background,
+        onBackground = Color.onBackground
+        )
+        `in`?.beginObject()
+        while (`in`?.hasNext() == true) {
+            when (val next = `in`.nextName()) {
+                "orders" -> {
+                    `in`.beginArray()
+                    while (`in`.peek() != JsonToken.END_ARRAY)
+                        taskFieldsOrders.add(TaskFieldOrderAdapter().read(`in`))
+                    `in`.endArray()
+                }
+                "colors" -> themeColors = ThemeColorsAdapter().read(`in`)
+                else -> throw JsonParseException("Unexpected field: $next")
+            }
+        }
+        `in`?.endObject()
         return Configs(
-            _taskFieldsOrder = taskFieldsOrders,
-            _themeColors = themeColors,
+            taskFieldsOrder = taskFieldsOrders,
+            themeColors = themeColors,
         )
     }
 }

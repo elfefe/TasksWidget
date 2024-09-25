@@ -24,6 +24,7 @@ import com.elfefe.common.controller.Tasks
 import com.elfefe.common.controller.deadlineDate
 import com.elfefe.common.controller.scaledSp
 import com.elfefe.common.model.Task
+import java.io.File
 
 @Composable
 fun TaskCard(modifier: Modifier, task: Task, showDescription: Boolean) {
@@ -73,7 +74,7 @@ fun TaskCard(modifier: Modifier, task: Task, showDescription: Boolean) {
                         .padding(10.dp, 0.dp),
                     textStyle = TextStyle(
                         color =
-                        if (task.done || deadlineDate == 1) Color.Black
+                        if (task.done || deadlineDate == 1) Tasks.Configs.configs.themeColors.onPrimary
                         else if (deadlineDate == -1) Color(0xFFFFB900)
                         else Color.Red,
                         fontSize = 10.scaledSp(),

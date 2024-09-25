@@ -40,7 +40,7 @@ kotlin {
 
                 implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.6.2")
 
-                implementation("com.google.code.gson:gson:2.10.1")
+                implementation("com.google.code.gson:gson:2.11.0")
 
                 implementation("org.apache.httpcomponents:httpclient:4.5.14")
 

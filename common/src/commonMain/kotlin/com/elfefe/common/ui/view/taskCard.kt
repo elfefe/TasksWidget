@@ -7,6 +7,7 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.text.BasicTextField
+import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.Card
 import androidx.compose.material.Icon
 import androidx.compose.material.icons.Icons
@@ -17,8 +18,11 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.input.*
+import androidx.compose.ui.text.substring
 import androidx.compose.ui.unit.dp
 import com.elfefe.common.controller.Tasks
 import com.elfefe.common.controller.deadlineDate
@@ -56,16 +60,17 @@ fun TaskCard(modifier: Modifier, task: Task, showDescription: Boolean) {
                 BasicTextField(
                     value = deadline,
                     onValueChange = {
-                        if (it.isBlank()) {
-                            deadline = "0"
-                            return@BasicTextField
-                        }
+                        var corrected = it
+                        if (it.any { char -> !char.isDigit() })
+                            corrected = it.filter { char -> char.isDigit() }
 
-                        if (it.length <= 4 && it.last().digitToIntOrNull() != null)
-                            deadline = it.replace("/", "")
+                        if (it.isBlank())
+                            corrected = "0000"
 
-                        if (it.length == 4 && !it.contains("/"))
-                            deadline = it.substring(0, 2) + "/" + it.substring(2, 4)
+                        if (it.length > 4)
+                            corrected = it.substring(0, 4)
+
+                        deadline = corrected
 
                         Tasks.update(task.apply { this.deadline = deadline })
                     },
@@ -74,13 +79,45 @@ fun TaskCard(modifier: Modifier, task: Task, showDescription: Boolean) {
                         .padding(10.dp, 0.dp),
                     textStyle = TextStyle(
                         color =
-                        if (task.done || deadlineDate == 1) Tasks.Configs.configs.themeColors.onPrimary
+                        if (task.done || deadlineDate == 1) Tasks.Configs.configs.themeColors.onBackground
                         else if (deadlineDate == -1) Color(0xFFFFB900)
                         else Color.Red,
                         fontSize = 10.scaledSp(),
                         fontWeight = FontWeight.SemiBold
                     ),
-                    singleLine = true
+                    singleLine = true,
+                    visualTransformation = {
+                        TransformedText(
+                            text = AnnotatedString(it.text.run {
+                                if (length < 2) return@run this
+                                substring(0, 2) + "/" + substring(2)
+                            }),
+                            offsetMapping = object: OffsetMapping {
+                                override fun originalToTransformed(offset: Int): Int {
+                                    return when (offset) {
+                                        0 -> 0
+                                        1 -> 1
+                                        2 -> 3
+                                        3 -> 4
+                                        4 -> 5
+                                        else -> 5
+                                    }
+                                }
+
+                                override fun transformedToOriginal(offset: Int): Int {
+                                    return when (offset) {
+                                        0 -> 0
+                                        1 -> 1
+                                        2 -> 2
+                                        3 -> 2
+                                        4 -> 3
+                                        5 -> 4
+                                        else -> 4
+                                    }
+                                }
+                            }
+                        )
+                    }
                 )
 
                 Spacer(modifier = Modifier.width(3.dp))

@@ -9,27 +9,11 @@
     <option name="autoReloadType" value="NONE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="342136dd-9d95-4b6b-84e1-4a9c7fc0eeb8" name="Changes" comment="feat:&#10;- Save and load configs from parameters&#10;fix:&#10; - Topbar shrinking too much">
-      <change afterPath="$PROJECT_DIR$/common/src/commonMain/resources/baseline_notes_24.svg" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/kotlinc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/kotlinc.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
+    <list default="true" id="342136dd-9d95-4b6b-84e1-4a9c7fc0eeb8" name="Changes" comment="feat:&#10;- Add a general config&#10;- Allow to add the application to startup">
+      <change afterPath="$PROJECT_DIR$/.idea/artifacts/desktop_jvm_1_3_0.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/build.gradle.kts" beforeDir="false" afterPath="$PROJECT_DIR$/build.gradle.kts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/common/build.gradle.kts" beforeDir="false" afterPath="$PROJECT_DIR$/common/build.gradle.kts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/common/src/commonMain/kotlin/com/elfefe/common/context.kt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/common/src/commonMain/kotlin/com/elfefe/common/controller/ConfigsAutoLoader.kt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/common/src/commonMain/kotlin/com/elfefe/common/controller/FileUtil.kt" beforeDir="false" afterPath="$PROJECT_DIR$/common/src/commonMain/kotlin/com/elfefe/common/controller/FileUtil.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/common/src/commonMain/kotlin/com/elfefe/common/controller/MutableStateAdapter.kt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/common/src/commonMain/kotlin/com/elfefe/common/controller/Tasks.kt" beforeDir="false" afterPath="$PROJECT_DIR$/common/src/commonMain/kotlin/com/elfefe/common/controller/Tasks.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/common/src/commonMain/kotlin/com/elfefe/common/model/Configs.kt" beforeDir="false" afterPath="$PROJECT_DIR$/common/src/commonMain/kotlin/com/elfefe/common/model/Configs.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/common/src/commonMain/kotlin/com/elfefe/common/ui/view/App.kt" beforeDir="false" afterPath="$PROJECT_DIR$/common/src/commonMain/kotlin/com/elfefe/common/ui/view/App.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/common/src/commonMain/kotlin/com/elfefe/common/ui/view/configs.kt" beforeDir="false" afterPath="$PROJECT_DIR$/common/src/commonMain/kotlin/com/elfefe/common/ui/view/configs.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/common/src/commonMain/kotlin/com/elfefe/common/ui/view/main.kt" beforeDir="false" afterPath="$PROJECT_DIR$/common/src/commonMain/kotlin/com/elfefe/common/ui/view/main.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/common/src/commonMain/kotlin/com/elfefe/common/controller/TasksUtils.kt" beforeDir="false" afterPath="$PROJECT_DIR$/common/src/commonMain/kotlin/com/elfefe/common/controller/TasksUtils.kt" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/common/src/commonMain/kotlin/com/elfefe/common/ui/view/taskCard.kt" beforeDir="false" afterPath="$PROJECT_DIR$/common/src/commonMain/kotlin/com/elfefe/common/ui/view/taskCard.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/common/src/commonMain/kotlin/com/elfefe/common/ui/view/toolbar.kt" beforeDir="false" afterPath="$PROJECT_DIR$/common/src/commonMain/kotlin/com/elfefe/common/ui/view/toolbar.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/common/src/commonMain/resources/version" beforeDir="false" afterPath="$PROJECT_DIR$/common/src/commonMain/resources/version" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/desktop/build.gradle.kts" beforeDir="false" afterPath="$PROJECT_DIR$/desktop/build.gradle.kts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/desktop/resources/version" beforeDir="false" afterPath="$PROJECT_DIR$/desktop/resources/version" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -148,6 +132,7 @@
   <component name="PropertiesComponent"><![CDATA[{
   "keyToString": {
     "ASKED_ADD_EXTERNAL_FILES": "true",
+    "ASKED_SHARE_PROJECT_CONFIGURATION_FILES": "true",
     "Gradle.Build TasksWidget.executor": "Run",
     "Gradle.Download Sources.executor": "Run",
     "Gradle.TasksWidget:desktop [build].executor": "Run",
@@ -203,7 +188,7 @@
       <command value="gradlew signingReport" />
     </option>
   </component>
-  <component name="RunManager" selected="Gradle.TasksWidget:desktop [packageMsi]">
+  <component name="RunManager" selected="Kotlin.MainKt">
     <configuration name="android" type="AndroidRunConfigurationType" factoryName="Android App">
       <module name="TasksWidget.android.main" />
       <option name="DEPLOY" value="true" />
@@ -358,8 +343,8 @@
     </list>
     <recent_temporary>
       <list>
-        <item itemvalue="Gradle.TasksWidget:desktop [packageMsi]" />
         <item itemvalue="Kotlin.MainKt" />
+        <item itemvalue="Gradle.TasksWidget:desktop [packageMsi]" />
         <item itemvalue="Gradle.TasksWidget:desktop [packageReleaseMsi]" />
         <item itemvalue="Gradle.TasksWidget:desktop [run]" />
         <item itemvalue="Gradle.TasksWidget:desktop [packageDistributionForCurrentOS]" />
@@ -591,7 +576,15 @@
       <option name="project" value="LOCAL" />
       <updated>1727125738948</updated>
     </task>
-    <option name="localTasksCounter" value="28" />
+    <task id="LOCAL-00028" summary="feat:&#10;- Add a general config&#10;- Allow to add the application to startup">
+      <option name="closed" value="true" />
+      <created>1727288547205</created>
+      <option name="number" value="00028" />
+      <option name="presentableId" value="LOCAL-00028" />
+      <option name="project" value="LOCAL" />
+      <updated>1727288547205</updated>
+    </task>
+    <option name="localTasksCounter" value="29" />
     <servers />
   </component>
   <component name="UnknownFeatures">
@@ -635,7 +628,8 @@
     <MESSAGE value="fix:&#10;- Automatically download and launch installation process" />
     <MESSAGE value="fix:&#10;- Update version" />
     <MESSAGE value="feat:&#10;- Save and load configs from parameters&#10;fix:&#10; - Topbar shrinking too much" />
-    <option name="LAST_COMMIT_MESSAGE" value="feat:&#10;- Save and load configs from parameters&#10;fix:&#10; - Topbar shrinking too much" />
+    <MESSAGE value="feat:&#10;- Add a general config&#10;- Allow to add the application to startup" />
+    <option name="LAST_COMMIT_MESSAGE" value="feat:&#10;- Add a general config&#10;- Allow to add the application to startup" />
   </component>
   <component name="XSLT-Support.FileAssociations.UIState">
     <expand />

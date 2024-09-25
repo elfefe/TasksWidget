@@ -19,6 +19,7 @@ import androidx.compose.ui.draw.rotate
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.SolidColor
 import androidx.compose.ui.input.pointer.pointerInput
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.unit.dp
 import com.elfefe.common.controller.Tasks
@@ -58,7 +59,7 @@ fun ColumnScope.Toolbar(scope: CoroutineScope, windowInteractions: WindowInterac
             if (expanded)
                 Row {
                     Icon(
-                        Icons.Default.Edit,
+                        painterResource("baseline_notes_24.svg"),
                         contentDescription = null,
                         modifier = Modifier
                             .clickable {

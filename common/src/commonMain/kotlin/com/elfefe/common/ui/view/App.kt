@@ -23,7 +23,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.ApplicationScope
 import com.elfefe.common.controller.Tasks
-import com.elfefe.common.controller.appPrivateDir
+import com.elfefe.common.controller.isAdmin
 import com.elfefe.common.controller.tmpDir
 import com.elfefe.common.model.Task
 import com.elfefe.common.model.github.GithubLatestRelease
@@ -31,7 +31,6 @@ import com.elfefe.common.ui.theme.TasksTheme
 import com.google.gson.Gson
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
 import org.apache.http.client.methods.HttpGet
 import org.apache.http.impl.client.HttpClientBuilder
 import org.apache.http.impl.client.LaxRedirectStrategy
@@ -41,8 +40,7 @@ import java.net.URI
 import java.net.http.HttpClient
 import java.net.http.HttpRequest
 import java.net.http.HttpResponse
-import java.time.Duration
-import kotlin.io.path.fileSize
+import java.nio.file.Files
 
 
 @OptIn(ExperimentalFoundationApi::class, ExperimentalComposeUiApi::class)
@@ -56,6 +54,7 @@ fun App(windowInteractions: WindowInteractions) {
     val listState = rememberLazyListState(0)
 
     Tasks.onUpdate = {
+        println(it)
         tasks = it
         scope.launch {
             Tasks.lastTask?.let { task ->

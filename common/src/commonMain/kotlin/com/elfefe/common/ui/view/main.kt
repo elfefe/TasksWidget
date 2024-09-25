@@ -20,15 +20,17 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.max
 import androidx.compose.ui.unit.min
 import androidx.compose.ui.window.*
-import com.elfefe.common.controller.EmojiApi
-import com.elfefe.common.controller.Tasks
-import com.elfefe.common.controller.Timer
+import com.elfefe.common.controller.*
 import java.awt.GraphicsEnvironment
 import java.awt.MouseInfo
 import java.awt.Toolkit
+import java.io.File
 
 
 fun preload() {
+    if (!isDevEnvironment)
+        if (!isAdmin()) askForAdminRights()
+
     EmojiApi.preloadEmojis()
 }
 

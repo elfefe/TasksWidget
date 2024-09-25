@@ -46,13 +46,11 @@ compose.desktop {
 tasks.withType(JavaExec::class.java) {
     try {
         File("""resources\version""").writeText(project.version.toString())
-    } catch (e: Exception) {
-        e.printStackTrace()
-    }
+    } catch (e: Exception) { e.printStackTrace() }
+    try {
+        File("""desktop\resources\version""").writeText(project.version.toString())
+    } catch (e: Exception) { e.printStackTrace() }
     try {
         File("""common\src\commonMain\resources\version""").writeText(project.version.toString())
-        File("""desktop\resources\version""").writeText(project.version.toString())
-    } catch (e: Exception) {
-        e.printStackTrace()
-    }
+    } catch (e: Exception) { e.printStackTrace() }
 }

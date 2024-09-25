@@ -78,6 +78,7 @@ object Tasks {
 
 
     fun refresh() {
+        Configs.updateTasksSort()
         _tasks.sorting()
         onUpdate(_tasks.filter(currentFilter))
     }
@@ -92,7 +93,6 @@ object Tasks {
             get() = _configs
 
         private var updateJob: Job? = null
-        private val waitingTasks = ConcurrentLinkedQueue<com.elfefe.common.model.Configs>()
 
         init {
             if (configsFile.exists()) {
@@ -105,11 +105,7 @@ object Tasks {
             refresh()
         }
 
-        fun loadConfigs() {
-            updateTasksSort()
-        }
-
-        private fun updateTasksSort() {
+        fun updateTasksSort() {
             sorting = {
                 sortWith(
                     compareBy<Task> { it.done }.apply {

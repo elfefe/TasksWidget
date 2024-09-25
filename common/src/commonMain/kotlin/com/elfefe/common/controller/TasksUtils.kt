@@ -9,7 +9,7 @@ import java.util.*
 
 fun getDate(): String {
     val date = Calendar.getInstance()
-    return date.get(Calendar.DAY_OF_MONTH).toString() + "/" + (date.get(Calendar.MONTH) + 1).toString()
+    return date.get(Calendar.DAY_OF_MONTH).toString() + (date.get(Calendar.MONTH) + 1).toString()
 }
 
 fun fromDate(date: String): Long {

@@ -52,7 +52,7 @@ The app is currently only available on windows, the implementation in other plat
 Usage
 -----
 
-[Check the documentation here](media/Documentation_TasksWidget.pdf)
+[Check the documentation here](medias/Documentation_TasksWidget.pdf)
 
 Contributing
 ------------

@@ -9,7 +9,7 @@ import java.util.*
 
 fun getDate(): String {
     val date = Calendar.getInstance()
-    return date.get(Calendar.DAY_OF_MONTH).toString() + (date.get(Calendar.MONTH) + 1).toString()
+    return date.get(Calendar.DAY_OF_MONTH).toString().padStart(2, '0') + (date.get(Calendar.MONTH) + 1).toString().padStart(2, '0')
 }
 
 fun fromDate(date: String): Long {
@@ -22,12 +22,13 @@ fun fromDate(date: String): Long {
 }
 
 fun deadlineDate(date: String): Int {
-    val dateOrder = listOf(Calendar.DAY_OF_MONTH, Calendar.MONTH, Calendar.YEAR)
-    date.split("/").let {
+    val dateOrder = listOf(Calendar.DAY_OF_MONTH, Calendar.MONTH)
         return Calendar.getInstance().apply {
-            for (i in it.indices) set(dateOrder[i], it[i].toInt() - if (i == 1) 1 else 0)
+            val day = date.substring(0, 2).toInt()
+            val month = date.substring(2, 4).toInt()
+            set(Calendar.DAY_OF_MONTH, day)
+            set(Calendar.MONTH, month - 1)
         }.compareTo(Calendar.getInstance())
-    }
 }
 
 

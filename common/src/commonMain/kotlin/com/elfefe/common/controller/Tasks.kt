@@ -36,7 +36,7 @@ object Tasks {
     var sorting: MutableList<Task>.() -> Unit = { sortByDescending { it.deadline } }
 
     init {
-        if (tasksFile.exists()) {
+        if (tasksFile.length() > 0) {
             _tasks.clear()
             _tasks.addAll(query())
         } else {
@@ -78,7 +78,7 @@ object Tasks {
 
 
     fun refresh() {
-        Configs.updateTasksSort()
+//        Configs.updateTasksSort()
         _tasks.sorting()
         onUpdate(_tasks.filter(currentFilter))
     }

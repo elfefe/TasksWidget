@@ -10,9 +10,11 @@ import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.Card
 import androidx.compose.material.Icon
+import androidx.compose.material.TextField
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Check
 import androidx.compose.material.icons.filled.Close
+import androidx.compose.material.icons.filled.Edit
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -35,6 +37,7 @@ fun TaskCard(modifier: Modifier, task: Task, showDescription: Boolean) {
     var deadline by remember { mutableStateOf(task.deadline) }
     var title by remember { mutableStateOf(task.title) }
     var description by remember { mutableStateOf(task.description) }
+    var done by remember { mutableStateOf(task.done) }
 
     Card(
         modifier = Modifier
@@ -64,8 +67,9 @@ fun TaskCard(modifier: Modifier, task: Task, showDescription: Boolean) {
                         if (it.any { char -> !char.isDigit() })
                             corrected = it.filter { char -> char.isDigit() }
 
-                        if (it.isBlank())
-                            corrected = "0000"
+                        if (it.length < 4)
+                            corrected += "0".repeat(4 - it.length)
+
 
                         if (it.length > 4)
                             corrected = it.substring(0, 4)
@@ -79,7 +83,7 @@ fun TaskCard(modifier: Modifier, task: Task, showDescription: Boolean) {
                         .padding(10.dp, 0.dp),
                     textStyle = TextStyle(
                         color =
-                        if (task.done || deadlineDate == 1) Tasks.Configs.configs.themeColors.onBackground
+                        if (done || deadlineDate == 1) Tasks.Configs.configs.themeColors.onBackground
                         else if (deadlineDate == -1) Color(0xFFFFB900)
                         else Color.Red,
                         fontSize = 10.scaledSp(),
@@ -135,17 +139,32 @@ fun TaskCard(modifier: Modifier, task: Task, showDescription: Boolean) {
                     singleLine = true
                 )
 
+                /*Icon(
+                    Icons.Default.Edit,
+                    contentDescription = "Edit",
+                    modifier = Modifier
+                        .clip(CircleShape)
+                        .size(16.dp)
+                        .clickable {
+
+                        },
+                    tint = Tasks.Configs.configs.themeColors.onBackground
+                )
+
+                Spacer(Modifier.width(4.dp))*/
+
                 Icon(
-                    if (task.done) Icons.Default.Check else Icons.Default.Close,
+                    if (done) Icons.Default.Check else Icons.Default.Close,
                     contentDescription = null,
                     modifier = Modifier
                         .clip(CircleShape)
                         .size(16.dp)
                         .clickable {
-                            Tasks.update(task.apply { done = !done })
+                            done = !done
+                            Tasks.update(task.apply { this.done = done })
                             Tasks.refresh()
                         },
-                    tint = if (task.done) Color.Green else Color.Red
+                    tint = if (done) Color.Green else Color.Red
                 )
             }
             AnimatedVisibility(
@@ -163,11 +182,28 @@ fun TaskCard(modifier: Modifier, task: Task, showDescription: Boolean) {
                         value = description,
                         onValueChange = {
                             description = it
+                                .run {
+                                    split("\n").map { line -> line.replace(regex = "^ - ".toRegex(), replacement = "• ") }.joinToString("\n")
+                                }
                             Tasks.update(task.apply { this.description = it })
                         },
                         modifier = Modifier
                             .fillMaxSize(),
-                        textStyle = TextStyle(color = Tasks.Configs.configs.themeColors.onBackground)
+                        textStyle = TextStyle(color = Tasks.Configs.configs.themeColors.onBackground),
+                        visualTransformation = {
+                            TransformedText(
+                                text = it,
+                                offsetMapping = object: OffsetMapping {
+                                    override fun originalToTransformed(offset: Int): Int {
+                                        return offset
+                                    }
+
+                                    override fun transformedToOriginal(offset: Int): Int {
+                                        return offset
+                                    }
+                                }
+                            )
+                        },
                     )
                 }
             }

@@ -31,6 +31,8 @@ Features
 Installation
 ------------
 
+The app is currently only available on windows, the implementation in other platforms is still in progress.* 
+
 ### Desktop
 
 #### Windows / macOS / Linux
@@ -50,13 +52,7 @@ Installation
 Usage
 -----
 
-1.  To create a new task, click the `+` button or tap it on your mobile device.
-2.  Enter the task description, set the priority level, due date, and add custom tags as needed.
-3.  Save the task by clicking the `Save` button or tapping it on your mobile device.
-4.  To update a task, simply click or tap on the task, make the desired changes, and save.
-5.  To delete a task, select the task and click the `Trash` button or tap it on your mobile device.
-6.  To filter tasks, use the filter options available in the menu or toolbar.
-7.  Customize the appearance of the widget by visiting the settings menu.
+[Check the documentation here](media/Documentation_TasksWidget.pdf)
 
 Contributing
 ------------

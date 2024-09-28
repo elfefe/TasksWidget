@@ -360,18 +360,25 @@ fun General(windowInteractions: WindowInteractions) {
                 ) {
                     Checkbox(checked = startOnBoot, onCheckedChange = {
                         startOnBoot = it
+                        val startupAppPath = "C:\\$userPath\\AppData\\Roaming\\Microsoft\\Windows\\Start Menu\\" +
+                                "Programs\\Startup\\TasksWidget.exe"
                         if (it) {
                             try {
                                 if (appDir.exists())
-                                    Files.createSymbolicLink(
-                                        File("C:\\$userPath\\AppData\\Roaming\\Microsoft\\Windows\\Start Menu\\" +
-                                                "Programs\\Startup\\TasksWidget.exe").toPath(),
-                                        appDir.toPath(),
-                                    )
-                                else Files.deleteIfExists(File("$userPath\\AppData\\Roaming\\Microsoft\\" +
-                                        "Windows\\Start Menu\\Programs\\Startup\\TasksWidget.exe").toPath())
+                                    if (!File(startupAppPath).exists())
+                                        Files.createSymbolicLink(
+                                            File(startupAppPath).toPath(),
+                                            appDir.toPath(),
+                                        )
                             } catch (e: Exception) {
                                 windowInteractions.popup.value = Popup.show(e.message ?: "Error while creating link")
+                            }
+                        } else {
+                            try {
+                                if (File(startupAppPath).exists())
+                                    File(startupAppPath).delete()
+                            } catch (e: Exception) {
+                                windowInteractions.popup.value = Popup.show(e.message ?: "Error while deleting link")
                             }
                         }
                     })

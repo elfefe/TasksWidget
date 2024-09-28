@@ -59,7 +59,7 @@ fun ColumnScope.Toolbar(scope: CoroutineScope, windowInteractions: WindowInterac
             if (expanded)
                 Row {
                     Icon(
-                        painterResource("baseline_notes_24.svg"),
+                        painterResource(if (showDescription)"baseline_notes_24.svg" else "short_text_24px.svg"),
                         contentDescription = null,
                         modifier = Modifier
                             .clickable {
@@ -67,10 +67,10 @@ fun ColumnScope.Toolbar(scope: CoroutineScope, windowInteractions: WindowInterac
                                 toolbarInteractions.showDescription(showDescription)
                             }
                             .padding(3.dp),
-                        tint = if (showDescription) Tasks.Configs.configs.themeColors.onPrimary else Color.LightGray
+                        tint = Tasks.Configs.configs.themeColors.onPrimary
                     )
                     Icon(
-                        Icons.Default.CheckCircle,
+                        painterResource(if (showDone)"check_circle_24px.svg" else "unpublished_24px.svg"),
                         contentDescription = null,
                         modifier = Modifier
                             .clickable {
@@ -199,9 +199,9 @@ fun ColumnScope.Toolbar(scope: CoroutineScope, windowInteractions: WindowInterac
                     onValueChange = {
                         searching = it
                         Tasks.filter { task ->
-                            task.title.contains(searching, false) ||
-                            task.deadline.contains(searching, false) ||
-                            task.description.contains(searching, false)
+                            task.title.contains(searching, true) ||
+                            task.deadline.contains(searching, true) ||
+                            task.description.contains(searching, true)
                         }
                     },
                     textStyle = TextStyle(

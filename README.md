@@ -1,9 +1,10 @@
 TasksWidget
 ===========
 
-[![License: MIT](https://img.shields.io/badge/License-MIT-green.svg)](https://opensource.org/licenses/MIT)
+[![License: MIT](https://img.shields.io/badge/License-MIT-green.svg)](https://opensource.org/licenses/MIT) ![GitHub Release](https://img.shields.io/github/v/release/elfefe/taskswidget) 
 
-TasksWidget is a multiplatform application designed to help you manage your tasks efficiently. This lightweight, easy-to-use widget allows you to create, update, and organize tasks right from your desktop or mobile device. The widget seamlessly integrates with your device's native operating system and offers a clean and intuitive user interface for effective task management.
+
+TasksWidget is a multiplatform application designed to help you manage your tasks efficiently. This lightweight, easy-to-use widget allows you to create, update, and organize tasks right from your desktop. The widget seamlessly integrates with your device's native operating system and offers a clean and intuitive user interface for effective task management.
 
 Table of Contents
 -----------------

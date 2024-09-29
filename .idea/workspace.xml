@@ -9,8 +9,7 @@
     <option name="autoReloadType" value="NONE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="342136dd-9d95-4b6b-84e1-4a9c7fc0eeb8" name="Changes" comment="fix:&#10;- readme release path">
-      <change afterPath="$PROJECT_DIR$/medias/settings_24dp_999999_FILL0_wght400_GRAD0_opsz24.svg" afterDir="false" />
+    <list default="true" id="342136dd-9d95-4b6b-84e1-4a9c7fc0eeb8" name="Changes" comment="fix:&#10;- Installer file name">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/README.md" afterDir="false" />
     </list>
@@ -616,7 +615,23 @@
       <option name="project" value="LOCAL" />
       <updated>1727603259078</updated>
     </task>
-    <option name="localTasksCounter" value="33" />
+    <task id="LOCAL-00033" summary="feat:&#10;- add startup instruciton in the doc">
+      <option name="closed" value="true" />
+      <created>1727603752570</created>
+      <option name="number" value="00033" />
+      <option name="presentableId" value="LOCAL-00033" />
+      <option name="project" value="LOCAL" />
+      <updated>1727603752570</updated>
+    </task>
+    <task id="LOCAL-00034" summary="fix:&#10;- Installer file name">
+      <option name="closed" value="true" />
+      <created>1727603796154</created>
+      <option name="number" value="00034" />
+      <option name="presentableId" value="LOCAL-00034" />
+      <option name="project" value="LOCAL" />
+      <updated>1727603796154</updated>
+    </task>
+    <option name="localTasksCounter" value="35" />
     <servers />
   </component>
   <component name="UnknownFeatures">
@@ -637,8 +652,6 @@
   </component>
   <component name="VcsManagerConfiguration">
     <option name="ADD_EXTERNAL_FILES_SILENTLY" value="true" />
-    <MESSAGE value="fix:&#10; - refresh when done trigger" />
-    <MESSAGE value="fix:&#10; - better configs name&#10; - cards config design" />
     <MESSAGE value="fix:&#10; - better project architecture&#10; - Color gradient" />
     <MESSAGE value="fix:&#10; - Custom colors modification (rgb, saturation, alpha)" />
     <MESSAGE value="fix:&#10; - Colors from config&#10; - Serialize colors" />
@@ -662,7 +675,9 @@
     <MESSAGE value="fix:&#10;- Documentation" />
     <MESSAGE value="feat:&#10;- Documentation in the readme" />
     <MESSAGE value="fix:&#10;- readme release path" />
-    <option name="LAST_COMMIT_MESSAGE" value="fix:&#10;- readme release path" />
+    <MESSAGE value="feat:&#10;- add startup instruciton in the doc" />
+    <MESSAGE value="fix:&#10;- Installer file name" />
+    <option name="LAST_COMMIT_MESSAGE" value="fix:&#10;- Installer file name" />
   </component>
   <component name="XSLT-Support.FileAssociations.UIState">
     <expand />

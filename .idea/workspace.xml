@@ -9,27 +9,31 @@
     <option name="autoReloadType" value="NONE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="342136dd-9d95-4b6b-84e1-4a9c7fc0eeb8" name="Changes" comment="fix:&#10;- replace dash width dot&#10;- Remove from startup">
-      <change afterPath="$PROJECT_DIR$/.idea/artifacts/common_desktop_1_3_1.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/artifacts/common_desktop_1_3_2.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/artifacts/desktop_jvm_1_3_1.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/artifacts/desktop_jvm_1_3_2.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/common/src/commonMain/resources/check_circle_24px.svg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/common/src/commonMain/resources/short_text_24px.svg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/common/src/commonMain/resources/unpublished_24px.svg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/medias/Documentation_TasksWidget.pdf" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/gradle.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/gradle.xml" afterDir="false" />
+    <list default="true" id="342136dd-9d95-4b6b-84e1-4a9c7fc0eeb8" name="Changes" comment="fix:&#10;- Documentation">
+      <change afterPath="$PROJECT_DIR$/medias/Capture d’écran 2024-09-28 195256.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/medias/Capture d’écran 2024-09-28 195912.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/medias/Capture d’écran 2024-09-28 200003.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/medias/Capture d’écran 2024-09-28 201232.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/medias/Capture d’écran 2024-09-28 201346.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/medias/arrow_drop_up_24dp_999999_FILL0_wght400_GRAD0_opsz24.svg" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/medias/check_24dp_0ED600_FILL0_wght400_GRAD0_opsz24.svg" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/medias/close_24dp_EA3323_FILL0_wght400_GRAD0_opsz24.svg" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/medias/exit_to_app_24dp_999999_FILL0_wght400_GRAD0_opsz24.svg" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/medias/image.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/medias/location_on_24dp_999999_FILL0_wght400_GRAD0_opsz24.svg" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/medias/notes_24dp_999999_FILL0_wght400_GRAD0_opsz24.svg" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/medias/search_24dp_999999_FILL0_wght400_GRAD0_opsz24 (1).svg" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/medias/search_24dp_999999_FILL0_wght400_GRAD0_opsz24.svg" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/medias/unpublished_24dp_999999_FILL0_wght400_GRAD0_opsz24.svg" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/medias/unpublished_24px.svg" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/medias/vokoscreenNG-2024-09-28_20-13-05-ezgif.com-gif-to-mov-converter.mov" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/medias/vokoscreenNG-2024-09-28_20-13-05-ezgif.com-video-to-gif-converter.gif" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/medias/vokoscreenNG-2024-09-28_20-13-05-ezgif.com-video-to-webp-converter.webp" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/medias/vokoscreenNG-2024-09-28_20-13-05.mp4" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/README.md" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/build.gradle.kts" beforeDir="false" afterPath="$PROJECT_DIR$/build.gradle.kts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/common/src/commonMain/kotlin/com/elfefe/common/controller/Tasks.kt" beforeDir="false" afterPath="$PROJECT_DIR$/common/src/commonMain/kotlin/com/elfefe/common/controller/Tasks.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/common/src/commonMain/kotlin/com/elfefe/common/controller/TasksUtils.kt" beforeDir="false" afterPath="$PROJECT_DIR$/common/src/commonMain/kotlin/com/elfefe/common/controller/TasksUtils.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/common/src/commonMain/kotlin/com/elfefe/common/ui/view/configs.kt" beforeDir="false" afterPath="$PROJECT_DIR$/common/src/commonMain/kotlin/com/elfefe/common/ui/view/configs.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/common/src/commonMain/kotlin/com/elfefe/common/ui/view/taskCard.kt" beforeDir="false" afterPath="$PROJECT_DIR$/common/src/commonMain/kotlin/com/elfefe/common/ui/view/taskCard.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/common/src/commonMain/kotlin/com/elfefe/common/ui/view/toolbar.kt" beforeDir="false" afterPath="$PROJECT_DIR$/common/src/commonMain/kotlin/com/elfefe/common/ui/view/toolbar.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/common/src/commonMain/resources/version" beforeDir="false" afterPath="$PROJECT_DIR$/common/src/commonMain/resources/version" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/desktop/resources/version" beforeDir="false" afterPath="$PROJECT_DIR$/desktop/resources/version" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/medias/Documentation_TasksWidget.pdf" beforeDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -145,37 +149,37 @@
     <option name="autoscrollFromSource" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent"><![CDATA[{
-  "keyToString": {
-    "ASKED_ADD_EXTERNAL_FILES": "true",
-    "ASKED_SHARE_PROJECT_CONFIGURATION_FILES": "true",
-    "Gradle.Build TasksWidget.executor": "Run",
-    "Gradle.Download Sources.executor": "Run",
-    "Gradle.TasksWidget:desktop [build].executor": "Run",
-    "Gradle.TasksWidget:desktop [packageDistributionForCurrentOS].executor": "Run",
-    "Gradle.TasksWidget:desktop [packageMsi].executor": "Run",
-    "Gradle.TasksWidget:desktop [packageReleaseMsi].executor": "Run",
-    "Gradle.TasksWidget:desktop [package].executor": "Run",
-    "Gradle.TasksWidget:desktop [runDistributable].executor": "Run",
-    "Gradle.TasksWidget:desktop [run].executor": "Run",
-    "Kotlin.MainKt.executor": "Run",
-    "RunOnceActivity.OpenProjectViewOnStart": "true",
-    "RunOnceActivity.ShowReadmeOnStart": "true",
-    "RunOnceActivity.cidr.known.project.marker": "true",
-    "SHARE_PROJECT_CONFIGURATION_FILES": "true",
-    "cidr.known.project.marker": "true",
-    "external.system.has.shared.sources": "true",
-    "git-widget-placeholder": "develop",
-    "ignore.virus.scanning.warn.message": "true",
-    "jdk.selected.JAVA_MODULE": "openjdk-19",
-    "kotlin-language-version-configured": "true",
-    "last_opened_file_path": "C:/Users/fbou-/IdeaProjects/TasksWidget/medias",
-    "project.structure.last.edited": "Project",
-    "project.structure.proportion": "0.15",
-    "project.structure.side.proportion": "0.2",
-    "settings.editor.selected.configurable": "editor.preferences.gutterIcons"
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;ASKED_ADD_EXTERNAL_FILES&quot;: &quot;true&quot;,
+    &quot;ASKED_SHARE_PROJECT_CONFIGURATION_FILES&quot;: &quot;true&quot;,
+    &quot;Gradle.Build TasksWidget.executor&quot;: &quot;Run&quot;,
+    &quot;Gradle.Download Sources.executor&quot;: &quot;Run&quot;,
+    &quot;Gradle.TasksWidget:desktop [build].executor&quot;: &quot;Run&quot;,
+    &quot;Gradle.TasksWidget:desktop [packageDistributionForCurrentOS].executor&quot;: &quot;Run&quot;,
+    &quot;Gradle.TasksWidget:desktop [packageMsi].executor&quot;: &quot;Run&quot;,
+    &quot;Gradle.TasksWidget:desktop [packageReleaseMsi].executor&quot;: &quot;Run&quot;,
+    &quot;Gradle.TasksWidget:desktop [package].executor&quot;: &quot;Run&quot;,
+    &quot;Gradle.TasksWidget:desktop [runDistributable].executor&quot;: &quot;Run&quot;,
+    &quot;Gradle.TasksWidget:desktop [run].executor&quot;: &quot;Run&quot;,
+    &quot;Kotlin.MainKt.executor&quot;: &quot;Run&quot;,
+    &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.cidr.known.project.marker&quot;: &quot;true&quot;,
+    &quot;SHARE_PROJECT_CONFIGURATION_FILES&quot;: &quot;true&quot;,
+    &quot;cidr.known.project.marker&quot;: &quot;true&quot;,
+    &quot;external.system.has.shared.sources&quot;: &quot;true&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;develop&quot;,
+    &quot;ignore.virus.scanning.warn.message&quot;: &quot;true&quot;,
+    &quot;jdk.selected.JAVA_MODULE&quot;: &quot;openjdk-19&quot;,
+    &quot;kotlin-language-version-configured&quot;: &quot;true&quot;,
+    &quot;last_opened_file_path&quot;: &quot;C:/Users/fbou-/IdeaProjects/TasksWidget/medias&quot;,
+    &quot;project.structure.last.edited&quot;: &quot;Project&quot;,
+    &quot;project.structure.proportion&quot;: &quot;0.15&quot;,
+    &quot;project.structure.side.proportion&quot;: &quot;0.2&quot;,
+    &quot;settings.editor.selected.configurable&quot;: &quot;editor.preferences.gutterIcons&quot;
   }
-}]]></component>
+}</component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
       <recent name="C:\Users\fbou-\IdeaProjects\TasksWidget\medias" />
@@ -205,7 +209,7 @@
       <command value="gradlew signingReport" />
     </option>
   </component>
-  <component name="RunManager" selected="Kotlin.MainKt">
+  <component name="RunManager" selected="Gradle.TasksWidget:desktop [packageMsi]">
     <configuration name="android" type="AndroidRunConfigurationType" factoryName="Android App">
       <module name="TasksWidget.android.main" />
       <option name="DEPLOY" value="true" />
@@ -360,8 +364,8 @@
     </list>
     <recent_temporary>
       <list>
-        <item itemvalue="Kotlin.MainKt" />
         <item itemvalue="Gradle.TasksWidget:desktop [packageMsi]" />
+        <item itemvalue="Kotlin.MainKt" />
         <item itemvalue="Gradle.TasksWidget:desktop [packageReleaseMsi]" />
         <item itemvalue="Gradle.TasksWidget:desktop [run]" />
         <item itemvalue="Gradle.TasksWidget:desktop [packageDistributionForCurrentOS]" />
@@ -609,7 +613,15 @@
       <option name="project" value="LOCAL" />
       <updated>1727299150307</updated>
     </task>
-    <option name="localTasksCounter" value="30" />
+    <task id="LOCAL-00030" summary="fix:&#10;- Documentation">
+      <option name="closed" value="true" />
+      <created>1727601268448</created>
+      <option name="number" value="00030" />
+      <option name="presentableId" value="LOCAL-00030" />
+      <option name="project" value="LOCAL" />
+      <updated>1727601268448</updated>
+    </task>
+    <option name="localTasksCounter" value="31" />
     <servers />
   </component>
   <component name="UnknownFeatures">
@@ -630,7 +642,6 @@
   </component>
   <component name="VcsManagerConfiguration">
     <option name="ADD_EXTERNAL_FILES_SILENTLY" value="true" />
-    <MESSAGE value="fix: &#10; - Searching system" />
     <MESSAGE value="feat: &#10; - Emotes in configs&#10; - Modifiable sorting order in configs" />
     <MESSAGE value="fix:&#10; - default sort by deadline&#10; - cards configs effect" />
     <MESSAGE value="fix:&#10; - refresh when done trigger" />
@@ -655,7 +666,8 @@
     <MESSAGE value="fix:&#10;- Date mechanic" />
     <MESSAGE value="fix:&#10;- replace dash width dot" />
     <MESSAGE value="fix:&#10;- replace dash width dot&#10;- Remove from startup" />
-    <option name="LAST_COMMIT_MESSAGE" value="fix:&#10;- replace dash width dot&#10;- Remove from startup" />
+    <MESSAGE value="fix:&#10;- Documentation" />
+    <option name="LAST_COMMIT_MESSAGE" value="fix:&#10;- Documentation" />
   </component>
   <component name="XSLT-Support.FileAssociations.UIState">
     <expand />

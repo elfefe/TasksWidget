@@ -25,12 +25,12 @@ data class TaskFieldOrder(
 
 @JsonAdapter(ThemeColorsAdapter::class)
 data class ThemeColors(
-    var primary: Color,
-    var onPrimary: Color,
-    var secondary: Color,
-    var onSecondary: Color,
-    var background: Color,
-    var onBackground: Color,
+    var primary: Color = Color.primary,
+    var onPrimary: Color = Color.onPrimary,
+    var secondary: Color = Color.secondary,
+    var onSecondary: Color = Color.onSecondary,
+    var background: Color = Color.background,
+    var onBackground: Color = Color.onBackground,
 )
 
 class ThemeColorsAdapter : TypeAdapter<ThemeColors> () {

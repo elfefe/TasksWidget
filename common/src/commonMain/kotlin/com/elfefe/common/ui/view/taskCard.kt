@@ -139,7 +139,7 @@ fun TaskCard(modifier: Modifier, task: Task, showDescription: Boolean) {
                     singleLine = true
                 )
 
-                /*Icon(
+                Icon(
                     Icons.Default.Edit,
                     contentDescription = "Edit",
                     modifier = Modifier
@@ -151,7 +151,7 @@ fun TaskCard(modifier: Modifier, task: Task, showDescription: Boolean) {
                     tint = Tasks.Configs.configs.themeColors.onBackground
                 )
 
-                Spacer(Modifier.width(4.dp))*/
+                Spacer(Modifier.width(4.dp))
 
                 Icon(
                     if (done) Icons.Default.Check else Icons.Default.Close,

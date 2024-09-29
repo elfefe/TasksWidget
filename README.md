@@ -38,7 +38,7 @@ The app is currently only available on windows, the implementation in other plat
 
 1.  Download the latest release of TasksWidget from the [Releases](https://github.com/elfefe/TasksWidget/releases) page.
 2.  Extract the downloaded archive to your desired location.
-3.  Run the `TasksWidget` executable file to start the application.
+3.  Run the `TasksWidget.msi` executable file to start the application.
 
 Usage
 -----

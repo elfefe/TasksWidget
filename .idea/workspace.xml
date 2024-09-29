@@ -9,31 +9,8 @@
     <option name="autoReloadType" value="NONE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="342136dd-9d95-4b6b-84e1-4a9c7fc0eeb8" name="Changes" comment="fix:&#10;- Documentation">
-      <change afterPath="$PROJECT_DIR$/medias/Capture d’écran 2024-09-28 195256.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/medias/Capture d’écran 2024-09-28 195912.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/medias/Capture d’écran 2024-09-28 200003.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/medias/Capture d’écran 2024-09-28 201232.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/medias/Capture d’écran 2024-09-28 201346.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/medias/arrow_drop_up_24dp_999999_FILL0_wght400_GRAD0_opsz24.svg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/medias/check_24dp_0ED600_FILL0_wght400_GRAD0_opsz24.svg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/medias/close_24dp_EA3323_FILL0_wght400_GRAD0_opsz24.svg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/medias/exit_to_app_24dp_999999_FILL0_wght400_GRAD0_opsz24.svg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/medias/image.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/medias/location_on_24dp_999999_FILL0_wght400_GRAD0_opsz24.svg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/medias/notes_24dp_999999_FILL0_wght400_GRAD0_opsz24.svg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/medias/search_24dp_999999_FILL0_wght400_GRAD0_opsz24 (1).svg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/medias/search_24dp_999999_FILL0_wght400_GRAD0_opsz24.svg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/medias/unpublished_24dp_999999_FILL0_wght400_GRAD0_opsz24.svg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/medias/unpublished_24px.svg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/medias/vokoscreenNG-2024-09-28_20-13-05-ezgif.com-gif-to-mov-converter.mov" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/medias/vokoscreenNG-2024-09-28_20-13-05-ezgif.com-video-to-gif-converter.gif" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/medias/vokoscreenNG-2024-09-28_20-13-05-ezgif.com-video-to-webp-converter.webp" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/medias/vokoscreenNG-2024-09-28_20-13-05.mp4" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+    <list default="true" id="342136dd-9d95-4b6b-84e1-4a9c7fc0eeb8" name="Changes" comment="feat:&#10;- Documentation in the readme">
       <change beforePath="$PROJECT_DIR$/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/README.md" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/medias/Documentation_TasksWidget.pdf" beforeDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -621,7 +598,15 @@
       <option name="project" value="LOCAL" />
       <updated>1727601268448</updated>
     </task>
-    <option name="localTasksCounter" value="31" />
+    <task id="LOCAL-00031" summary="feat:&#10;- Documentation in the readme">
+      <option name="closed" value="true" />
+      <created>1727602856754</created>
+      <option name="number" value="00031" />
+      <option name="presentableId" value="LOCAL-00031" />
+      <option name="project" value="LOCAL" />
+      <updated>1727602856754</updated>
+    </task>
+    <option name="localTasksCounter" value="32" />
     <servers />
   </component>
   <component name="UnknownFeatures">
@@ -642,7 +627,6 @@
   </component>
   <component name="VcsManagerConfiguration">
     <option name="ADD_EXTERNAL_FILES_SILENTLY" value="true" />
-    <MESSAGE value="feat: &#10; - Emotes in configs&#10; - Modifiable sorting order in configs" />
     <MESSAGE value="fix:&#10; - default sort by deadline&#10; - cards configs effect" />
     <MESSAGE value="fix:&#10; - refresh when done trigger" />
     <MESSAGE value="fix:&#10; - better configs name&#10; - cards config design" />
@@ -667,7 +651,8 @@
     <MESSAGE value="fix:&#10;- replace dash width dot" />
     <MESSAGE value="fix:&#10;- replace dash width dot&#10;- Remove from startup" />
     <MESSAGE value="fix:&#10;- Documentation" />
-    <option name="LAST_COMMIT_MESSAGE" value="fix:&#10;- Documentation" />
+    <MESSAGE value="feat:&#10;- Documentation in the readme" />
+    <option name="LAST_COMMIT_MESSAGE" value="feat:&#10;- Documentation in the readme" />
   </component>
   <component name="XSLT-Support.FileAssociations.UIState">
     <expand />

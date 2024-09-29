@@ -9,9 +9,16 @@
     <option name="autoReloadType" value="NONE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="342136dd-9d95-4b6b-84e1-4a9c7fc0eeb8" name="Changes" comment="fix:&#10;- Installer file name">
+    <list default="true" id="342136dd-9d95-4b6b-84e1-4a9c7fc0eeb8" name="Changes" comment="feat:&#10;- Documentation bold startup">
+      <change afterPath="$PROJECT_DIR$/common/src/commonMain/kotlin/com/elfefe/common/controller/Traductions.kt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/medias/add_24dp_999999_FILL0_wght400_GRAD0_opsz24.svg" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/README.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/common/src/commonMain/kotlin/com/elfefe/common/controller/Tasks.kt" beforeDir="false" afterPath="$PROJECT_DIR$/common/src/commonMain/kotlin/com/elfefe/common/controller/Tasks.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/common/src/commonMain/kotlin/com/elfefe/common/model/Configs.kt" beforeDir="false" afterPath="$PROJECT_DIR$/common/src/commonMain/kotlin/com/elfefe/common/model/Configs.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/common/src/commonMain/kotlin/com/elfefe/common/ui/view/configs.kt" beforeDir="false" afterPath="$PROJECT_DIR$/common/src/commonMain/kotlin/com/elfefe/common/ui/view/configs.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/common/src/commonMain/kotlin/com/elfefe/common/ui/view/main.kt" beforeDir="false" afterPath="$PROJECT_DIR$/common/src/commonMain/kotlin/com/elfefe/common/ui/view/main.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/medias/search_24dp_999999_FILL0_wght400_GRAD0_opsz24 (1).svg" beforeDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -42,6 +49,23 @@
               <path>
                 <item name="" type="6a2764b6:ExternalProjectsStructure$RootNode" />
                 <item name="TasksWidget" type="f1a62948:ProjectNode" />
+              </path>
+              <path>
+                <item name="" type="6a2764b6:ExternalProjectsStructure$RootNode" />
+                <item name="TasksWidget" type="f1a62948:ProjectNode" />
+                <item name="Tasks" type="e4a08cd1:TasksNode" />
+              </path>
+              <path>
+                <item name="" type="6a2764b6:ExternalProjectsStructure$RootNode" />
+                <item name="TasksWidget" type="f1a62948:ProjectNode" />
+                <item name="Tasks" type="e4a08cd1:TasksNode" />
+                <item name="compose desktop" type="c8890929:TasksNode$1" />
+              </path>
+              <path>
+                <item name="" type="6a2764b6:ExternalProjectsStructure$RootNode" />
+                <item name="TasksWidget" type="f1a62948:ProjectNode" />
+                <item name="Tasks" type="e4a08cd1:TasksNode" />
+                <item name="documentation" type="c8890929:TasksNode$1" />
               </path>
               <path>
                 <item name="" type="6a2764b6:ExternalProjectsStructure$RootNode" />
@@ -80,6 +104,7 @@
         <option value="Kotlin Data Class" />
         <option value="Kotlin File" />
         <option value="Kotlin Class" />
+        <option value="Kotlin Enum" />
       </list>
     </option>
   </component>
@@ -127,37 +152,38 @@
     <option name="autoscrollFromSource" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent">{
-  &quot;keyToString&quot;: {
-    &quot;ASKED_ADD_EXTERNAL_FILES&quot;: &quot;true&quot;,
-    &quot;ASKED_SHARE_PROJECT_CONFIGURATION_FILES&quot;: &quot;true&quot;,
-    &quot;Gradle.Build TasksWidget.executor&quot;: &quot;Run&quot;,
-    &quot;Gradle.Download Sources.executor&quot;: &quot;Run&quot;,
-    &quot;Gradle.TasksWidget:desktop [build].executor&quot;: &quot;Run&quot;,
-    &quot;Gradle.TasksWidget:desktop [packageDistributionForCurrentOS].executor&quot;: &quot;Run&quot;,
-    &quot;Gradle.TasksWidget:desktop [packageMsi].executor&quot;: &quot;Run&quot;,
-    &quot;Gradle.TasksWidget:desktop [packageReleaseMsi].executor&quot;: &quot;Run&quot;,
-    &quot;Gradle.TasksWidget:desktop [package].executor&quot;: &quot;Run&quot;,
-    &quot;Gradle.TasksWidget:desktop [runDistributable].executor&quot;: &quot;Run&quot;,
-    &quot;Gradle.TasksWidget:desktop [run].executor&quot;: &quot;Run&quot;,
-    &quot;Kotlin.MainKt.executor&quot;: &quot;Run&quot;,
-    &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.cidr.known.project.marker&quot;: &quot;true&quot;,
-    &quot;SHARE_PROJECT_CONFIGURATION_FILES&quot;: &quot;true&quot;,
-    &quot;cidr.known.project.marker&quot;: &quot;true&quot;,
-    &quot;external.system.has.shared.sources&quot;: &quot;true&quot;,
-    &quot;git-widget-placeholder&quot;: &quot;develop&quot;,
-    &quot;ignore.virus.scanning.warn.message&quot;: &quot;true&quot;,
-    &quot;jdk.selected.JAVA_MODULE&quot;: &quot;openjdk-19&quot;,
-    &quot;kotlin-language-version-configured&quot;: &quot;true&quot;,
-    &quot;last_opened_file_path&quot;: &quot;C:/Users/fbou-/IdeaProjects/TasksWidget/medias&quot;,
-    &quot;project.structure.last.edited&quot;: &quot;Project&quot;,
-    &quot;project.structure.proportion&quot;: &quot;0.15&quot;,
-    &quot;project.structure.side.proportion&quot;: &quot;0.2&quot;,
-    &quot;settings.editor.selected.configurable&quot;: &quot;editor.preferences.gutterIcons&quot;
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "ASKED_ADD_EXTERNAL_FILES": "true",
+    "ASKED_SHARE_PROJECT_CONFIGURATION_FILES": "true",
+    "Gradle.Build TasksWidget.executor": "Run",
+    "Gradle.Download Sources.executor": "Run",
+    "Gradle.TasksWidget [javadoc].executor": "Run",
+    "Gradle.TasksWidget:desktop [build].executor": "Run",
+    "Gradle.TasksWidget:desktop [packageDistributionForCurrentOS].executor": "Run",
+    "Gradle.TasksWidget:desktop [packageMsi].executor": "Run",
+    "Gradle.TasksWidget:desktop [packageReleaseMsi].executor": "Run",
+    "Gradle.TasksWidget:desktop [package].executor": "Run",
+    "Gradle.TasksWidget:desktop [runDistributable].executor": "Run",
+    "Gradle.TasksWidget:desktop [run].executor": "Run",
+    "Kotlin.MainKt.executor": "Run",
+    "RunOnceActivity.OpenProjectViewOnStart": "true",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "RunOnceActivity.cidr.known.project.marker": "true",
+    "SHARE_PROJECT_CONFIGURATION_FILES": "true",
+    "cidr.known.project.marker": "true",
+    "external.system.has.shared.sources": "true",
+    "git-widget-placeholder": "develop",
+    "ignore.virus.scanning.warn.message": "true",
+    "jdk.selected.JAVA_MODULE": "openjdk-19",
+    "kotlin-language-version-configured": "true",
+    "last_opened_file_path": "C:/Users/fbou-/IdeaProjects/TasksWidget/medias",
+    "project.structure.last.edited": "Project",
+    "project.structure.proportion": "0.15",
+    "project.structure.side.proportion": "0.2",
+    "settings.editor.selected.configurable": "reference.settingsdialog.project.gradle"
   }
-}</component>
+}]]></component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
       <recent name="C:\Users\fbou-\IdeaProjects\TasksWidget\medias" />
@@ -187,7 +213,7 @@
       <command value="gradlew signingReport" />
     </option>
   </component>
-  <component name="RunManager" selected="Gradle.TasksWidget:desktop [packageMsi]">
+  <component name="RunManager" selected="Kotlin.MainKt">
     <configuration name="android" type="AndroidRunConfigurationType" factoryName="Android App">
       <module name="TasksWidget.android.main" />
       <option name="DEPLOY" value="true" />
@@ -225,10 +251,10 @@
         <option name="Android.Gradle.BeforeRunTask" enabled="true" />
       </method>
     </configuration>
-    <configuration name="TasksWidget:desktop [packageDistributionForCurrentOS]" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
+    <configuration name="TasksWidget [javadoc]" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
       <ExternalSystemSettings>
         <option name="executionName" />
-        <option name="externalProjectPath" value="$PROJECT_DIR$/desktop" />
+        <option name="externalProjectPath" value="$PROJECT_DIR$" />
         <option name="externalSystemIdString" value="GRADLE" />
         <option name="scriptParameters" />
         <option name="taskDescriptions">
@@ -236,7 +262,7 @@
         </option>
         <option name="taskNames">
           <list>
-            <option value="packageDistributionForCurrentOS" />
+            <option value="javadoc" />
           </list>
         </option>
         <option name="vmOptions" />
@@ -334,19 +360,19 @@
     </configuration>
     <list>
       <item itemvalue="Android App.android" />
+      <item itemvalue="Gradle.TasksWidget [javadoc]" />
       <item itemvalue="Gradle.TasksWidget:desktop [run]" />
       <item itemvalue="Gradle.TasksWidget:desktop [packageMsi]" />
       <item itemvalue="Gradle.TasksWidget:desktop [packageReleaseMsi]" />
-      <item itemvalue="Gradle.TasksWidget:desktop [packageDistributionForCurrentOS]" />
       <item itemvalue="Kotlin.MainKt" />
     </list>
     <recent_temporary>
       <list>
-        <item itemvalue="Gradle.TasksWidget:desktop [packageMsi]" />
         <item itemvalue="Kotlin.MainKt" />
+        <item itemvalue="Gradle.TasksWidget [javadoc]" />
+        <item itemvalue="Gradle.TasksWidget:desktop [packageMsi]" />
         <item itemvalue="Gradle.TasksWidget:desktop [packageReleaseMsi]" />
         <item itemvalue="Gradle.TasksWidget:desktop [run]" />
-        <item itemvalue="Gradle.TasksWidget:desktop [packageDistributionForCurrentOS]" />
       </list>
     </recent_temporary>
   </component>
@@ -631,7 +657,23 @@
       <option name="project" value="LOCAL" />
       <updated>1727603796154</updated>
     </task>
-    <option name="localTasksCounter" value="35" />
+    <task id="LOCAL-00035" summary="fix:&#10;- readme description and link buttons">
+      <option name="closed" value="true" />
+      <created>1727604550145</created>
+      <option name="number" value="00035" />
+      <option name="presentableId" value="LOCAL-00035" />
+      <option name="project" value="LOCAL" />
+      <updated>1727604550145</updated>
+    </task>
+    <task id="LOCAL-00036" summary="feat:&#10;- Documentation bold startup">
+      <option name="closed" value="true" />
+      <created>1727604672018</created>
+      <option name="number" value="00036" />
+      <option name="presentableId" value="LOCAL-00036" />
+      <option name="project" value="LOCAL" />
+      <updated>1727604672018</updated>
+    </task>
+    <option name="localTasksCounter" value="37" />
     <servers />
   </component>
   <component name="UnknownFeatures">
@@ -652,8 +694,6 @@
   </component>
   <component name="VcsManagerConfiguration">
     <option name="ADD_EXTERNAL_FILES_SILENTLY" value="true" />
-    <MESSAGE value="fix:&#10; - better project architecture&#10; - Color gradient" />
-    <MESSAGE value="fix:&#10; - Custom colors modification (rgb, saturation, alpha)" />
     <MESSAGE value="fix:&#10; - Colors from config&#10; - Serialize colors" />
     <MESSAGE value="fix:&#10; - Version management" />
     <MESSAGE value="fix:&#10; - desktop issue" />
@@ -677,7 +717,9 @@
     <MESSAGE value="fix:&#10;- readme release path" />
     <MESSAGE value="feat:&#10;- add startup instruciton in the doc" />
     <MESSAGE value="fix:&#10;- Installer file name" />
-    <option name="LAST_COMMIT_MESSAGE" value="fix:&#10;- Installer file name" />
+    <MESSAGE value="fix:&#10;- readme description and link buttons" />
+    <MESSAGE value="feat:&#10;- Documentation bold startup" />
+    <option name="LAST_COMMIT_MESSAGE" value="feat:&#10;- Documentation bold startup" />
   </component>
   <component name="XSLT-Support.FileAssociations.UIState">
     <expand />

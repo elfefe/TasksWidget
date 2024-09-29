@@ -50,7 +50,7 @@ Usage
 
 *Default TasksWidget*
 
-To create a new task click on the ![add](./medias/search_24dp_999999_FILL0_wght400_GRAD0_opsz24%20(1).svg) icon.
+To create a new task click on the ![add](./medias/add_24dp_999999_FILL0_wght400_GRAD0_opsz24.svg) icon.
 
 ![](./medias/Capture%20d%E2%80%99%C3%A9cran%202024-09-28%20195256.png)
 
@@ -90,7 +90,7 @@ The ![location](./medias/location_on_24dp_999999_FILL0_wght400_GRAD0_opsz24.svg)
 
 Click on the app icon in the system trail bar to show it back or right click and exit to stop the app.
 
-By clicking the ![settings](./medias/settings_24dp_999999_FILL0_wght400_GRAD0_opsz24.svg) icon and go to the *General* tab, you can __add the app to the startup programs__.
+By clicking the ![settings](./medias/settings_24dp_999999_FILL0_wght400_GRAD0_opsz24.svg) icon and going to the *General* tab, you can __add the app to the startup programs__.
 
 Contributing
 ------------

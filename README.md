@@ -11,7 +11,6 @@ Table of Contents
 * [Features](#features)
 * [Installation](#installation)
     * [Desktop](#desktop)
-    * [Mobile](#mobile)
 * [Usage](#usage)
 * [Contributing](#contributing)
 * [License](#license)
@@ -19,7 +18,7 @@ Table of Contents
 Features
 --------
 
-* Multiplatform support: Works on Windows, macOS, Linux, Android, and iOS.
+* Multiplatform support: Works on Windows only for now.
 * Minimalistic design: Clean, clutter-free interface for easy navigation.
 * Task management: Create, update, and delete tasks with just a few clicks.
 * Task prioritization: Organize tasks by priority levels to focus on what's most important.
@@ -35,24 +34,60 @@ The app is currently only available on windows, the implementation in other plat
 
 ### Desktop
 
-#### Windows / macOS / Linux
+#### Windows
 
 1.  Download the latest release of TasksWidget from the [Releases](https://github.com/yourusername/TasksWidget/releases) page.
 2.  Extract the downloaded archive to your desired location.
 3.  Run the `TasksWidget` executable file to start the application.
 
-### Mobile
-
-#### Android / iOS
-
-1.  Visit the Google Play Store (Android) or the App Store (iOS) on your device.
-2.  Search for `TasksWidget` and install the app.
-3.  Launch the app from your device's app list.
-
 Usage
 -----
 
-[Check the documentation here](medias/Documentation_TasksWidget.pdf)
+> *You’ll find the instructions here to help you understand how to use the app.*
+
+![image.png](./medias/image.png)
+
+*Default TasksWidget*
+
+To create a new task click on the ![add](./medias/search_24dp_999999_FILL0_wght400_GRAD0_opsz24%20(1).svg) icon.
+
+![](./medias/Capture%20d%E2%80%99%C3%A9cran%202024-09-28%20195256.png)
+
+*New task added*
+
+The date will be **red** if it’s due for today, **yellow** if the date is passed, and **black** for a later due date.
+
+The blank space at the right of the date is a text field to input the task title.
+
+The white space below the task title is a text field to input the task description.
+
+![](./medias/Capture%20d%E2%80%99%C3%A9cran%202024-09-28%20200003.png)
+
+*Task with a description and a title*
+
+The icon on the right indicates if the task is done (![done](./medias/check_24dp_0ED600_FILL0_wght400_GRAD0_opsz24.svg)) or not (![undone](./medias/close_24dp_EA3323_FILL0_wght400_GRAD0_opsz24.svg)).
+
+If this icon is clicked the task will be removed from the active tasks. Clicking on the ![history](./medias/unpublished_24dp_999999_FILL0_wght400_GRAD0_opsz24.svg) icon will show the history of all the tasks.
+
+If you want to hide all the descriptions to see more tasks, click the ![description](./medias/notes_24dp_999999_FILL0_wght400_GRAD0_opsz24.svg) icon.
+
+To search through your tasks click the ![search](./medias/search_24dp_999999_FILL0_wght400_GRAD0_opsz24.svg) icon.
+
+![](./medias/Capture%20d%E2%80%99%C3%A9cran%202024-09-28%20201232.png)
+
+*Reduced app*
+
+The ![reduce](./medias/arrow_drop_up_24dp_999999_FILL0_wght400_GRAD0_opsz24.svg) icon reduces TasksWidget to a less invasive format.
+
+The ![hide](./medias/exit_to_app_24dp_999999_FILL0_wght400_GRAD0_opsz24.svg) icon hides TasksWidget in the system trail bar.
+
+The ![location](./medias/location_on_24dp_999999_FILL0_wght400_GRAD0_opsz24.svg) icon allows you to move the app horizontally across the window.
+
+![](./medias/Capture%20d%E2%80%99%C3%A9cran%202024-09-28%20201346.png)
+
+*App in system trail*
+
+Click on the app icon in the system trail bar to show it back or right click and exit to stop the app.
 
 Contributing
 ------------

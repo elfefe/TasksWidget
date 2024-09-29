@@ -12,6 +12,7 @@ import androidx.compose.foundation.gestures.detectHorizontalDragGestures
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.*
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowDropDown
@@ -28,7 +29,11 @@ import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.platform.ClipboardManager
 import androidx.compose.ui.platform.LocalClipboardManager
 import androidx.compose.ui.text.AnnotatedString
+import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.input.OffsetMapping
+import androidx.compose.ui.text.input.TransformedText
+import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
@@ -36,19 +41,24 @@ import androidx.compose.ui.unit.sp
 import com.elfefe.common.controller.*
 import com.elfefe.common.model.TaskFieldOrder
 import com.elfefe.common.ui.theme.primary
+import grayScale
+import hexToColor
+import maxSaturation
 import org.burnoutcrew.reorderable.ReorderableItem
 import org.burnoutcrew.reorderable.detectReorderAfterLongPress
 import org.burnoutcrew.reorderable.rememberReorderableLazyListState
 import org.burnoutcrew.reorderable.reorderable
+import toHexString
 import java.io.File
 import java.nio.file.Files
+import kotlin.math.absoluteValue
 import kotlin.math.floor
 import kotlin.math.max
 import kotlin.math.min
 
 enum class ConfigNavDestination(val text: String) {
     EMOTES(Traductions().emotes),
-    CARDS(Traductions().cards),
+//    CARDS(Traductions().cards),
     THEMES(Traductions().theme),
     GENERAL(Traductions().general),
 }
@@ -77,7 +87,7 @@ fun AnimatedNavigation(visible: Boolean, page: @Composable () -> Unit) {
 @Composable
 fun Navigator(destination: ConfigNavDestination, windowInteractions: WindowInteractions) {
     AnimatedNavigation(destination == ConfigNavDestination.EMOTES) { Emotes(windowInteractions) }
-    AnimatedNavigation(destination == ConfigNavDestination.CARDS) { Cards(windowInteractions) }
+//    AnimatedNavigation(destination == ConfigNavDestination.CARDS) { Cards(windowInteractions) }
     AnimatedNavigation(destination == ConfigNavDestination.THEMES) { Theme(windowInteractions) }
     AnimatedNavigation(destination == ConfigNavDestination.GENERAL) { General(windowInteractions) }
 }
@@ -304,27 +314,27 @@ fun Theme(windowInteractions: WindowInteractions) {
             modifier = Modifier
                 .fillMaxSize()
         ) {
-            themePartConfig("Primary", Tasks.Configs.configs.themeColors.primary) {
+            themePartConfig(Traductions().toolbarBackground, Tasks.Configs.configs.themeColors.primary) {
                 Tasks.Configs.configs.updateThemeColors(primary = it)
                 Tasks.Configs.update()
             }
-            themePartConfig("On primary", Tasks.Configs.configs.themeColors.onPrimary) {
+            themePartConfig(Traductions().toolbarIcons, Tasks.Configs.configs.themeColors.onPrimary) {
                 Tasks.Configs.configs.updateThemeColors(onPrimary = it)
                 Tasks.Configs.update()
             }
-            themePartConfig("Secondary", Tasks.Configs.configs.themeColors.secondary) {
+            /*themePartConfig("Secondary", Tasks.Configs.configs.themeColors.secondary) {
                 Tasks.Configs.configs.updateThemeColors(secondary = it)
                 Tasks.Configs.update()
             }
             themePartConfig("On secondary", Tasks.Configs.configs.themeColors.onSecondary) {
                 Tasks.Configs.configs.updateThemeColors(onSecondary = it)
                 Tasks.Configs.update()
-            }
-            themePartConfig("Background", Tasks.Configs.configs.themeColors.background) {
+            }*/
+            themePartConfig(Traductions().tasksBackground, Tasks.Configs.configs.themeColors.background) {
                 Tasks.Configs.configs.updateThemeColors(background = it)
                 Tasks.Configs.update()
             }
-            themePartConfig("On background", Tasks.Configs.configs.themeColors.onBackground) {
+            themePartConfig(Traductions().tasksContent, Tasks.Configs.configs.themeColors.onBackground) {
                 Tasks.Configs.configs.updateThemeColors(onBackground = it)
             }
         }
@@ -422,7 +432,11 @@ fun ThemeColor(default: Color, onColorChange: (Color) -> Unit) {
         verticalAlignment = Alignment.CenterVertically
     ) {
         var currentColor by remember { mutableStateOf(default) }
-        var saturationColor by remember { mutableStateOf(default) }
+
+        var colorCursorPosition by remember { mutableStateOf(0f) }
+        var darknessCursorPosition by remember { mutableStateOf((default.red + default.blue + default.green) / 3 * 180) }
+        var alphaCursorPosition by remember { mutableStateOf(default.alpha) }
+        var saturated by remember { mutableStateOf(default.red != default.blue && default.blue != default.green) }
 
         Column(
             modifier = Modifier
@@ -437,12 +451,8 @@ fun ThemeColor(default: Color, onColorChange: (Color) -> Unit) {
                 Color(0f, 1f, 1f),
                 Color(0f, 0f, 1f),
                 Color(1f, 0f, 1f),
+                Color(1f, 0f, 0f),
             )
-
-            var colorCursorPosition by remember { mutableStateOf(0f) }
-            var darknessCursorPosition by remember { mutableStateOf((default.red + default.blue + default.green) / 3 * 180) }
-            var alphaCursorPosition by remember { mutableStateOf(default.alpha) }
-            var saturated by remember { mutableStateOf(default.red != default.blue && default.blue != default.green) }
 
             Canvas(
                 modifier = Modifier
@@ -462,6 +472,7 @@ fun ThemeColor(default: Color, onColorChange: (Color) -> Unit) {
                         Color(0f, 1f, 1f, alphaCursorPosition),
                         Color(0f, 0f, 1f, alphaCursorPosition),
                         Color(1f, 0f, 1f, alphaCursorPosition),
+                        Color(1f, 0f, 0f, alphaCursorPosition),
                     )
 
                 drawRect(
@@ -490,7 +501,7 @@ fun ThemeColor(default: Color, onColorChange: (Color) -> Unit) {
                 val colorFraction =
                     max(0f, min(1f, (colorIndexNormalized - minFraction) * (colorAlphaGradient.size - 1f)))
 
-                currentColor =
+                if (saturated) currentColor =
                     if (colorAlphaGradient.lastIndex == firstColorIndex) colorAlphaGradient[firstColorIndex]
                     else lerp(
                         colorAlphaGradient[firstColorIndex],
@@ -512,7 +523,7 @@ fun ThemeColor(default: Color, onColorChange: (Color) -> Unit) {
                 val colorGradient = listOf(Color.Black, if (saturated) currentColor else Color.Gray, Color.White)
                 val colorAlphaGradient = listOf(
                     Color(0f, 0f, 0f, alphaCursorPosition),
-                    if (saturated) currentColor else Color.Gray,
+                    if (saturated) currentColor.maxSaturation() else Color.Gray,
                     Color(1f, 1f, 1f, alphaCursorPosition)
                 )
                 drawRect(
@@ -523,7 +534,12 @@ fun ThemeColor(default: Color, onColorChange: (Color) -> Unit) {
                     size = size
                 )
                 drawRect(
-                    color = Color.primary,
+                    color = currentColor.grayScale().run { Color(
+                        (1 - red).absoluteValue.coerceIn(0f, 1f),
+                        (1 - green).absoluteValue.coerceIn(0f, 1f),
+                        (1 - blue).absoluteValue.coerceIn(0f, 1f),
+                        1f
+                    ) },
                     topLeft = Offset(max(0f, min(size.width, darknessCursorPosition)), 0f),
                     size = Size(2f, size.height)
                 )
@@ -539,7 +555,7 @@ fun ThemeColor(default: Color, onColorChange: (Color) -> Unit) {
                 val colorLerpFraction =
                     max(0f, min(1f, (indexNormalized - minFraction) * (colorAlphaGradient.size - 1f)))
 
-                saturationColor =
+                currentColor =
                     lerp(colorAlphaGradient[colorIndex], colorAlphaGradient[colorIndex + 1], colorLerpFraction)
             }
             Row(
@@ -561,15 +577,71 @@ fun ThemeColor(default: Color, onColorChange: (Color) -> Unit) {
             }
         }
 
-        Canvas(
+        Column(
             modifier = Modifier
-                .size(64.dp)
+                .fillMaxHeight(),
+            horizontalAlignment = Alignment.CenterHorizontally,
+            verticalArrangement = Arrangement.SpaceBetween
         ) {
-            onColorChange(saturationColor)
-            drawRoundRect(
-                color = saturationColor,
-                cornerRadius = CornerRadius(8f, 8f),
-                size = size
+            Canvas(
+                modifier = Modifier
+                    .size(64.dp)
+            ) {
+                onColorChange(currentColor)
+                drawRoundRect(
+                    color = currentColor,
+                    cornerRadius = CornerRadius(8f, 8f),
+                    size = size
+                )
+            }
+
+            Spacer(Modifier.height(8.dp))
+
+            BasicTextField(
+                value = currentColor.toHexString(),
+                onValueChange = {
+                    println(it)
+                    var colorText = it
+                    if (colorText.startsWith("#"))
+                        colorText = colorText.substring(1)
+                    if (colorText.length != 8) return@BasicTextField
+
+                    try {
+                        currentColor = colorText.hexToColor()
+                        onColorChange(currentColor)
+                    } catch (e: Exception) {
+                        e.printStackTrace()
+                    }
+                },
+                readOnly = false,
+                modifier = Modifier
+                    .padding(0.dp)
+                    .width(64.dp)
+                    .align(Alignment.CenterHorizontally),
+                textStyle = TextStyle(
+                    color = Color.Black,
+                    fontSize = 12.sp
+                ),
+                singleLine = true,
+                visualTransformation = {
+                    TransformedText(
+                        text = AnnotatedString("#${it.text}"),
+                        offsetMapping = object :OffsetMapping {
+                            override fun originalToTransformed(offset: Int): Int {
+                                return offset + 1
+                            }
+
+                            override fun transformedToOriginal(offset: Int): Int {
+                                return when {
+                                    offset == 1 -> 0
+                                    offset > it.text.length -> it.text.length
+                                    else -> offset
+                                }
+                            }
+
+                        }
+                    )
+                }
             )
         }
     }

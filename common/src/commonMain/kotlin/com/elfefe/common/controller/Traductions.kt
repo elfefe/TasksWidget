@@ -34,4 +34,29 @@ class Traductions(val language: String = currentLanguage) {
             "en" -> "Launch the application at startup."
             else -> "Launch the application at startup."
         }
+    val toolbarBackground: String
+        get() = when (language) {
+            "fr" -> "Arrière-plan de la barre d'outils"
+            "en" -> "Toolbar background"
+            else -> "Toolbar background"
+        }
+    val toolbarIcons: String
+        get() = when (language) {
+            "fr" -> "Icônes de la barre d'outils"
+            "en" -> "Toolbar icons"
+            else -> "Toolbar icons"
+        }
+    val tasksBackground: String
+        get() = when (language) {
+            "fr" -> "Arrière-plan des tâches"
+            "en" -> "Tasks background"
+            else -> "Tasks background"
+        }
+    val tasksContent: String
+        get() = when (language) {
+            "fr" -> "Texte des tâches"
+            "en" -> "Tasks text"
+            else -> "Tasks text"
+        }
 }
+

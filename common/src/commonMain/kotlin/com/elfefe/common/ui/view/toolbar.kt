@@ -59,7 +59,7 @@ fun ColumnScope.Toolbar(scope: CoroutineScope, windowInteractions: WindowInterac
             if (expanded)
                 Row {
                     Icon(
-                        painterResource(if (showDescription)"baseline_notes_24.svg" else "short_text_24px.svg"),
+                        painterResource(if (showDescription) "baseline_notes_24.svg" else "short_text_24px.svg"),
                         contentDescription = null,
                         modifier = Modifier
                             .clickable {
@@ -78,7 +78,9 @@ fun ColumnScope.Toolbar(scope: CoroutineScope, windowInteractions: WindowInterac
                                 Tasks.filter { if (showDone) true else !it.done }
                             }
                             .padding(3.dp),
-                        tint = if (showDone) Tasks.Configs.configs.themeColors.onPrimary else Color.LightGray
+                        tint = Tasks.Configs.configs.themeColors.onPrimary.run {
+                            if (showDone) copy(alpha = .6f) else this
+                        }
                     )
                     Icon(
                         Icons.Default.Add,
@@ -199,9 +201,10 @@ fun ColumnScope.Toolbar(scope: CoroutineScope, windowInteractions: WindowInterac
                     onValueChange = {
                         searching = it
                         Tasks.filter { task ->
-                            task.title.contains(searching, true) ||
+                            (task.title.contains(searching, true) ||
                             task.deadline.contains(searching, true) ||
-                            task.description.contains(searching, true)
+                            task.description.contains(searching, true)) &&
+                                    ((!task.done && !showDone) || showDone)
                         }
                     },
                     textStyle = TextStyle(

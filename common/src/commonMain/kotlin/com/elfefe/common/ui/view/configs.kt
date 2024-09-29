@@ -47,10 +47,10 @@ import kotlin.math.max
 import kotlin.math.min
 
 enum class ConfigNavDestination(val text: String) {
-    EMOTES("Emotes"),
-    CARDS("Cards"),
-    THEMES("Theme"),
-    GENERAL("Général"),
+    EMOTES(Traductions().emotes),
+    CARDS(Traductions().cards),
+    THEMES(Traductions().theme),
+    GENERAL(Traductions().general),
 }
 
 @Composable
@@ -386,7 +386,7 @@ fun General(windowInteractions: WindowInteractions) {
                     Spacer(Modifier.width(16.dp))
 
                     Text(
-                        text = "Lancer l'application au démarrage.",
+                        text = Traductions().startupLabel,
                         fontWeight = FontWeight.Normal,
                         fontSize = 16.sp,
                         color = Color.DarkGray

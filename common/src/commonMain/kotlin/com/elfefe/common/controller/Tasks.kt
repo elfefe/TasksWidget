@@ -78,7 +78,7 @@ object Tasks {
 
 
     fun refresh() {
-//        Configs.updateTasksSort()
+//        Configs.updateTasksSo rt()
         _tasks.sorting()
         onUpdate(_tasks.filter(currentFilter))
     }

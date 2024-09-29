@@ -4,6 +4,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.text.intl.Locale
 import com.elfefe.common.ui.theme.*
 import com.google.gson.GsonBuilder
 import com.google.gson.JsonObject
@@ -31,10 +32,12 @@ class Configs(
         onSecondary = Color.onSecondary,
         background = Color.background,
         onBackground = Color.onBackground,
-    )
+    ),
+    language: String = Locale.current.language
 ) {
     var taskFieldsOrder: List<TaskFieldOrder> by mutableStateOf(taskFieldsOrder)
     var themeColors: ThemeColors by mutableStateOf(themeColors)
+    var language: String by mutableStateOf(language)
 
     fun updateThemeColors(
         primary: Color = themeColors.primary,
@@ -67,6 +70,7 @@ class ConfigsAdapter : TypeAdapter<Configs>() {
         gson.toJson(JsonObject().apply {
             add("orders", gson.toJsonTree(value?.taskFieldsOrder))
             add("colors", gson.toJsonTree(value?.themeColors))
+            add("language", gson.toJsonTree(value?.language))
         }, out)
     }
 
@@ -80,6 +84,7 @@ class ConfigsAdapter : TypeAdapter<Configs>() {
         background = Color.background,
         onBackground = Color.onBackground
         )
+        var language: String = Locale.current.language
         `in`?.beginObject()
         while (`in`?.hasNext() == true) {
             when (val next = `in`.nextName()) {
@@ -90,6 +95,7 @@ class ConfigsAdapter : TypeAdapter<Configs>() {
                     `in`.endArray()
                 }
                 "colors" -> themeColors = ThemeColorsAdapter().read(`in`)
+                "language" -> language = `in`.nextString()
                 else -> throw JsonParseException("Unexpected field: $next")
             }
         }
@@ -97,6 +103,7 @@ class ConfigsAdapter : TypeAdapter<Configs>() {
         return Configs(
             taskFieldsOrder = taskFieldsOrders,
             themeColors = themeColors,
+            language = language
         )
     }
 }

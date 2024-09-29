@@ -24,7 +24,6 @@ import com.elfefe.common.controller.*
 import java.awt.GraphicsEnvironment
 import java.awt.MouseInfo
 import java.awt.Toolkit
-import java.io.File
 
 
 fun preload() {

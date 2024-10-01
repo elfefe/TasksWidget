@@ -11,7 +11,7 @@ import androidx.compose.ui.Modifier
 import com.elfefe.common.model.Task
 
 @Composable
-fun ColumnScope.TasksList(tasks: List<Task>, listState: LazyListState, showDescription: Boolean) {
+fun ColumnScope.TasksList(tasks: List<Task>, windowInteractions: WindowInteractions, listState: LazyListState, showDescription: Boolean) {
     Row(
         modifier = Modifier
             .fillMaxWidth()
@@ -23,7 +23,7 @@ fun ColumnScope.TasksList(tasks: List<Task>, listState: LazyListState, showDescr
             state = listState
         ) {
             items(tasks, key = { it.created }) { task ->
-                TaskCard(Modifier, task, showDescription)
+                TaskCard(Modifier, task, windowInteractions, showDescription)
             }
         }
     }

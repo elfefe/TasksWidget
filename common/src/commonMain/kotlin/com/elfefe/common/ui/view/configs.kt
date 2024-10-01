@@ -57,15 +57,15 @@ import kotlin.math.max
 import kotlin.math.min
 
 enum class ConfigNavDestination(val text: String) {
-    EMOTES(Traductions().emotes),
+//    EMOTES(Traductions().emotes),
 //    CARDS(Traductions().cards),
-    THEMES(Traductions().theme),
     GENERAL(Traductions().general),
+    THEMES(Traductions().theme),
 }
 
 @Composable
 fun Configs(windowInteractions: WindowInteractions) {
-    var currentDestination: ConfigNavDestination by remember { mutableStateOf(ConfigNavDestination.EMOTES) }
+    var currentDestination: ConfigNavDestination by remember { mutableStateOf(ConfigNavDestination.GENERAL) }
 
     Row {
         NavigationBar {
@@ -86,10 +86,10 @@ fun AnimatedNavigation(visible: Boolean, page: @Composable () -> Unit) {
 
 @Composable
 fun Navigator(destination: ConfigNavDestination, windowInteractions: WindowInteractions) {
-    AnimatedNavigation(destination == ConfigNavDestination.EMOTES) { Emotes(windowInteractions) }
+//    AnimatedNavigation(destination == ConfigNavDestination.EMOTES) { Emotes(windowInteractions) }
 //    AnimatedNavigation(destination == ConfigNavDestination.CARDS) { Cards(windowInteractions) }
-    AnimatedNavigation(destination == ConfigNavDestination.THEMES) { Theme(windowInteractions) }
     AnimatedNavigation(destination == ConfigNavDestination.GENERAL) { General(windowInteractions) }
+    AnimatedNavigation(destination == ConfigNavDestination.THEMES) { Theme(windowInteractions) }
 }
 
 @Composable
@@ -117,81 +117,6 @@ fun NavigationBar(onNavigate: (ConfigNavDestination) -> Unit) {
                         textAlign = TextAlign.Start,
                         modifier = Modifier.fillMaxWidth()
                     )
-                }
-            }
-        }
-    }
-}
-
-@Composable
-fun Emotes(windowInteractions: WindowInteractions) {
-    Column(
-        modifier = Modifier
-            .fillMaxSize(),
-        verticalArrangement = Arrangement.Center,
-        horizontalAlignment = Alignment.CenterHorizontally
-    ) {
-        val clipboardManager: ClipboardManager = LocalClipboardManager.current
-
-        val categoryScrollState = rememberLazyListState()
-
-        val emojis by remember { mutableStateOf(EmojiApi.emojis) }
-
-        LazyColumn(
-            modifier = Modifier
-                .fillMaxSize(),
-            state = categoryScrollState,
-            contentPadding = PaddingValues(16.dp)
-        ) {
-            itemsIndexed(emojis) { index, category ->
-                Column(
-                    modifier = Modifier
-                ) {
-                    var isSelected by remember { mutableStateOf(false) }
-
-                    TextButton(onClick = {
-                        isSelected = !isSelected
-                    }
-                    ) {
-                        Text(
-                            text = category.name,
-                            modifier = Modifier
-                                .padding(4.dp),
-                            fontWeight = FontWeight.Normal,
-                            fontSize = 16.sp
-                        )
-                    }
-
-                    AnimatedVisibility(
-                        visible = isSelected,
-                        modifier = Modifier
-                    ) {
-                        Column(
-                            modifier = Modifier
-                                .fillMaxWidth()
-                        ) {
-                            category.subCategories.forEach { subCategory ->
-                                Row(
-                                    modifier = Modifier
-                                        .padding(2.dp)
-                                ) {
-                                    subCategory.emojis.forEach { emoji ->
-                                        if (emoji.type == "default")
-                                            Text(
-                                                text = emoji.character,
-                                                modifier = Modifier
-                                                    .clip(RoundedCornerShape(4.dp))
-                                                    .clickable {
-                                                        clipboardManager.setText(AnnotatedString(emoji.character))
-                                                        windowInteractions.popup.value =
-                                                            Popup.show("Copied ${emoji.character}")
-                                                    }
-                                            )
-                                    }
-                                }
-                            }
-                        }
-                    }
                 }
             }
         }
@@ -350,7 +275,7 @@ fun General(windowInteractions: WindowInteractions) {
         verticalArrangement = Arrangement.Top,
         horizontalAlignment = Alignment.Start
     ) {
-        var startOnBoot by remember { mutableStateOf(false) }
+        var startOnBoot by remember { mutableStateOf(startupAppFile.exists()) }
 
         Card(
             modifier = Modifier
@@ -369,24 +294,18 @@ fun General(windowInteractions: WindowInteractions) {
                     verticalAlignment = Alignment.CenterVertically,
                 ) {
                     Checkbox(checked = startOnBoot, onCheckedChange = {
-                        startOnBoot = it
-                        val startupAppPath = "C:\\$userPath\\AppData\\Roaming\\Microsoft\\Windows\\Start Menu\\" +
-                                "Programs\\Startup\\TasksWidget.exe"
-                        if (it) {
+
+                        if (!startupAppFile.exists()) {
                             try {
-                                if (appDir.exists())
-                                    if (!File(startupAppPath).exists())
-                                        Files.createSymbolicLink(
-                                            File(startupAppPath).toPath(),
-                                            appDir.toPath(),
-                                        )
+                                windowInteractions.popup.value = Popup.show(createShortcutWithAdminRights())
+                                startOnBoot = true
                             } catch (e: Exception) {
                                 windowInteractions.popup.value = Popup.show(e.message ?: "Error while creating link")
                             }
                         } else {
                             try {
-                                if (File(startupAppPath).exists())
-                                    File(startupAppPath).delete()
+                                windowInteractions.popup.value = Popup.show(deleteShortcutWithAdminRights())
+                                startOnBoot = false
                             } catch (e: Exception) {
                                 windowInteractions.popup.value = Popup.show(e.message ?: "Error while deleting link")
                             }

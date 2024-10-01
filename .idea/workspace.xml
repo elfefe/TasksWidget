@@ -9,14 +9,30 @@
     <option name="autoReloadType" value="NONE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="342136dd-9d95-4b6b-84e1-4a9c7fc0eeb8" name="Changes" comment="fix:&#10;- Documentation text errors">
+    <list default="true" id="342136dd-9d95-4b6b-84e1-4a9c7fc0eeb8" name="Changes" comment="fix:&#10; - Searching also apply the task done filter&#10; - Removed Cards settings while not in use&#10; - Color selection&#10;feat:&#10; - Added Texts translations&#10; - Replaced description icon">
+      <change afterPath="$PROJECT_DIR$/common/src/commonMain/kotlin/com/elfefe/common/controller/markdown.kt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/common/src/commonMain/kotlin/com/elfefe/common/ui/view/emotes.kt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/common/src/commonMain/resources/close_fullscreen.svg" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/common/src/commonMain/resources/create_shortcut.ps1" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/common/src/commonMain/resources/delete_shortcut.ps1" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/common/src/commonMain/resources/edit.svg" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/common/src/commonMain/resources/edit_off.svg" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/common/src/commonMain/resources/fullscreen.svg" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/common/src/commonMain/resources/list_bulleted.svg" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/common/src/commonMain/resources/list_numbered.svg" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/common/src/commonMain/kotlin/com/elfefe/common/controller/Traductions.kt" beforeDir="false" afterPath="$PROJECT_DIR$/common/src/commonMain/kotlin/com/elfefe/common/controller/Traductions.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/common/src/commonMain/kotlin/com/elfefe/common/controller/color/colors.kt" beforeDir="false" afterPath="$PROJECT_DIR$/common/src/commonMain/kotlin/com/elfefe/common/controller/color/colors.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/common/src/commonMain/kotlin/com/elfefe/common/model/Task.kt" beforeDir="false" afterPath="$PROJECT_DIR$/common/src/commonMain/kotlin/com/elfefe/common/model/Task.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/README.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/build.gradle.kts" beforeDir="false" afterPath="$PROJECT_DIR$/build.gradle.kts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/common/build.gradle.kts" beforeDir="false" afterPath="$PROJECT_DIR$/common/build.gradle.kts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/common/src/commonMain/kotlin/com/elfefe/common/controller/FileUtil.kt" beforeDir="false" afterPath="$PROJECT_DIR$/common/src/commonMain/kotlin/com/elfefe/common/controller/FileUtil.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/common/src/commonMain/kotlin/com/elfefe/common/ui/view/App.kt" beforeDir="false" afterPath="$PROJECT_DIR$/common/src/commonMain/kotlin/com/elfefe/common/ui/view/App.kt" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/common/src/commonMain/kotlin/com/elfefe/common/ui/view/configs.kt" beforeDir="false" afterPath="$PROJECT_DIR$/common/src/commonMain/kotlin/com/elfefe/common/ui/view/configs.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/common/src/commonMain/kotlin/com/elfefe/common/ui/view/main.kt" beforeDir="false" afterPath="$PROJECT_DIR$/common/src/commonMain/kotlin/com/elfefe/common/ui/view/main.kt" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/common/src/commonMain/kotlin/com/elfefe/common/ui/view/taskCard.kt" beforeDir="false" afterPath="$PROJECT_DIR$/common/src/commonMain/kotlin/com/elfefe/common/ui/view/taskCard.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/common/src/commonMain/kotlin/com/elfefe/common/ui/view/tasksList.kt" beforeDir="false" afterPath="$PROJECT_DIR$/common/src/commonMain/kotlin/com/elfefe/common/ui/view/tasksList.kt" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/common/src/commonMain/kotlin/com/elfefe/common/ui/view/toolbar.kt" beforeDir="false" afterPath="$PROJECT_DIR$/common/src/commonMain/kotlin/com/elfefe/common/ui/view/toolbar.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/common/src/commonMain/resources/version" beforeDir="false" afterPath="$PROJECT_DIR$/common/src/commonMain/resources/version" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/desktop/resources/version" beforeDir="false" afterPath="$PROJECT_DIR$/desktop/resources/version" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -100,9 +116,9 @@
     <option name="RECENT_TEMPLATES">
       <list>
         <option value="Kotlin Data Class" />
-        <option value="Kotlin File" />
         <option value="Kotlin Class" />
         <option value="Kotlin Enum" />
+        <option value="Kotlin File" />
       </list>
     </option>
   </component>
@@ -150,45 +166,45 @@
     <option name="autoscrollFromSource" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent"><![CDATA[{
-  "keyToString": {
-    "ASKED_ADD_EXTERNAL_FILES": "true",
-    "ASKED_SHARE_PROJECT_CONFIGURATION_FILES": "true",
-    "Gradle.Build TasksWidget.executor": "Run",
-    "Gradle.Download Sources.executor": "Run",
-    "Gradle.TasksWidget [javadoc].executor": "Run",
-    "Gradle.TasksWidget:desktop [build].executor": "Run",
-    "Gradle.TasksWidget:desktop [packageDistributionForCurrentOS].executor": "Run",
-    "Gradle.TasksWidget:desktop [packageMsi].executor": "Run",
-    "Gradle.TasksWidget:desktop [packageReleaseMsi].executor": "Run",
-    "Gradle.TasksWidget:desktop [package].executor": "Run",
-    "Gradle.TasksWidget:desktop [runDistributable].executor": "Run",
-    "Gradle.TasksWidget:desktop [run].executor": "Run",
-    "Kotlin.MainKt.executor": "Run",
-    "RunOnceActivity.OpenProjectViewOnStart": "true",
-    "RunOnceActivity.ShowReadmeOnStart": "true",
-    "RunOnceActivity.cidr.known.project.marker": "true",
-    "SHARE_PROJECT_CONFIGURATION_FILES": "true",
-    "cidr.known.project.marker": "true",
-    "external.system.has.shared.sources": "true",
-    "git-widget-placeholder": "develop",
-    "ignore.virus.scanning.warn.message": "true",
-    "jdk.selected.JAVA_MODULE": "openjdk-19",
-    "kotlin-language-version-configured": "true",
-    "last_opened_file_path": "C:/Users/fbou-/IdeaProjects/TasksWidget/medias",
-    "project.structure.last.edited": "Project",
-    "project.structure.proportion": "0.15",
-    "project.structure.side.proportion": "0.2",
-    "settings.editor.selected.configurable": "reference.settingsdialog.project.gradle"
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;ASKED_ADD_EXTERNAL_FILES&quot;: &quot;true&quot;,
+    &quot;ASKED_SHARE_PROJECT_CONFIGURATION_FILES&quot;: &quot;true&quot;,
+    &quot;Gradle.Build TasksWidget.executor&quot;: &quot;Run&quot;,
+    &quot;Gradle.Download Sources.executor&quot;: &quot;Run&quot;,
+    &quot;Gradle.TasksWidget [javadoc].executor&quot;: &quot;Run&quot;,
+    &quot;Gradle.TasksWidget:desktop [build].executor&quot;: &quot;Run&quot;,
+    &quot;Gradle.TasksWidget:desktop [packageDistributionForCurrentOS].executor&quot;: &quot;Run&quot;,
+    &quot;Gradle.TasksWidget:desktop [packageMsi].executor&quot;: &quot;Run&quot;,
+    &quot;Gradle.TasksWidget:desktop [packageReleaseMsi].executor&quot;: &quot;Run&quot;,
+    &quot;Gradle.TasksWidget:desktop [package].executor&quot;: &quot;Run&quot;,
+    &quot;Gradle.TasksWidget:desktop [runDistributable].executor&quot;: &quot;Run&quot;,
+    &quot;Gradle.TasksWidget:desktop [run].executor&quot;: &quot;Run&quot;,
+    &quot;Kotlin.MainKt.executor&quot;: &quot;Run&quot;,
+    &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.cidr.known.project.marker&quot;: &quot;true&quot;,
+    &quot;SHARE_PROJECT_CONFIGURATION_FILES&quot;: &quot;true&quot;,
+    &quot;cidr.known.project.marker&quot;: &quot;true&quot;,
+    &quot;external.system.has.shared.sources&quot;: &quot;true&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;develop&quot;,
+    &quot;ignore.virus.scanning.warn.message&quot;: &quot;true&quot;,
+    &quot;jdk.selected.JAVA_MODULE&quot;: &quot;openjdk-19&quot;,
+    &quot;kotlin-language-version-configured&quot;: &quot;true&quot;,
+    &quot;last_opened_file_path&quot;: &quot;C:/Users/fbou-/IdeaProjects/TasksWidget/common/src/commonMain/kotlin/com/elfefe/common/ui/view&quot;,
+    &quot;project.structure.last.edited&quot;: &quot;Project&quot;,
+    &quot;project.structure.proportion&quot;: &quot;0.15&quot;,
+    &quot;project.structure.side.proportion&quot;: &quot;0.2&quot;,
+    &quot;settings.editor.selected.configurable&quot;: &quot;reference.settingsdialog.project.gradle&quot;
   }
-}]]></component>
+}</component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
+      <recent name="C:\Users\fbou-\IdeaProjects\TasksWidget\common\src\commonMain\kotlin\com\elfefe\common\ui\view" />
+      <recent name="C:\Users\fbou-\IdeaProjects\TasksWidget\common\src\commonMain\resources" />
       <recent name="C:\Users\fbou-\IdeaProjects\TasksWidget\medias" />
       <recent name="C:\Users\fbou-\IdeaProjects\TasksWidget" />
-      <recent name="C:\Users\fbou-\IdeaProjects\TasksWidget\common\src\commonMain\resources" />
       <recent name="C:\Users\fbou-\IdeaProjects\TasksWidget\common\src\desktopMain" />
-      <recent name="C:\Users\fbou-\IdeaProjects\TasksWidget\desktop\src\jvmMain" />
     </key>
     <key name="MoveFile.RECENT_KEYS">
       <recent name="C:\Users\fbou-\IdeaProjects\TasksWidget\medias" />
@@ -367,8 +383,8 @@
     <recent_temporary>
       <list>
         <item itemvalue="Kotlin.MainKt" />
-        <item itemvalue="Gradle.TasksWidget [javadoc]" />
         <item itemvalue="Gradle.TasksWidget:desktop [packageMsi]" />
+        <item itemvalue="Gradle.TasksWidget [javadoc]" />
         <item itemvalue="Gradle.TasksWidget:desktop [packageReleaseMsi]" />
         <item itemvalue="Gradle.TasksWidget:desktop [run]" />
       </list>
@@ -687,7 +703,15 @@
       <option name="project" value="LOCAL" />
       <updated>1727611906370</updated>
     </task>
-    <option name="localTasksCounter" value="39" />
+    <task id="LOCAL-00039" summary="fix:&#10; - Searching also apply the task done filter&#10; - Removed Cards settings while not in use&#10; - Color selection&#10;feat:&#10; - Added Texts translations&#10; - Replaced description icon">
+      <option name="closed" value="true" />
+      <created>1727626309514</created>
+      <option name="number" value="00039" />
+      <option name="presentableId" value="LOCAL-00039" />
+      <option name="project" value="LOCAL" />
+      <updated>1727626309514</updated>
+    </task>
+    <option name="localTasksCounter" value="40" />
     <servers />
   </component>
   <component name="UnknownFeatures">
@@ -708,7 +732,6 @@
   </component>
   <component name="VcsManagerConfiguration">
     <option name="ADD_EXTERNAL_FILES_SILENTLY" value="true" />
-    <MESSAGE value="fix:&#10; - Version management" />
     <MESSAGE value="fix:&#10; - desktop issue" />
     <MESSAGE value="fix:&#10; - update gitignore" />
     <MESSAGE value="fix:&#10; - Better performances&#10; - Moved configs to appdata" />
@@ -733,7 +756,8 @@
     <MESSAGE value="fix:&#10;- readme description and link buttons" />
     <MESSAGE value="feat:&#10;- Documentation bold startup" />
     <MESSAGE value="fix:&#10;- Documentation text errors" />
-    <option name="LAST_COMMIT_MESSAGE" value="fix:&#10;- Documentation text errors" />
+    <MESSAGE value="fix:&#10; - Searching also apply the task done filter&#10; - Removed Cards settings while not in use&#10; - Color selection&#10;feat:&#10; - Added Texts translations&#10; - Replaced description icon" />
+    <option name="LAST_COMMIT_MESSAGE" value="fix:&#10; - Searching also apply the task done filter&#10; - Removed Cards settings while not in use&#10; - Color selection&#10;feat:&#10; - Added Texts translations&#10; - Replaced description icon" />
   </component>
   <component name="XSLT-Support.FileAssociations.UIState">
     <expand />

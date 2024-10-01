@@ -59,7 +59,7 @@ fun ColumnScope.Toolbar(scope: CoroutineScope, windowInteractions: WindowInterac
             if (expanded)
                 Row {
                     Icon(
-                        painterResource(if (showDescription) "baseline_notes_24.svg" else "short_text_24px.svg"),
+                        painterResource(if (!showDescription) "baseline_notes_24.svg" else "short_text_24px.svg"),
                         contentDescription = null,
                         modifier = Modifier
                             .clickable {
@@ -70,7 +70,7 @@ fun ColumnScope.Toolbar(scope: CoroutineScope, windowInteractions: WindowInterac
                         tint = Tasks.Configs.configs.themeColors.onPrimary
                     )
                     Icon(
-                        painterResource(if (showDone)"check_circle_24px.svg" else "unpublished_24px.svg"),
+                        painterResource(if (!showDone)"check_circle_24px.svg" else "unpublished_24px.svg"),
                         contentDescription = null,
                         modifier = Modifier
                             .clickable {

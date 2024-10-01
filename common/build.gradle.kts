@@ -60,6 +60,7 @@ kotlin {
 
                 implementation("androidx.constraintlayout:constraintlayout:2.2.0-alpha07")
                 implementation("androidx.constraintlayout:constraintlayout-compose:1.1.0-alpha07")
+                implementation("com.colintheshots:twain:0.3.2")
 
                 implementation("com.guardsquare:proguard-gradle:7.2.2")
 

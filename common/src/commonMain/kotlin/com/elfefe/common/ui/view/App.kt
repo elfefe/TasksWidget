@@ -23,7 +23,6 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.ApplicationScope
 import com.elfefe.common.controller.Tasks
-import com.elfefe.common.controller.isAdmin
 import com.elfefe.common.controller.tmpDir
 import com.elfefe.common.model.Task
 import com.elfefe.common.model.github.GithubLatestRelease
@@ -182,7 +181,7 @@ fun App(windowInteractions: WindowInteractions) {
                 }
             }
             Toolbar(scope, windowInteractions, ToolbarInteractions { showDescription = it })
-            TasksList(tasks, listState, showDescription)
+            TasksList(tasks, windowInteractions, listState, showDescription)
         }
     }
 }
@@ -194,6 +193,7 @@ data class WindowInteractions(
     val expand: Interactable<Boolean>,
     val moveWindow: Interactable<WindowMovement>,
     val showConfigs: Interactable<Boolean>,
+    val showEmotes: Interactable<Boolean>,
     val popup: Interactable<Popup>
 )
 

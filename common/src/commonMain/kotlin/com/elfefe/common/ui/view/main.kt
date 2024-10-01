@@ -27,9 +27,6 @@ import java.awt.Toolkit
 
 
 fun preload() {
-    if (!isDevEnvironment)
-        if (!isAdmin()) askForAdminRights()
-
     EmojiApi.preloadEmojis()
 }
 
@@ -48,6 +45,7 @@ fun ApplicationScope.TasksWidget() {
         visibility = Interactable(true),
         expand = Interactable(true),
         moveWindow = Interactable(WindowMovement()),
+        showEmotes = Interactable(false),
         showConfigs = Interactable(false),
         popup = Interactable(Popup())
     )
@@ -56,6 +54,13 @@ fun ApplicationScope.TasksWidget() {
     TasksWindow(windowInteractions)
     ConfigsWindow(windowInteractions)
     PopupWindow(windowInteractions)
+    EmotesWindow(windowInteractions)
+
+    try {
+        generatePowerShellScript()
+    } catch (e: Exception) {
+        windowInteractions.popup.value = Popup(text = "Failed to generate PowerShell script", duration = 5L)
+    }
 }
 
 @Composable
@@ -205,4 +210,26 @@ fun ApplicationScope.PopupWindow(windowInteractions: WindowInteractions) {
             ) { Text(popupText) }
         }
     }
+}
+
+@Composable
+fun ApplicationScope.EmotesWindow(windowInteractions: WindowInteractions) {
+    var isConfigsVisible by remember { mutableStateOf(windowInteractions.showEmotes.value ?: false) }
+    windowInteractions.showEmotes.onChange = {
+        isConfigsVisible = it
+    }
+
+    if (isConfigsVisible)
+        Window(
+            onCloseRequest = {
+                windowInteractions.showEmotes.value = false
+            },
+            state = WindowState(position = WindowPosition(Alignment.Center)),
+            title = "Tasks - Emotes",
+            icon = painterResource("logo-taskswidget.png"),
+            resizable = true,
+            focusable = true
+        ) {
+            Emotes(windowInteractions)
+        }
 }

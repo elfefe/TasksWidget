@@ -10,6 +10,7 @@ import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.interaction.PressInteraction
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyRow
+import androidx.compose.foundation.onClick
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.material.Card
@@ -217,15 +218,33 @@ fun Editor(manager: TaskCardManager, windowInteractions: WindowInteractions) {
                 modifier = Modifier.fillMaxSize(),
                 verticalAlignment = Alignment.CenterVertically
             ) {
-// Bold Text Button
+                // Header Text Button
+                item {
+                    val level = 1
+                    Text(
+                        text = "H$level",
+//                        fontSize = (24 - level * 2).sp,
+                        fontSize = 12.sp,
+                        lineHeight = 12.sp,
+                        modifier = Modifier
+                            .padding(4.dp)
+                            .clickable {
+                                toggleHeader(manager, level)
+                            }
+                    )
+                    Spacer(Modifier.width(4.dp))
+                }
+
+                // Bold Text Button
                 item {
                     Text(
                         text = "B",
                         fontSize = 12.sp,
                         lineHeight = 12.sp,
+                        textAlign = TextAlign.Center,
                         fontWeight = FontWeight.Bold,
                         modifier = Modifier
-                            .height(16.dp)
+                            .size(16.dp)
                             .clickable {
                                 wrapSelectionWith(manager, "**")
                             }
@@ -233,31 +252,33 @@ fun Editor(manager: TaskCardManager, windowInteractions: WindowInteractions) {
                     Spacer(Modifier.width(4.dp))
                 }
 
-// Italic Text Button
+                // Italic Text Button
                 item {
                     Text(
                         text = "I",
                         fontSize = 12.sp,
                         lineHeight = 12.sp,
+                        textAlign = TextAlign.Center,
                         fontStyle = FontStyle.Italic,
                         modifier = Modifier
-                            .height(16.dp)
+                            .size(16.dp)
                             .clickable {
-                                wrapSelectionWith(manager, "*")
+                                wrapSelectionWith(manager, "_")
                             }
                     )
                     Spacer(Modifier.width(4.dp))
                 }
 
-// Strikethrough Button
+                // Strikethrough Button
                 item {
                     Text(
                         text = "S",
                         fontSize = 12.sp,
                         lineHeight = 12.sp,
+                        textAlign = TextAlign.Center,
                         textDecoration = TextDecoration.LineThrough,
                         modifier = Modifier
-                            .height(16.dp)
+                            .size(16.dp)
                             .clickable {
                                 wrapSelectionWith(manager, "~~")
                             }
@@ -265,28 +286,96 @@ fun Editor(manager: TaskCardManager, windowInteractions: WindowInteractions) {
                     Spacer(Modifier.width(4.dp))
                 }
 
-// Inline Code Button
-                item {
+                // Inline Code Button
+                /*item {
                     Text(
                         text = "{ }",
                         fontSize = 12.sp,
                         lineHeight = 12.sp,
+                        textAlign = TextAlign.Center,
                         modifier = Modifier
-                            .height(16.dp)
+                            .size(16.dp)
                             .clickable {
                                 wrapSelectionWith(manager, "`")
                             }
                     )
                     Spacer(Modifier.width(4.dp))
+                }*/
+
+                // Bullet List Button
+                item {
+                    Text(
+                        text = "•",
+                        fontSize = 12.sp,
+                        lineHeight = 12.sp,
+                        textAlign = TextAlign.Center,
+                        modifier = Modifier
+                            .size(16.dp)
+                            .clickable {
+                                toggleList(manager, "bullet")
+                            }
+                    )
+                    Spacer(Modifier.width(4.dp))
                 }
 
+                // Numbered List Button
+                item {
+                    Text(
+                        text = "1.",
+                        fontSize = 12.sp,
+                        lineHeight = 12.sp,
+                        textAlign = TextAlign.Center,
+                        modifier = Modifier
+                            .size(16.dp)
+                            .clickable {
+                                toggleList(manager, "numbered")
+                            }
+                    )
+                    Spacer(Modifier.width(4.dp))
+                }
+
+                // Code Block Button
+                /*item {
+                    Text(
+                        text = "```",
+                        fontSize = 12.sp,
+                        lineHeight = 12.sp,
+                        textAlign = TextAlign.Center,
+                        modifier = Modifier
+                            .size(16.dp)
+                            .clickable {
+                                toggleCodeBlock(manager)
+                            }
+                    )
+                    Spacer(Modifier.width(4.dp))
+                }*/
+
+                // Highlight Button
+                item {
+                    Text(
+                        text = "HL",
+                        fontSize = 12.sp,
+                        lineHeight = 12.sp,
+                        textAlign = TextAlign.Center,
+                        modifier = Modifier
+                            .background(Color.Yellow)
+                            .size(16.dp)
+                            .clickable {
+                                toggleHighlight(manager)
+                            }
+                    )
+                    Spacer(Modifier.width(4.dp))
+                }
+
+                // Emotes Button
                 item {
                     Text(
                         text = "\uD83D\uDE42",
                         fontSize = 12.sp,
                         lineHeight = 12.sp,
+                        textAlign = TextAlign.Center,
                         modifier = Modifier
-                            .height(16.dp)
+                            .size(16.dp)
                             .clickable {
                                 windowInteractions.showEmotes.value = !(windowInteractions.showEmotes.value ?: true)
                             }

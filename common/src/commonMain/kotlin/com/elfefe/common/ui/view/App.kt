@@ -53,7 +53,7 @@ fun App(windowInteractions: WindowInteractions) {
     val listState = rememberLazyListState(0)
 
     Tasks.onUpdate = {
-        println(it)
+//        println(it)
         tasks = it
         scope.launch {
             Tasks.lastTask?.let { task ->

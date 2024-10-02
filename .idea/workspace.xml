@@ -9,30 +9,12 @@
     <option name="autoReloadType" value="NONE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="342136dd-9d95-4b6b-84e1-4a9c7fc0eeb8" name="Changes" comment="fix:&#10; - Searching also apply the task done filter&#10; - Removed Cards settings while not in use&#10; - Color selection&#10;feat:&#10; - Added Texts translations&#10; - Replaced description icon">
-      <change afterPath="$PROJECT_DIR$/common/src/commonMain/kotlin/com/elfefe/common/controller/markdown.kt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/common/src/commonMain/kotlin/com/elfefe/common/ui/view/emotes.kt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/common/src/commonMain/resources/close_fullscreen.svg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/common/src/commonMain/resources/create_shortcut.ps1" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/common/src/commonMain/resources/delete_shortcut.ps1" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/common/src/commonMain/resources/edit.svg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/common/src/commonMain/resources/edit_off.svg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/common/src/commonMain/resources/fullscreen.svg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/common/src/commonMain/resources/list_bulleted.svg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/common/src/commonMain/resources/list_numbered.svg" afterDir="false" />
+    <list default="true" id="342136dd-9d95-4b6b-84e1-4a9c7fc0eeb8" name="Changes" comment="feat:&#10; - Add markdown formated text&#10; - Authentication no more needed on launch&#10;fix:&#10; - Add and remove to startup path">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/README.md" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/build.gradle.kts" beforeDir="false" afterPath="$PROJECT_DIR$/build.gradle.kts" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/common/build.gradle.kts" beforeDir="false" afterPath="$PROJECT_DIR$/common/build.gradle.kts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/common/src/commonMain/kotlin/com/elfefe/common/controller/FileUtil.kt" beforeDir="false" afterPath="$PROJECT_DIR$/common/src/commonMain/kotlin/com/elfefe/common/controller/FileUtil.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/common/src/commonMain/kotlin/com/elfefe/common/controller/markdown.kt" beforeDir="false" afterPath="$PROJECT_DIR$/common/src/commonMain/kotlin/com/elfefe/common/controller/markdown.kt" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/common/src/commonMain/kotlin/com/elfefe/common/ui/view/App.kt" beforeDir="false" afterPath="$PROJECT_DIR$/common/src/commonMain/kotlin/com/elfefe/common/ui/view/App.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/common/src/commonMain/kotlin/com/elfefe/common/ui/view/configs.kt" beforeDir="false" afterPath="$PROJECT_DIR$/common/src/commonMain/kotlin/com/elfefe/common/ui/view/configs.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/common/src/commonMain/kotlin/com/elfefe/common/ui/view/main.kt" beforeDir="false" afterPath="$PROJECT_DIR$/common/src/commonMain/kotlin/com/elfefe/common/ui/view/main.kt" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/common/src/commonMain/kotlin/com/elfefe/common/ui/view/taskCard.kt" beforeDir="false" afterPath="$PROJECT_DIR$/common/src/commonMain/kotlin/com/elfefe/common/ui/view/taskCard.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/common/src/commonMain/kotlin/com/elfefe/common/ui/view/tasksList.kt" beforeDir="false" afterPath="$PROJECT_DIR$/common/src/commonMain/kotlin/com/elfefe/common/ui/view/tasksList.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/common/src/commonMain/kotlin/com/elfefe/common/ui/view/toolbar.kt" beforeDir="false" afterPath="$PROJECT_DIR$/common/src/commonMain/kotlin/com/elfefe/common/ui/view/toolbar.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/common/src/commonMain/resources/version" beforeDir="false" afterPath="$PROJECT_DIR$/common/src/commonMain/resources/version" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/desktop/resources/version" beforeDir="false" afterPath="$PROJECT_DIR$/desktop/resources/version" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -711,7 +693,15 @@
       <option name="project" value="LOCAL" />
       <updated>1727626309514</updated>
     </task>
-    <option name="localTasksCounter" value="40" />
+    <task id="LOCAL-00040" summary="feat:&#10; - Add markdown formated text&#10; - Authentication no more needed on launch&#10;fix:&#10; - Add and remove to startup path">
+      <option name="closed" value="true" />
+      <created>1727809626159</created>
+      <option name="number" value="00040" />
+      <option name="presentableId" value="LOCAL-00040" />
+      <option name="project" value="LOCAL" />
+      <updated>1727809626159</updated>
+    </task>
+    <option name="localTasksCounter" value="41" />
     <servers />
   </component>
   <component name="UnknownFeatures">
@@ -732,7 +722,6 @@
   </component>
   <component name="VcsManagerConfiguration">
     <option name="ADD_EXTERNAL_FILES_SILENTLY" value="true" />
-    <MESSAGE value="fix:&#10; - desktop issue" />
     <MESSAGE value="fix:&#10; - update gitignore" />
     <MESSAGE value="fix:&#10; - Better performances&#10; - Moved configs to appdata" />
     <MESSAGE value="fix:&#10; - Better performances" />
@@ -757,7 +746,8 @@
     <MESSAGE value="feat:&#10;- Documentation bold startup" />
     <MESSAGE value="fix:&#10;- Documentation text errors" />
     <MESSAGE value="fix:&#10; - Searching also apply the task done filter&#10; - Removed Cards settings while not in use&#10; - Color selection&#10;feat:&#10; - Added Texts translations&#10; - Replaced description icon" />
-    <option name="LAST_COMMIT_MESSAGE" value="fix:&#10; - Searching also apply the task done filter&#10; - Removed Cards settings while not in use&#10; - Color selection&#10;feat:&#10; - Added Texts translations&#10; - Replaced description icon" />
+    <MESSAGE value="feat:&#10; - Add markdown formated text&#10; - Authentication no more needed on launch&#10;fix:&#10; - Add and remove to startup path" />
+    <option name="LAST_COMMIT_MESSAGE" value="feat:&#10; - Add markdown formated text&#10; - Authentication no more needed on launch&#10;fix:&#10; - Add and remove to startup path" />
   </component>
   <component name="XSLT-Support.FileAssociations.UIState">
     <expand />

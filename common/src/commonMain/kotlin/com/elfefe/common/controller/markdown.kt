@@ -47,29 +47,32 @@ class MarkdownVisualTransformation : VisualTransformation {
                         }
                         continue // Move to the next iteration
                     }
-                } else {
-                    val symbol = when {
-                        originalText.startsWith("```", i) -> originalText.substring(i, i + 3)
-                        originalText.startsWith("**", i) -> originalText.substring(i, i + 2)
-                        originalText.startsWith("_", i) -> originalText.substring(i, i + 1)
-                        originalText.startsWith("~~", i) -> originalText.substring(i, i + 2)
-                        originalText.startsWith("==", i) -> originalText.substring(i, i + 2)
-                        originalText.startsWith("---", i) -> originalText.substring(i, i + 3)
-                        else -> null
-                    }
+                }
 
-                    if (symbol != null) {
-                        tokens.add(Token.MarkdownSymbol(symbol, i))
-                        i += symbol.length
-                    } else {
-                        // Accumulate text until the next markdown symbol
-                        val start = i
-                        while (i < originalText.length && !isMarkdownSymbolStart(originalText, i)) {
-                            i++
-                        }
-                        val content = originalText.substring(start, i)
-                        if (text.isNotBlank()) tokens.add(Token.Text(content))
+                val symbol = when {
+                    originalText.startsWith("```", i) -> "```"
+                    originalText.startsWith("**", i) -> "**"
+                    originalText.startsWith("__", i) -> "__"
+                    originalText.startsWith("*", i) -> "*"
+                    originalText.startsWith("_", i) -> "_"
+                    originalText.startsWith("~~", i) -> "~~"
+                    originalText.startsWith("==", i) -> "=="
+                    originalText.startsWith("---", i) -> "---"
+                    originalText.startsWith("`", i) -> "`"
+                    else -> null
+                }
+
+                if (symbol != null) {
+                    tokens.add(Token.MarkdownSymbol(symbol, i))
+                    i += symbol.length
+                } else {
+                    // Accumulate text until the next markdown symbol
+                    val start = i
+                    while (i < originalText.length && !isMarkdownSymbolStart(originalText, i)) {
+                        i++
                     }
+                    val content = originalText.substring(start, i)
+                    if (content.isNotEmpty()) tokens.add(Token.Text(content))
                 }
             }
 
@@ -77,8 +80,10 @@ class MarkdownVisualTransformation : VisualTransformation {
             val openSymbols = mutableMapOf<String, MutableList<Int>>() // Symbol to stack of positions
 
             val markdownStyles = mapOf(
+                "*" to SpanStyle(fontStyle = FontStyle.Italic),
                 "_" to SpanStyle(fontStyle = FontStyle.Italic),
                 "**" to SpanStyle(fontWeight = FontWeight.Bold),
+                "__" to SpanStyle(fontWeight = FontWeight.Bold),
                 "~~" to SpanStyle(textDecoration = TextDecoration.LineThrough),
                 "`" to SpanStyle(fontFamily = FontFamily.Monospace, background = Color.LightGray),
                 "```" to SpanStyle(fontFamily = FontFamily.Monospace, background = Color.LightGray),
@@ -94,89 +99,37 @@ class MarkdownVisualTransformation : VisualTransformation {
             var originalIndex = 0
             var transformedIndex = 0
 
-            var numberOfLines = 1 // For handling numbered lists
-
-            var headerLevel: Int? = null
-            var headerStartIndex: Int? = null
-
             for (token in tokens) {
                 when (token) {
                     is Token.Text -> {
                         val content = token.text
 
-                        // Process links within the text
-                        val linkPattern = Regex("\\[(.+?)\\]\\((.+?)\\)")
-                        var lastIndex = 0
-                        linkPattern.findAll(content).forEach { matchResult ->
-                            val range = matchResult.range
-                            if (range.first > lastIndex) {
-                                val plainText = content.substring(lastIndex, range.first)
-                                annotatedStringBuilder.append(plainText)
-                                // Map positions
-                                for (j in plainText.indices) {
-                                    originalToTransformed.add(transformedIndex)
-                                    transformedToOriginal.add(originalIndex)
-                                    originalIndex++
-                                    transformedIndex++
-                                }
-                            }
-
-                            val displayText = matchResult.groupValues[1]
-                            val url = matchResult.groupValues[2]
-                            val start = transformedIndex
-                            annotatedStringBuilder.append(displayText)
-                            transformedIndex += displayText.length
-
-                            // Apply link style
-                            annotatedStringBuilder.addStyle(
-                                SpanStyle(color = Color.Blue, textDecoration = TextDecoration.Underline),
-                                start,
-                                transformedIndex
-                            )
-
-                            // Optionally, add annotation for the URL
-                            annotatedStringBuilder.addStringAnnotation(
-                                tag = "URL",
-                                annotation = url,
-                                start = start,
-                                end = transformedIndex
-                            )
-
-                            // Map positions
-                            for (j in displayText.indices) {
-                                originalToTransformed.add(transformedIndex - displayText.length + j)
-                                transformedToOriginal.add(originalIndex)
-                                originalIndex++
-                            }
-
-                            lastIndex = range.last + 1
-                        }
-
-                        if (lastIndex < content.length) {
-                            val remainingText = content.substring(lastIndex)
-                            annotatedStringBuilder.append(remainingText)
-                            // Map positions
-                            for (j in remainingText.indices) {
-                                originalToTransformed.add(transformedIndex)
-                                transformedToOriginal.add(originalIndex)
-                                originalIndex++
-                                transformedIndex++
-                            }
+                        annotatedStringBuilder.append(content)
+                        for (char in content) {
+                            originalToTransformed.add(transformedIndex)
+                            transformedToOriginal.add(originalIndex)
+                            originalIndex++
+                            transformedIndex++
                         }
                     }
                     is Token.MarkdownSymbol -> {
                         val symbol = token.symbol
-                        val position = token.position
+
+                        // Update mapping for the symbol in original text
+                        for (j in symbol.indices) {
+                            // Since symbol is not added to transformed text, we map it to the current transformedIndex
+                            originalToTransformed.add(transformedIndex)
+                            originalIndex++
+                        }
 
                         if (symbol == "---") {
                             // Handle horizontal rule
-                            annotatedStringBuilder.append("\n──────────\n")
-                            transformedIndex += 11 // Length of "──────────"
-
-                            // Skip the original symbol in the mapping
-                            for (j in symbol.indices) {
+                            val hr = "\n──────────\n"
+                            annotatedStringBuilder.append(hr)
+                            for (char in hr) {
                                 originalToTransformed.add(transformedIndex)
-                                originalIndex++
+                                transformedToOriginal.add(originalIndex)
+                                transformedIndex++
                             }
                         } else if (symbol in openSymbols && openSymbols[symbol]?.isNotEmpty() == true) {
                             // Closing symbol
@@ -192,36 +145,35 @@ class MarkdownVisualTransformation : VisualTransformation {
                             // Opening symbol
                             openSymbols.getOrPut(symbol) { mutableListOf() }.add(originalIndex)
                         }
-
-                        // Skip the symbol in the transformed text (since we're removing markdown symbols)
-                        for (j in symbol.indices) {
-                            originalToTransformed.add(transformedIndex)
-                            originalIndex++
-                        }
                     }
                     is Token.Header -> {
                         val content = token.content
                         val level = token.level
-                        val startIndex = transformedIndex
+                        val headerStartIndex = transformedIndex
+
+                        // Skip header symbols in original text and update mapping
+                        val headerSyntax = "#".repeat(level) + " "
+                        for (j in headerSyntax.indices) {
+                            originalToTransformed.add(transformedIndex)
+                            originalIndex++
+                        }
 
                         // Append the header content
                         annotatedStringBuilder.append(content)
-                        transformedIndex += content.length
-
-                        // Update mappings
-                        for (j in content.indices) {
-                            originalToTransformed.add(startIndex + j)
+                        for (char in content) {
+                            originalToTransformed.add(transformedIndex)
                             transformedToOriginal.add(originalIndex)
                             originalIndex++
+                            transformedIndex++
                         }
 
                         // Append newline if present in the original text
                         if (originalIndex < originalText.length && originalText[originalIndex] == '\n') {
                             annotatedStringBuilder.append('\n')
-                            transformedIndex += 1
-                            originalToTransformed.add(transformedIndex - 1)
+                            originalToTransformed.add(transformedIndex)
                             transformedToOriginal.add(originalIndex)
                             originalIndex++
+                            transformedIndex++
                         }
 
                         // Apply header style
@@ -236,48 +188,24 @@ class MarkdownVisualTransformation : VisualTransformation {
                         }
                         annotatedStringBuilder.addStyle(
                             SpanStyle(fontSize = fontSize, fontWeight = FontWeight.Bold),
-                            startIndex,
+                            headerStartIndex,
                             headerEndIndex
                         )
                     }
-                }
-
-                // Apply header style at the end of the line
-                if (headerLevel != null && token is Token.Text && token.text.contains('\n')) {
-                    val headerEndIndex = transformedIndex
-                    val fontSize = when (headerLevel) {
-                        1 -> 32.sp
-                        2 -> 28.sp
-                        3 -> 24.sp
-                        4 -> 20.sp
-                        5 -> 16.sp
-                        else -> 14.sp
-                    }
-                    annotatedStringBuilder.addStyle(
-                        SpanStyle(fontSize = fontSize, fontWeight = FontWeight.Bold),
-                        headerStartIndex ?: 0,
-                        headerEndIndex
-                    )
-                    headerLevel = null
-                    headerStartIndex = null
                 }
             }
 
             // Build the final AnnotatedString
             val transformedText = annotatedStringBuilder.toAnnotatedString()
 
-            // Final mapping positions
-            originalToTransformed.add(transformedIndex)
-            transformedToOriginal.add(originalIndex)
-
             // OffsetMapping implementation
             val offsetMapping = object : OffsetMapping {
                 override fun originalToTransformed(offset: Int): Int {
-                    return originalToTransformed.getOrNull(offset) ?: transformedIndex
+                    return originalToTransformed.getOrNull(offset)?.coerceAtMost(transformedText.length) ?: transformedText.length
                 }
 
                 override fun transformedToOriginal(offset: Int): Int {
-                    return transformedToOriginal.getOrNull(offset) ?: originalIndex
+                    return transformedToOriginal.getOrNull(offset)?.coerceAtMost(originalText.length) ?: originalText.length
                 }
             }
 
@@ -285,26 +213,20 @@ class MarkdownVisualTransformation : VisualTransformation {
         } catch (e: Exception) {
             e.printStackTrace()
         }
-        return TransformedText(text, object: OffsetMapping {
-            override fun originalToTransformed(offset: Int): Int {
-                return offset
-            }
-
-            override fun transformedToOriginal(offset: Int): Int {
-                return offset
-            }
-        })
+        return TransformedText(text, OffsetMapping.Identity)
     }
 
     private fun isMarkdownSymbolStart(text: String, index: Int): Boolean {
         return text.startsWith("#", index) && isStartOfLine(text, index) ||
                 text.startsWith("```", index) ||
                 text.startsWith("**", index) ||
+                text.startsWith("__", index) ||
+                text.startsWith("*", index) ||
                 text.startsWith("_", index) ||
                 text.startsWith("~~", index) ||
-                text.startsWith("`", index) ||
                 text.startsWith("==", index) ||
-                text.startsWith("---", index)
+                text.startsWith("---", index) ||
+                text.startsWith("`", index)
     }
 
     private fun isStartOfLine(text: String, index: Int): Boolean {
@@ -321,8 +243,9 @@ class MarkdownVisualTransformation : VisualTransformation {
         data class MarkdownSymbol(val symbol: String, val position: Int) : Token()
         data class Header(val level: Int, val content: String) : Token()
     }
-
 }
+
+
 
 fun wrapSelectionWith(
     manager: TaskCardManager, // Replace with your actual manager type

@@ -9,11 +9,9 @@
     <option name="autoReloadType" value="NONE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="342136dd-9d95-4b6b-84e1-4a9c7fc0eeb8" name="Changes" comment="feat:&#10; - Add markdown formated text&#10; - Authentication no more needed on launch&#10;fix:&#10; - Add and remove to startup path">
+    <list default="true" id="342136dd-9d95-4b6b-84e1-4a9c7fc0eeb8" name="Changes" comment="fix:&#10; - Markdown header issue">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/common/build.gradle.kts" beforeDir="false" afterPath="$PROJECT_DIR$/common/build.gradle.kts" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/common/src/commonMain/kotlin/com/elfefe/common/controller/markdown.kt" beforeDir="false" afterPath="$PROJECT_DIR$/common/src/commonMain/kotlin/com/elfefe/common/controller/markdown.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/common/src/commonMain/kotlin/com/elfefe/common/ui/view/App.kt" beforeDir="false" afterPath="$PROJECT_DIR$/common/src/commonMain/kotlin/com/elfefe/common/ui/view/App.kt" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/common/src/commonMain/kotlin/com/elfefe/common/ui/view/taskCard.kt" beforeDir="false" afterPath="$PROJECT_DIR$/common/src/commonMain/kotlin/com/elfefe/common/ui/view/taskCard.kt" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -701,7 +699,15 @@
       <option name="project" value="LOCAL" />
       <updated>1727809626159</updated>
     </task>
-    <option name="localTasksCounter" value="41" />
+    <task id="LOCAL-00041" summary="fix:&#10; - Markdown header issue">
+      <option name="closed" value="true" />
+      <created>1727904319065</created>
+      <option name="number" value="00041" />
+      <option name="presentableId" value="LOCAL-00041" />
+      <option name="project" value="LOCAL" />
+      <updated>1727904319065</updated>
+    </task>
+    <option name="localTasksCounter" value="42" />
     <servers />
   </component>
   <component name="UnknownFeatures">
@@ -722,7 +728,6 @@
   </component>
   <component name="VcsManagerConfiguration">
     <option name="ADD_EXTERNAL_FILES_SILENTLY" value="true" />
-    <MESSAGE value="fix:&#10; - update gitignore" />
     <MESSAGE value="fix:&#10; - Better performances&#10; - Moved configs to appdata" />
     <MESSAGE value="fix:&#10; - Better performances" />
     <MESSAGE value="fix:&#10; - Better performances&#10; - Moved configs to AppData" />
@@ -747,7 +752,8 @@
     <MESSAGE value="fix:&#10;- Documentation text errors" />
     <MESSAGE value="fix:&#10; - Searching also apply the task done filter&#10; - Removed Cards settings while not in use&#10; - Color selection&#10;feat:&#10; - Added Texts translations&#10; - Replaced description icon" />
     <MESSAGE value="feat:&#10; - Add markdown formated text&#10; - Authentication no more needed on launch&#10;fix:&#10; - Add and remove to startup path" />
-    <option name="LAST_COMMIT_MESSAGE" value="feat:&#10; - Add markdown formated text&#10; - Authentication no more needed on launch&#10;fix:&#10; - Add and remove to startup path" />
+    <MESSAGE value="fix:&#10; - Markdown header issue" />
+    <option name="LAST_COMMIT_MESSAGE" value="fix:&#10; - Markdown header issue" />
   </component>
   <component name="XSLT-Support.FileAssociations.UIState">
     <expand />

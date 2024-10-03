@@ -220,7 +220,7 @@ fun Editor(manager: TaskCardManager, windowInteractions: WindowInteractions) {
             ) {
                 // Header Text Button
                 item {
-                    val level = 1
+                    val level = 4
                     Text(
                         text = "H$level",
 //                        fontSize = (24 - level * 2).sp,

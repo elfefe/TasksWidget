@@ -79,12 +79,6 @@ fun App(windowInteractions: WindowInteractions) {
                 scope.launch {
                     val response = HttpClient.newHttpClient().send(
                         HttpRequest.newBuilder(URI.create("https://api.github.com/repos/elfefe/TasksWidget/releases/latest"))
-                            .header("Accept", "application/vnd.github.v3+json")
-                            .header("X-GitHub-Api-Version", "2022-11-28")
-                            .header(
-                                "Authorization",
-                                "Bearer ghp" + "_93cRkXjvkXwbsjicfo91HMyVCQumAz0U18Sn"
-                            )
                             .GET()
                             .build(),
                         HttpResponse.BodyHandlers.ofString()
@@ -143,29 +137,40 @@ fun App(windowInteractions: WindowInteractions) {
                                         latestRelease?.run {
                                             assets.firstOrNull()?.run {
                                                 browserDownloadUrl?.let {
-                                                    windowInteractions.popup.value =
-                                                        Popup.show("Launched TasksWidget update ! \uD83D\uDE80")
-                                                    val updateFile = File(tmpDir, name ?: "TasksWidget.latest.msi")
-                                                    println(it)
-                                                    val client = HttpClientBuilder.create()
-                                                        .setRedirectStrategy(LaxRedirectStrategy())
-                                                        .build()
-                                                    client.execute(HttpGet(it)).use { response ->
-                                                        if (response.statusLine.statusCode == 201) {
-                                                            response.entity.content?.use { input ->
-                                                                updateFile.outputStream().use { output ->
-                                                                    input.copyTo(output)
+                                                    try {
+                                                        windowInteractions.popup.value =
+                                                            Popup.show("Launched TasksWidget update ! \uD83D\uDE80")
+                                                        val updateFile = File(tmpDir, name ?: "TasksWidget-latest.msi")
+                                                        val client = HttpClientBuilder.create()
+                                                            .setRedirectStrategy(LaxRedirectStrategy())
+                                                            .build()
+                                                        windowInteractions.popup.value =
+                                                            Popup.show("Downloading the latest version of TasksWidget..")
+                                                        client.execute(HttpGet(it)).use { response ->
+                                                            if (response.statusLine.statusCode == 201) {
+                                                                response.entity.content?.use { input ->
+                                                                    updateFile.outputStream().use { output ->
+                                                                        input.copyTo(output)
+                                                                    }
                                                                 }
+                                                                windowInteractions.popup.value =
+                                                                    Popup.show("Installing the latest version of TasksWidget..")
+                                                                ProcessBuilder(
+                                                                    "msiexec.exe",
+                                                                    "/i",
+                                                                    updateFile.absolutePath
+                                                                ).start()
+                                                                windowInteractions.application.exitApplication()
+                                                            } else {
+                                                                return@run
                                                             }
-                                                            ProcessBuilder(
-                                                                "msiexec.exe",
-                                                                "/i",
-                                                                updateFile.absolutePath
-                                                            ).start()
-                                                            windowInteractions.application.exitApplication()
-                                                        } else {
-                                                            return@run null
                                                         }
+                                                    } catch (e: Exception) {
+                                                        e.printStackTrace()
+                                                        windowInteractions.popup.value =
+                                                            Popup(true,
+                                                                "The latest version of TasksWidget could not be updated.. \uD83D\uDE1E \n" +
+                                                                        "Please download and install it manually !", 5)
                                                     }
                                                 }
                                             } ?: run {

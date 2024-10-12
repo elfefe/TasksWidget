@@ -7,11 +7,15 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.heightIn
+import androidx.compose.foundation.layout.widthIn
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.Card
 import androidx.compose.material.Text
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
@@ -24,42 +28,59 @@ import com.elfefe.common.controller.*
 import java.awt.GraphicsEnvironment
 import java.awt.MouseInfo
 import java.awt.Toolkit
+import java.io.File
 
 
 fun preload() {
-    EmojiApi.preloadEmojis()
+    runCatching {
+        EmojiApi.preloadEmojis()
+    }.onFailure { EmojiApi.log(it.stackTraceToString()) }
 }
 
 fun start() {
     preload()
-    application { TasksWidget() }
+    application {
+        runCatching {
+            TasksWidget()
+        }.onFailure {
+            log(it.stackTraceToString())
+        }
+    }
 }
 
 @Composable
 fun ApplicationScope.TasksWidget() {
-    Tasks.scope = rememberCoroutineScope()
+    Thread.setDefaultUncaughtExceptionHandler { _, e ->
+        log(e.stackTraceToString())
+    }
 
-    val windowInteractions = WindowInteractions(
-        application = this,
-        window = Interactable(null),
-        visibility = Interactable(true),
-        expand = Interactable(true),
-        moveWindow = Interactable(WindowMovement()),
-        showEmotes = Interactable(false),
-        showConfigs = Interactable(false),
-        popup = Interactable(Popup())
-    )
+    runCatching {
+        Tasks.scope = rememberCoroutineScope()
 
-    TrayWindow(windowInteractions)
-    TasksWindow(windowInteractions)
-    ConfigsWindow(windowInteractions)
-    PopupWindow(windowInteractions)
-    EmotesWindow(windowInteractions)
+        val windowInteractions = WindowInteractions(
+            application = this,
+            window = Interactable(null),
+            visibility = Interactable(true),
+            expand = Interactable(true),
+            moveWindow = Interactable(WindowMovement()),
+            showEmotes = Interactable(false),
+            showConfigs = Interactable(false),
+            popup = Interactable(Popup())
+        )
 
-    try {
-        generatePowerShellScript()
-    } catch (e: Exception) {
-        windowInteractions.popup.value = Popup(text = "Failed to generate PowerShell script", duration = 5L)
+        TrayWindow(windowInteractions)
+        TasksWindow(windowInteractions)
+        ConfigsWindow(windowInteractions)
+        PopupWindow(windowInteractions)
+        EmotesWindow(windowInteractions)
+
+        try {
+            generatePowerShellScript()
+        } catch (e: Exception) {
+            windowInteractions.popup.value = Popup(text = "Failed to generate PowerShell script", duration = 5L)
+        }
+    }.onFailure {
+        log(it.stackTraceToString())
     }
 }
 
@@ -110,7 +131,7 @@ fun ApplicationScope.TasksWindow(windowInteractions: WindowInteractions) {
         )
     )
 
-    Window(
+    CrashWindow(
         onCloseRequest = ::exitApplication,
         state = WindowState(
             position = WindowPosition(windowHorizontalPosition, 5.dp),
@@ -146,7 +167,7 @@ fun ApplicationScope.ConfigsWindow(windowInteractions: WindowInteractions) {
     }
 
     if (isConfigsVisible)
-        Window(
+        CrashWindow(
             onCloseRequest = {
                 windowInteractions.showConfigs.value = false
             },
@@ -154,9 +175,25 @@ fun ApplicationScope.ConfigsWindow(windowInteractions: WindowInteractions) {
             title = "Tasks - configs",
             icon = painterResource("logo-taskswidget.png"),
             resizable = true,
-            focusable = true
+            focusable = true,
+            undecorated = true,
+            transparent = true,
+            alwaysOnTop = false
         ) {
-            Configs(windowInteractions)
+            Card(
+                modifier = Modifier
+                    .fillMaxSize(),
+                shape = RoundedCornerShape(32.dp),
+                elevation = 16.dp,
+                backgroundColor = Color.White
+            ) {
+                Column(
+                    modifier = Modifier
+                        .fillMaxSize()
+                ) {
+                    Configs(windowInteractions)
+                }
+            }
         }
 }
 
@@ -180,7 +217,7 @@ fun ApplicationScope.PopupWindow(windowInteractions: WindowInteractions) {
     }
 
     if (isPopupVisible) {
-        Window(
+        CrashWindow(
             state = WindowState(
                 position = WindowPosition(
                     screenSize.width / 4,
@@ -220,7 +257,7 @@ fun ApplicationScope.EmotesWindow(windowInteractions: WindowInteractions) {
     }
 
     if (isConfigsVisible)
-        Window(
+        CrashWindow(
             onCloseRequest = {
                 windowInteractions.showEmotes.value = false
             },

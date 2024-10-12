@@ -23,26 +23,24 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.ApplicationScope
 import com.elfefe.common.controller.Tasks
-import com.elfefe.common.controller.tmpDir
+import com.elfefe.common.controller.Updater
+import com.elfefe.common.controller.log
+import com.elfefe.common.controller.update
 import com.elfefe.common.model.Task
 import com.elfefe.common.model.github.GithubLatestRelease
 import com.elfefe.common.ui.theme.TasksTheme
 import com.google.gson.Gson
-import kotlinx.coroutines.Dispatchers
+import io.ktor.util.InternalAPI
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
-import org.apache.http.client.methods.HttpGet
-import org.apache.http.impl.client.HttpClientBuilder
-import org.apache.http.impl.client.LaxRedirectStrategy
 import java.awt.Window
-import java.io.File
 import java.net.URI
 import java.net.http.HttpClient
 import java.net.http.HttpRequest
 import java.net.http.HttpResponse
-import java.nio.file.Files
 
 
-@OptIn(ExperimentalFoundationApi::class, ExperimentalComposeUiApi::class)
+@OptIn(ExperimentalFoundationApi::class, ExperimentalComposeUiApi::class, InternalAPI::class)
 @Composable
 fun App(windowInteractions: WindowInteractions) {
     val scope = rememberCoroutineScope()
@@ -132,55 +130,25 @@ fun App(windowInteractions: WindowInteractions) {
                             .onClick {
                                 shadowColor = Color.Black
                                 showStatus = false
-                                if (newVersionAvailable)
-                                    scope.launch(Dispatchers.IO) {
-                                        latestRelease?.run {
-                                            assets.firstOrNull()?.run {
-                                                browserDownloadUrl?.let {
-                                                    try {
-                                                        windowInteractions.popup.value =
-                                                            Popup.show("Launched TasksWidget update ! \uD83D\uDE80")
-                                                        val updateFile = File(tmpDir, name ?: "TasksWidget-latest.msi")
-                                                        val client = HttpClientBuilder.create()
-                                                            .setRedirectStrategy(LaxRedirectStrategy())
-                                                            .build()
-                                                        windowInteractions.popup.value =
-                                                            Popup.show("Downloading the latest version of TasksWidget..")
-                                                        client.execute(HttpGet(it)).use { response ->
-                                                            if (response.statusLine.statusCode == 201) {
-                                                                response.entity.content?.use { input ->
-                                                                    updateFile.outputStream().use { output ->
-                                                                        input.copyTo(output)
-                                                                    }
-                                                                }
-                                                                windowInteractions.popup.value =
-                                                                    Popup.show("Installing the latest version of TasksWidget..")
-                                                                ProcessBuilder(
-                                                                    "msiexec.exe",
-                                                                    "/i",
-                                                                    updateFile.absolutePath
-                                                                ).start()
-                                                                windowInteractions.application.exitApplication()
-                                                            } else {
-                                                                return@run
-                                                            }
-                                                        }
-                                                    } catch (e: Exception) {
-                                                        e.printStackTrace()
-                                                        windowInteractions.popup.value =
-                                                            Popup(true,
-                                                                "The latest version of TasksWidget could not be updated.. \uD83D\uDE1E \n" +
-                                                                        "Please download and install it manually !", 5)
-                                                    }
-                                                }
-                                            } ?: run {
-                                                htmlUrl?.let { uriHandler.openUri(it) }
-                                                windowInteractions.popup.value =
-                                                    Popup(true, "The latest version of TasksWidget could not be updated manually.. \uD83D\uDE1E \n" +
-                                                            "Please download and install it manually !", 5)
+                                if (newVersionAvailable) latestRelease?.let {
+                                    update(it) { status ->
+                                        windowInteractions.popup.value = Popup.show(status.message)
+
+                                        when (status) {
+                                            is Updater.Error -> {
+                                                log(status.error.stackTraceToString())
+                                                it.url?.let { uriHandler.openUri(it) }
                                             }
+
+                                            is Updater.Install -> {
+                                                delay(500)
+                                                windowInteractions.application.exitApplication()
+                                            }
+
+                                            else -> null
                                         }
                                     }
+                                }
                             }
                     )
                 }

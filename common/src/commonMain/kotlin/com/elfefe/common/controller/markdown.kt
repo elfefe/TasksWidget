@@ -443,8 +443,8 @@ fun toggleCodeBlock(manager: TaskCardManager) {
     val text = textFieldValue.text
     val selection = textFieldValue.selection
 
-    val start = minOf(manager.selections.first().start, selection.end)
-    val end = maxOf(manager.selections.first().start, selection.end)
+    val start = manager.selections.first().start
+    val end = selection.end
 
     val selectedText = text.substring(start, end)
 

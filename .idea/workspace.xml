@@ -9,10 +9,32 @@
     <option name="autoReloadType" value="NONE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="342136dd-9d95-4b6b-84e1-4a9c7fc0eeb8" name="Changes" comment="fix:&#10; - Markdown header issue">
+    <list default="true" id="342136dd-9d95-4b6b-84e1-4a9c7fc0eeb8" name="Changes" comment="fix:&#10; - working on downloading the latest version">
+      <change afterPath="$PROJECT_DIR$/common/src/commonMain/kotlin/com/elfefe/common/controller/TextFieldValueCustom.kt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/common/src/commonMain/kotlin/com/elfefe/common/controller/crashwindow.kt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/common/src/commonMain/kotlin/com/elfefe/common/controller/log.kt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/common/src/commonMain/kotlin/com/elfefe/common/controller/network.kt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/common/src/commonMain/kotlin/com/elfefe/common/controller/updater.kt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/desktop/cert-password" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/desktop/certificate.crt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/desktop/certificate.csr" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/desktop/certificate.pfx" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/desktop/key-password" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/desktop/private-key.key" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/hs_err_pid2304.log" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/hs_err_pid6380.log" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/build.gradle.kts" beforeDir="false" afterPath="$PROJECT_DIR$/build.gradle.kts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/common/build.gradle.kts" beforeDir="false" afterPath="$PROJECT_DIR$/common/build.gradle.kts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/common/src/commonMain/kotlin/com/elfefe/common/controller/FileUtil.kt" beforeDir="false" afterPath="$PROJECT_DIR$/common/src/commonMain/kotlin/com/elfefe/common/controller/FileUtil.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/common/src/commonMain/kotlin/com/elfefe/common/controller/Tasks.kt" beforeDir="false" afterPath="$PROJECT_DIR$/common/src/commonMain/kotlin/com/elfefe/common/controller/Tasks.kt" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/common/src/commonMain/kotlin/com/elfefe/common/controller/markdown.kt" beforeDir="false" afterPath="$PROJECT_DIR$/common/src/commonMain/kotlin/com/elfefe/common/controller/markdown.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/common/src/commonMain/kotlin/com/elfefe/common/ui/view/App.kt" beforeDir="false" afterPath="$PROJECT_DIR$/common/src/commonMain/kotlin/com/elfefe/common/ui/view/App.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/common/src/commonMain/kotlin/com/elfefe/common/ui/view/main.kt" beforeDir="false" afterPath="$PROJECT_DIR$/common/src/commonMain/kotlin/com/elfefe/common/ui/view/main.kt" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/common/src/commonMain/kotlin/com/elfefe/common/ui/view/taskCard.kt" beforeDir="false" afterPath="$PROJECT_DIR$/common/src/commonMain/kotlin/com/elfefe/common/ui/view/taskCard.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/desktop/build.gradle.kts" beforeDir="false" afterPath="$PROJECT_DIR$/desktop/build.gradle.kts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/desktop/src/jvmMain/kotlin/Main.kt" beforeDir="false" afterPath="$PROJECT_DIR$/desktop/src/jvmMain/kotlin/Main.kt" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -37,6 +59,9 @@
         <task path="$PROJECT_DIR$/common">
           <activation />
         </task>
+        <task path="~\IdeaProjects\TasksWidget\desktop">
+          <activation />
+        </task>
         <projects_view>
           <tree_state>
             <expand>
@@ -47,23 +72,6 @@
               <path>
                 <item name="" type="6a2764b6:ExternalProjectsStructure$RootNode" />
                 <item name="TasksWidget" type="f1a62948:ProjectNode" />
-                <item name="Tasks" type="e4a08cd1:TasksNode" />
-              </path>
-              <path>
-                <item name="" type="6a2764b6:ExternalProjectsStructure$RootNode" />
-                <item name="TasksWidget" type="f1a62948:ProjectNode" />
-                <item name="Tasks" type="e4a08cd1:TasksNode" />
-                <item name="compose desktop" type="c8890929:TasksNode$1" />
-              </path>
-              <path>
-                <item name="" type="6a2764b6:ExternalProjectsStructure$RootNode" />
-                <item name="TasksWidget" type="f1a62948:ProjectNode" />
-                <item name="Tasks" type="e4a08cd1:TasksNode" />
-                <item name="documentation" type="c8890929:TasksNode$1" />
-              </path>
-              <path>
-                <item name="" type="6a2764b6:ExternalProjectsStructure$RootNode" />
-                <item name="TasksWidget" type="f1a62948:ProjectNode" />
                 <item name="desktop" type="2d1252cf:ModuleNode" />
               </path>
               <path>
@@ -71,6 +79,13 @@
                 <item name="TasksWidget" type="f1a62948:ProjectNode" />
                 <item name="desktop" type="2d1252cf:ModuleNode" />
                 <item name="Tasks" type="e4a08cd1:TasksNode" />
+              </path>
+              <path>
+                <item name="" type="6a2764b6:ExternalProjectsStructure$RootNode" />
+                <item name="TasksWidget" type="f1a62948:ProjectNode" />
+                <item name="desktop" type="2d1252cf:ModuleNode" />
+                <item name="Tasks" type="e4a08cd1:TasksNode" />
+                <item name="build" type="c8890929:TasksNode$1" />
               </path>
               <path>
                 <item name="" type="6a2764b6:ExternalProjectsStructure$RootNode" />
@@ -78,12 +93,6 @@
                 <item name="desktop" type="2d1252cf:ModuleNode" />
                 <item name="Tasks" type="e4a08cd1:TasksNode" />
                 <item name="compose desktop" type="c8890929:TasksNode$1" />
-              </path>
-              <path>
-                <item name="" type="6a2764b6:ExternalProjectsStructure$RootNode" />
-                <item name="TasksWidget" type="f1a62948:ProjectNode" />
-                <item name="desktop" type="2d1252cf:ModuleNode" />
-                <item name="Run Configurations" type="7b0102dc:RunConfigurationsNode" />
               </path>
             </expand>
             <select />
@@ -96,8 +105,8 @@
     <option name="RECENT_TEMPLATES">
       <list>
         <option value="Kotlin Data Class" />
-        <option value="Kotlin Class" />
         <option value="Kotlin Enum" />
+        <option value="Kotlin Class" />
         <option value="Kotlin File" />
       </list>
     </option>
@@ -152,14 +161,18 @@
     &quot;ASKED_SHARE_PROJECT_CONFIGURATION_FILES&quot;: &quot;true&quot;,
     &quot;Gradle.Build TasksWidget.executor&quot;: &quot;Run&quot;,
     &quot;Gradle.Download Sources.executor&quot;: &quot;Run&quot;,
+    &quot;Gradle.TasksWidget [dependencies].executor&quot;: &quot;Run&quot;,
+    &quot;Gradle.TasksWidget [desktop:signMsi].executor&quot;: &quot;Run&quot;,
     &quot;Gradle.TasksWidget [javadoc].executor&quot;: &quot;Run&quot;,
     &quot;Gradle.TasksWidget:desktop [build].executor&quot;: &quot;Run&quot;,
+    &quot;Gradle.TasksWidget:desktop [clean].executor&quot;: &quot;Run&quot;,
     &quot;Gradle.TasksWidget:desktop [packageDistributionForCurrentOS].executor&quot;: &quot;Run&quot;,
     &quot;Gradle.TasksWidget:desktop [packageMsi].executor&quot;: &quot;Run&quot;,
     &quot;Gradle.TasksWidget:desktop [packageReleaseMsi].executor&quot;: &quot;Run&quot;,
     &quot;Gradle.TasksWidget:desktop [package].executor&quot;: &quot;Run&quot;,
     &quot;Gradle.TasksWidget:desktop [runDistributable].executor&quot;: &quot;Run&quot;,
     &quot;Gradle.TasksWidget:desktop [run].executor&quot;: &quot;Run&quot;,
+    &quot;Gradle.~\\IdeaProjects\\TasksWidget\\desktop [desktop:signMsi].executor&quot;: &quot;Run&quot;,
     &quot;Kotlin.MainKt.executor&quot;: &quot;Run&quot;,
     &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
     &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
@@ -175,7 +188,7 @@
     &quot;project.structure.last.edited&quot;: &quot;Project&quot;,
     &quot;project.structure.proportion&quot;: &quot;0.15&quot;,
     &quot;project.structure.side.proportion&quot;: &quot;0.2&quot;,
-    &quot;settings.editor.selected.configurable&quot;: &quot;reference.settingsdialog.project.gradle&quot;
+    &quot;settings.editor.selected.configurable&quot;: &quot;preferences.language.Kotlin&quot;
   }
 }</component>
   <component name="RecentsManager">
@@ -187,11 +200,11 @@
       <recent name="C:\Users\fbou-\IdeaProjects\TasksWidget\common\src\desktopMain" />
     </key>
     <key name="MoveFile.RECENT_KEYS">
+      <recent name="C:\Users\fbou-\IdeaProjects\TasksWidget\desktop" />
       <recent name="C:\Users\fbou-\IdeaProjects\TasksWidget\medias" />
       <recent name="C:\Users\fbou-\IdeaProjects\TasksWidget\desktop\resources" />
       <recent name="C:\Users\fbou-\IdeaProjects\TasksWidget\common\src\commonMain\kotlin\com\elfefe\common\model\github" />
       <recent name="C:\Users\fbou-\IdeaProjects\TasksWidget\common\src\commonMain\kotlin\com\elfefe\common\view" />
-      <recent name="C:\Users\fbou-\IdeaProjects\TasksWidget" />
     </key>
     <key name="MoveKotlinTopLevelDeclarationsDialog.RECENTS_KEY">
       <recent name="com.elfefe.common.model" />
@@ -205,6 +218,8 @@
   <component name="RunAnythingCache">
     <option name="myCommands">
       <command value="gradlew signingReport" />
+      <command value="gradlew dependencies" />
+      <command value="signMsi" />
     </option>
   </component>
   <component name="RunManager" selected="Kotlin.MainKt">
@@ -245,10 +260,32 @@
         <option name="Android.Gradle.BeforeRunTask" enabled="true" />
       </method>
     </configuration>
-    <configuration name="TasksWidget [javadoc]" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
+    <configuration name="TasksWidget [desktop:signMsi]" type="GradleRunConfiguration" factoryName="Gradle" activateToolWindowBeforeRun="false" nameIsGenerated="true">
       <ExternalSystemSettings>
         <option name="executionName" />
         <option name="externalProjectPath" value="$PROJECT_DIR$" />
+        <option name="externalSystemIdString" value="GRADLE" />
+        <option name="scriptParameters" value="--stacktrace" />
+        <option name="taskDescriptions">
+          <list />
+        </option>
+        <option name="taskNames">
+          <list>
+            <option value="desktop:signMsi" />
+          </list>
+        </option>
+        <option name="vmOptions" />
+      </ExternalSystemSettings>
+      <ExternalSystemDebugServerProcess>false</ExternalSystemDebugServerProcess>
+      <ExternalSystemReattachDebugProcess>true</ExternalSystemReattachDebugProcess>
+      <DebugAllEnabled>false</DebugAllEnabled>
+      <RunAsTest>false</RunAsTest>
+      <method v="2" />
+    </configuration>
+    <configuration name="TasksWidget:desktop [clean]" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
+      <ExternalSystemSettings>
+        <option name="executionName" />
+        <option name="externalProjectPath" value="$PROJECT_DIR$/desktop" />
         <option name="externalSystemIdString" value="GRADLE" />
         <option name="scriptParameters" />
         <option name="taskDescriptions">
@@ -256,7 +293,7 @@
         </option>
         <option name="taskNames">
           <list>
-            <option value="javadoc" />
+            <option value="clean" />
           </list>
         </option>
         <option name="vmOptions" />
@@ -294,7 +331,7 @@
         <option name="executionName" />
         <option name="externalProjectPath" value="$PROJECT_DIR$/desktop" />
         <option name="externalSystemIdString" value="GRADLE" />
-        <option name="scriptParameters" />
+        <option name="scriptParameters" value="" />
         <option name="taskDescriptions">
           <list />
         </option>
@@ -311,7 +348,7 @@
       <RunAsTest>false</RunAsTest>
       <method v="2" />
     </configuration>
-    <configuration name="TasksWidget:desktop [run]" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
+    <configuration name="TasksWidget:desktop [runDistributable]" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
       <ExternalSystemSettings>
         <option name="executionName" />
         <option name="externalProjectPath" value="$PROJECT_DIR$/desktop" />
@@ -322,7 +359,7 @@
         </option>
         <option name="taskNames">
           <list>
-            <option value="run" />
+            <option value="runDistributable" />
           </list>
         </option>
         <option name="vmOptions" />
@@ -354,8 +391,9 @@
     </configuration>
     <list>
       <item itemvalue="Android App.android" />
-      <item itemvalue="Gradle.TasksWidget [javadoc]" />
-      <item itemvalue="Gradle.TasksWidget:desktop [run]" />
+      <item itemvalue="Gradle.TasksWidget [desktop:signMsi]" />
+      <item itemvalue="Gradle.TasksWidget:desktop [clean]" />
+      <item itemvalue="Gradle.TasksWidget:desktop [runDistributable]" />
       <item itemvalue="Gradle.TasksWidget:desktop [packageMsi]" />
       <item itemvalue="Gradle.TasksWidget:desktop [packageReleaseMsi]" />
       <item itemvalue="Kotlin.MainKt" />
@@ -363,10 +401,10 @@
     <recent_temporary>
       <list>
         <item itemvalue="Kotlin.MainKt" />
-        <item itemvalue="Gradle.TasksWidget:desktop [packageMsi]" />
-        <item itemvalue="Gradle.TasksWidget [javadoc]" />
         <item itemvalue="Gradle.TasksWidget:desktop [packageReleaseMsi]" />
-        <item itemvalue="Gradle.TasksWidget:desktop [run]" />
+        <item itemvalue="Gradle.TasksWidget:desktop [runDistributable]" />
+        <item itemvalue="Gradle.TasksWidget:desktop [clean]" />
+        <item itemvalue="Gradle.TasksWidget:desktop [packageMsi]" />
       </list>
     </recent_temporary>
   </component>

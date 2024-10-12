@@ -5,6 +5,9 @@ import androidx.compose.animation.expandVertically
 import androidx.compose.animation.shrinkVertically
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.gestures.awaitFirstDown
+import androidx.compose.foundation.gestures.awaitLongPressOrCancellation
+import androidx.compose.foundation.gestures.detectVerticalDragGestures
 import androidx.compose.foundation.interaction.Interaction
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.interaction.PressInteraction
@@ -27,6 +30,9 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.focus.onFocusChanged
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.painter.BitmapPainter
+import androidx.compose.ui.input.pointer.PointerEventType
+import androidx.compose.ui.input.pointer.PointerId
+import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.*
 import androidx.compose.ui.text.font.FontStyle
@@ -41,10 +47,12 @@ import com.elfefe.common.model.Task
 import com.google.common.collect.EvictingQueue
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
+import java.awt.MouseInfo
+import kotlin.math.roundToInt
 import kotlin.text.substring
 
 class TaskCardManager(val task: Task) {
-    var selections by mutableStateOf(EvictingQueue.create<TextRange>(2))
+    var selections by mutableStateOf(EvictingQueue.create<TextRange>(2).apply { add(TextRange(0, 0)) })
     var description by mutableStateOf(TextFieldValue(task.description))
     var showEditor by mutableStateOf(false)
     var showDescription by mutableStateOf(false)
@@ -220,16 +228,22 @@ fun Editor(manager: TaskCardManager, windowInteractions: WindowInteractions) {
             ) {
                 // Header Text Button
                 item {
-                    val level = 4
+                    var level by remember { mutableStateOf(4f) }
                     Text(
-                        text = "H$level",
+                        text = "H${level.toInt()}",
 //                        fontSize = (24 - level * 2).sp,
                         fontSize = 12.sp,
                         lineHeight = 12.sp,
                         modifier = Modifier
                             .padding(4.dp)
                             .clickable {
-                                toggleHeader(manager, level)
+                                toggleHeader(manager, level.toInt())
+                            }
+                            .pointerInput(Unit) {
+                                detectVerticalDragGestures { change, value ->
+                                    if (value > 0) level = (level + value / 10).coerceIn(1f, 6f)
+                                    else if (value < 0) level = (level + value / 10).coerceIn(1f, 6f)
+                                }
                             }
                     )
                     Spacer(Modifier.width(4.dp))
@@ -377,7 +391,7 @@ fun Editor(manager: TaskCardManager, windowInteractions: WindowInteractions) {
                         modifier = Modifier
                             .size(16.dp)
                             .clickable {
-                                windowInteractions.showEmotes.value = !(windowInteractions.showEmotes.value ?: true)
+                                windowInteractions.showEmotes.value = windowInteractions.showEmotes.value == false
                             }
                     )
                     Spacer(Modifier.width(4.dp))
@@ -390,6 +404,7 @@ fun Editor(manager: TaskCardManager, windowInteractions: WindowInteractions) {
 @Composable
 fun Content(manager: TaskCardManager) {
     val scope = rememberCoroutineScope()
+//    var lastMouseEvent by remember { mutableStateOf(PointerEventType.Unknown) }
     AnimatedVisibility(
         visible = manager.showDescription,
         modifier = Modifier
@@ -397,26 +412,50 @@ fun Content(manager: TaskCardManager) {
         enter = expandVertically(),
         exit = shrinkVertically()
     ) {
-        Row(
-            Modifier
-                .fillMaxSize()
-        ) {
+        Row(Modifier.fillMaxSize()) {
             BasicTextField(
                 value = manager.description,
                 onValueChange = {
-                    manager.description = it
+                    println("Selection: ${it.selection}")
                     manager.selections.add(it.selection)
+                    manager.description = it
                     Tasks.update(manager.task.apply { this.description = it.text })
                 },
                 modifier = Modifier
                     .fillMaxSize(),
+                    /*.pointerInput(Unit) {
+                        awaitPointerEventScope {
+                            while (true) {
+                                val event = awaitPointerEvent()
+                                if (event.type != lastMouseEvent) println(lastMouseEvent)
+                                when (event.type) {
+                                    PointerEventType.Enter -> {}
+                                    PointerEventType.Exit -> {}
+                                    PointerEventType.Press -> {
+                                        if (lastMouseEvent != PointerEventType.Press) {
+                                            manager.description = manager.description.copy(
+                                                selection = TextRange(
+                                                    manager.description.selection.end,
+                                                    manager.description.selection.end
+                                                )
+                                            )
+                                        }
+                                    }
+
+                                    PointerEventType.Release -> {}
+                                    else -> {}
+                                }
+                                lastMouseEvent = event.type
+                            }
+                        }
+                    }*/
                 textStyle = TextStyle(color = Tasks.Configs.configs.themeColors.onBackground),
                 visualTransformation = MarkdownVisualTransformation(),
-//                interactionSource = remember { MutableInteractionSource() }.apply {
-//                    interactions.onEach {
-//                        println("Interaction: ${it}")
-//                    }.launchIn(scope)
-//                },
+                /*interactionSource = remember { MutableInteractionSource() }.apply {
+                    interactions.onEach {
+                        println("Interaction: ${it}")
+                    }.launchIn(scope)
+                },*/
             )
         }
     }

@@ -31,7 +31,6 @@ kotlin {
                 implementation("com.google.guava:guava:32.1.1-jre")
                 implementation("com.google.cloud:google-cloud-firestore:3.13.4")
                 implementation("com.google.auth:google-auth-library-oauth2-http:1.19.0")
-
                 api("io.jsonwebtoken:jjwt-api:0.11.5")
                 runtimeOnly("io.jsonwebtoken:jjwt-impl:0.11.5")
                 runtimeOnly("io.jsonwebtoken:jjwt-orgjson:0.11.5")
@@ -41,8 +40,6 @@ kotlin {
                 implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.6.2")
 
                 implementation("com.google.code.gson:gson:2.11.0")
-
-                implementation("org.apache.httpcomponents:httpclient:4.5.14")
 
                 implementation("io.ktor:ktor-client-core:$ktorVersion")
                 implementation("io.ktor:ktor-client-cio:$ktorVersion")
@@ -62,6 +59,9 @@ kotlin {
                 implementation("androidx.constraintlayout:constraintlayout-compose:1.1.0-alpha07")
                 implementation("com.colintheshots:twain:0.3.2")
                 implementation("org.jetbrains:markdown:0.7.3")
+
+                implementation("net.java.dev.jna:jna:5.15.0")
+                implementation("net.java.dev.jna:jna-platform:5.15.0")
 
                 implementation("com.guardsquare:proguard-gradle:7.2.2")
 

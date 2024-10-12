@@ -1,6 +1,7 @@
 import org.jetbrains.compose.compose
 import org.jetbrains.compose.desktop.application.dsl.TargetFormat
 import org.jetbrains.kotlin.cli.jvm.main
+import org.jetbrains.kotlin.load.kotlin.signatures
 
 plugins {
     kotlin("multiplatform")
@@ -33,9 +34,14 @@ compose.desktop {
 
         nativeDistributions {
             targetFormats(TargetFormat.Dmg, TargetFormat.Msi, TargetFormat.Deb)
+
             packageName = "TasksWidget"
             packageVersion = project.version.toString()
+
             modules("java.net.http")
+
+            description = "TasksWidget is a multiplatform application designed to help you manage your tasks efficiently."
+            copyright = "© 2024 Fedacier"
         }
 
         jvmArgs("--add-opens", "java.desktop/sun.awt=ALL-UNNAMED")
@@ -53,4 +59,19 @@ tasks.withType(JavaExec::class.java) {
     try {
         File("""common\src\commonMain\resources\version""").writeText(project.version.toString())
     } catch (e: Exception) { e.printStackTrace() }
+}
+
+tasks.register<Exec>("signMsi") {
+    dependsOn("packageMsi")
+    val msiFile = file("build/compose/binaries/main/msi/TasksWidget-${version}.msi")
+    commandLine(
+        arrayOf("signtool",
+        "sign",
+        "/f", "\"${file("certificate.pfx").path}\"",
+        "/p", "\"${file("key-password").readText().trim()}\"",
+        "/fd", "SHA256",
+        "/tr", "http://timestamp.digicert.com",
+        "/td", "SHA256",
+        "\"${msiFile.path}\"").joinToString(" ")
+    )
 }

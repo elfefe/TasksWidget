@@ -19,3 +19,4 @@ plugins {
     id("org.jetbrains.compose") apply false version "1.6.2"
     id("org.openjfx.javafxplugin") version "0.0.13"
 }
+

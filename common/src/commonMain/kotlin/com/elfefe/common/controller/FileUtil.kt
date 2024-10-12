@@ -34,6 +34,7 @@ val tmpDir: File by lazy { File(appPrivateDir, "tmp").apply { mkdirs() } }
 
 val tasksFile: File by lazy { File(publicDir, TASKS_FILENAME).apply { createNewFile() } }
 val configsFile: File by lazy { File(appPrivateDir, CONFIGS_FILENAME).apply { createNewFile() } }
+val logsFile: File by lazy { File(appPrivateDir, "app.log").apply { createNewFile() } }
 
 val exePath: String = installDir + File.separator + "TasksWidget.exe"
 
@@ -59,20 +60,7 @@ fun generatePowerShellScript() {
 fun createShortcutWithAdminRights(): String {
     if (!createShortcutScript.exists()) return "PowerShell script not found"
 
-    val scriptPath = createShortcutScript.absolutePath
-
-    val command = arrayOf(
-        "powershell",
-        "-Command",
-        "Start-Process",
-        "powershell",
-        "-ArgumentList",
-        "'-ExecutionPolicy Bypass -File $scriptPath'",
-        "-Verb",
-        "runAs"
-    )
-
-    val result = ProcessBuilder(*command)
+    val result = scriptProcess(createShortcutScript)
         .inheritIO()
         .start()
         .waitFor()
@@ -83,25 +71,40 @@ fun createShortcutWithAdminRights(): String {
 fun deleteShortcutWithAdminRights(): String {
     if (!deleteShortcutScript.exists()) return "PowerShell script not found"
 
-    val scriptPath = deleteShortcutScript.absolutePath
-
-    val command = arrayOf(
-        "powershell",
-        "-Command",
-        "Start-Process",
-        "powershell",
-        "-ArgumentList",
-        "'-ExecutionPolicy Bypass -File $scriptPath'",
-        "-Verb",
-        "runAs"
-    )
-
-
-    val result = ProcessBuilder(*command)
+    val result = scriptProcess(deleteShortcutScript)
         .inheritIO()
         .start()
         .waitFor()
 
     return if (result == 0) "Shortcut deleted successfully" else "Failed to delete shortcut, status code $result"
 }
+
+//fun appUpdater(updateFile: File) {
+////    Thread {
+//    val command = arrayOf(
+//        "Start-Process",
+//        "cmd",
+//        "-Args",
+//        "/c,",
+//        """start "${updateFile.absolutePath}"""",
+//    )
+//    ProcessBuilder(*command).start()
+////    }.start()
+//}
+
+fun scriptProcess(script: File): ProcessBuilder {
+    val command = arrayOf(
+        "powershell",
+        "-Command",
+        "Start-Process",
+        "powershell",
+        "-ArgumentList",
+        "'-ExecutionPolicy Bypass -File ${script.absolutePath}'",
+        "-Verb",
+        "runAs"
+    )
+
+    return ProcessBuilder(*command)
+}
+
 

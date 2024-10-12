@@ -6,6 +6,7 @@ import com.elfefe.common.model.Task
 import com.google.gson.Gson
 import com.google.gson.GsonBuilder
 import com.google.gson.reflect.TypeToken
+import io.ktor.client.network.sockets.mapEngineExceptions
 import kotlinx.coroutines.*
 import java.io.File
 import java.util.concurrent.ConcurrentLinkedQueue

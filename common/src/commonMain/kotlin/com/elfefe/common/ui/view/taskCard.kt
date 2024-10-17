@@ -103,15 +103,15 @@ fun TopBar(manager: TaskCardManager) {
             onValueChange = {
                 var corrected = it
 
-                if (it.any { char -> !char.isDigit() })
+                if (corrected.any { char -> !char.isDigit() })
                     corrected = it.filter { char -> char.isDigit() }
 
-                if (it.length < 4)
-                    corrected += "0".repeat(4 - it.length)
+                if (corrected.length < 4)
+                    corrected += "0".repeat(4 - corrected.length)
 
 
-                if (it.length > 4)
-                    corrected = it.substring(0, 4)
+                if (corrected.length > 4)
+                    corrected = corrected.substring(0, 4)
 
                 deadline = corrected
 

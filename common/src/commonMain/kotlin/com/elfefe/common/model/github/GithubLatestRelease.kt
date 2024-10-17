@@ -22,5 +22,4 @@ data class GithubLatestRelease (
   @SerializedName("tarball_url"      ) var tarballUrl      : String?           = null,
   @SerializedName("zipball_url"      ) var zipballUrl      : String?           = null,
   @SerializedName("body"             ) var body            : String?           = null
-
 )

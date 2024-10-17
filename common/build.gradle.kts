@@ -50,6 +50,8 @@ kotlin {
                 implementation("io.ktor:ktor-client-content-negotiation:$ktorVersion")
                 implementation("io.ktor:ktor-serialization-gson:$ktorVersion")
 
+                implementation("org.simplejavamail:simple-java-mail:8.12.2")
+
                 implementation("com.jcraft:jsch:0.1.55")
 
                 implementation("org.apache.poi:poi:5.2.0")

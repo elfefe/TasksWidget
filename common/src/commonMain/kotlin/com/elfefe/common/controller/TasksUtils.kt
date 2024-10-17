@@ -22,7 +22,6 @@ fun fromDate(date: String): Long {
 }
 
 fun deadlineDate(date: String): Int {
-    val dateOrder = listOf(Calendar.DAY_OF_MONTH, Calendar.MONTH)
         return Calendar.getInstance().apply {
             val day = date.substring(0, 2).toInt()
             val month = date.substring(2, 4).toInt()

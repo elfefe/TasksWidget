@@ -9,12 +9,14 @@
     <option name="autoReloadType" value="NONE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="342136dd-9d95-4b6b-84e1-4a9c7fc0eeb8" name="Changes" comment="fix:&#10; - working on downloading the latest version">
-      <change afterPath="$PROJECT_DIR$/common/src/commonMain/kotlin/com/elfefe/common/controller/TextFieldValueCustom.kt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/common/src/commonMain/kotlin/com/elfefe/common/controller/crashwindow.kt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/common/src/commonMain/kotlin/com/elfefe/common/controller/log.kt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/common/src/commonMain/kotlin/com/elfefe/common/controller/network.kt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/common/src/commonMain/kotlin/com/elfefe/common/controller/updater.kt" afterDir="false" />
+    <list default="true" id="342136dd-9d95-4b6b-84e1-4a9c7fc0eeb8" name="Changes" comment="fix:&#10; - catch all errors&#10; - working on the updates">
+      <change afterPath="$PROJECT_DIR$/common/src/commonTest/kotlin/ConfigsTest.kt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/common/src/commonTest/kotlin/GithubTest.kt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/common/src/commonTest/kotlin/MarkdownTest.kt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/common/src/commonTest/kotlin/TaskTest.kt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/common/src/commonTest/kotlin/TaskUtilsTest.kt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/common/src/commonTest/kotlin/TasksTest.kt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/common/src/commonTest/kotlin/TimerTest.kt" afterDir="false" />
       <change afterPath="$PROJECT_DIR$/desktop/cert-password" afterDir="false" />
       <change afterPath="$PROJECT_DIR$/desktop/certificate.crt" afterDir="false" />
       <change afterPath="$PROJECT_DIR$/desktop/certificate.csr" afterDir="false" />
@@ -23,18 +25,24 @@
       <change afterPath="$PROJECT_DIR$/desktop/private-key.key" afterDir="false" />
       <change afterPath="$PROJECT_DIR$/hs_err_pid2304.log" afterDir="false" />
       <change afterPath="$PROJECT_DIR$/hs_err_pid6380.log" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/vcs.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/vcs.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/build.gradle.kts" beforeDir="false" afterPath="$PROJECT_DIR$/build.gradle.kts" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/common/build.gradle.kts" beforeDir="false" afterPath="$PROJECT_DIR$/common/build.gradle.kts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/common/src/commonMain/kotlin/com/elfefe/common/controller/FileUtil.kt" beforeDir="false" afterPath="$PROJECT_DIR$/common/src/commonMain/kotlin/com/elfefe/common/controller/FileUtil.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/common/src/commonMain/kotlin/com/elfefe/common/controller/Tasks.kt" beforeDir="false" afterPath="$PROJECT_DIR$/common/src/commonMain/kotlin/com/elfefe/common/controller/Tasks.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/common/src/commonMain/kotlin/com/elfefe/common/controller/markdown.kt" beforeDir="false" afterPath="$PROJECT_DIR$/common/src/commonMain/kotlin/com/elfefe/common/controller/markdown.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/common/src/commonMain/kotlin/com/elfefe/common/controller/TasksUtils.kt" beforeDir="false" afterPath="$PROJECT_DIR$/common/src/commonMain/kotlin/com/elfefe/common/controller/TasksUtils.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/common/src/commonMain/kotlin/com/elfefe/common/controller/TextFieldValueCustom.kt" beforeDir="false" afterPath="$PROJECT_DIR$/common/src/commonMain/kotlin/com/elfefe/common/controller/mailer.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/common/src/commonMain/kotlin/com/elfefe/common/controller/Traductions.kt" beforeDir="false" afterPath="$PROJECT_DIR$/common/src/commonMain/kotlin/com/elfefe/common/controller/Translation.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/common/src/commonMain/kotlin/com/elfefe/common/controller/crashwindow.kt" beforeDir="false" afterPath="$PROJECT_DIR$/common/src/commonMain/kotlin/com/elfefe/common/controller/crashwindow.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/common/src/commonMain/kotlin/com/elfefe/common/controller/firebase/firestore/FirestoreApi.kt" beforeDir="false" afterPath="$PROJECT_DIR$/common/src/commonMain/kotlin/com/elfefe/common/controller/firebase/firestore/FirestoreApi.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/common/src/commonMain/kotlin/com/elfefe/common/controller/log.kt" beforeDir="false" afterPath="$PROJECT_DIR$/common/src/commonMain/kotlin/com/elfefe/common/controller/log.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/common/src/commonMain/kotlin/com/elfefe/common/model/Configs.kt" beforeDir="false" afterPath="$PROJECT_DIR$/common/src/commonMain/kotlin/com/elfefe/common/model/Configs.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/common/src/commonMain/kotlin/com/elfefe/common/model/github/GithubLatestRelease.kt" beforeDir="false" afterPath="$PROJECT_DIR$/common/src/commonMain/kotlin/com/elfefe/common/model/github/GithubLatestRelease.kt" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/common/src/commonMain/kotlin/com/elfefe/common/ui/view/App.kt" beforeDir="false" afterPath="$PROJECT_DIR$/common/src/commonMain/kotlin/com/elfefe/common/ui/view/App.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/common/src/commonMain/kotlin/com/elfefe/common/ui/view/configs.kt" beforeDir="false" afterPath="$PROJECT_DIR$/common/src/commonMain/kotlin/com/elfefe/common/ui/view/configs.kt" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/common/src/commonMain/kotlin/com/elfefe/common/ui/view/main.kt" beforeDir="false" afterPath="$PROJECT_DIR$/common/src/commonMain/kotlin/com/elfefe/common/ui/view/main.kt" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/common/src/commonMain/kotlin/com/elfefe/common/ui/view/taskCard.kt" beforeDir="false" afterPath="$PROJECT_DIR$/common/src/commonMain/kotlin/com/elfefe/common/ui/view/taskCard.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/desktop/build.gradle.kts" beforeDir="false" afterPath="$PROJECT_DIR$/desktop/build.gradle.kts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/desktop/src/jvmMain/kotlin/Main.kt" beforeDir="false" afterPath="$PROJECT_DIR$/desktop/src/jvmMain/kotlin/Main.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/common/src/commonMain/resources/version" beforeDir="false" afterPath="$PROJECT_DIR$/common/src/commonMain/resources/version" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/desktop/resources/version" beforeDir="false" afterPath="$PROJECT_DIR$/desktop/resources/version" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -160,10 +168,18 @@
     &quot;ASKED_ADD_EXTERNAL_FILES&quot;: &quot;true&quot;,
     &quot;ASKED_SHARE_PROJECT_CONFIGURATION_FILES&quot;: &quot;true&quot;,
     &quot;Gradle.Build TasksWidget.executor&quot;: &quot;Run&quot;,
+    &quot;Gradle.ConfigsTest.Read and write Configs.executor&quot;: &quot;Run&quot;,
     &quot;Gradle.Download Sources.executor&quot;: &quot;Run&quot;,
+    &quot;Gradle.MarkdownTest.executor&quot;: &quot;Run&quot;,
+    &quot;Gradle.TaskTest.read and write TaskFieldOrder.executor&quot;: &quot;Run&quot;,
+    &quot;Gradle.TaskTest.read and write ThemeColors.executor&quot;: &quot;Run&quot;,
+    &quot;Gradle.TaskUtilsTest.get date in correct format.executor&quot;: &quot;Run&quot;,
+    &quot;Gradle.TaskUtilsTest.test deadline date.executor&quot;: &quot;Run&quot;,
+    &quot;Gradle.TasksTest.test tasks.executor&quot;: &quot;Run&quot;,
     &quot;Gradle.TasksWidget [dependencies].executor&quot;: &quot;Run&quot;,
     &quot;Gradle.TasksWidget [desktop:signMsi].executor&quot;: &quot;Run&quot;,
     &quot;Gradle.TasksWidget [javadoc].executor&quot;: &quot;Run&quot;,
+    &quot;Gradle.TasksWidget [signingReport].executor&quot;: &quot;Run&quot;,
     &quot;Gradle.TasksWidget:desktop [build].executor&quot;: &quot;Run&quot;,
     &quot;Gradle.TasksWidget:desktop [clean].executor&quot;: &quot;Run&quot;,
     &quot;Gradle.TasksWidget:desktop [packageDistributionForCurrentOS].executor&quot;: &quot;Run&quot;,
@@ -217,12 +233,12 @@
   </component>
   <component name="RunAnythingCache">
     <option name="myCommands">
+      <command value="signMsi" />
       <command value="gradlew signingReport" />
       <command value="gradlew dependencies" />
-      <command value="signMsi" />
     </option>
   </component>
-  <component name="RunManager" selected="Kotlin.MainKt">
+  <component name="RunManager" selected="Gradle.TasksWidget:desktop [packageMsi]">
     <configuration name="android" type="AndroidRunConfigurationType" factoryName="Android App">
       <module name="TasksWidget.android.main" />
       <option name="DEPLOY" value="true" />
@@ -260,6 +276,52 @@
         <option name="Android.Gradle.BeforeRunTask" enabled="true" />
       </method>
     </configuration>
+    <configuration name="MarkdownTest" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
+      <ExternalSystemSettings>
+        <option name="executionName" />
+        <option name="externalProjectPath" value="$PROJECT_DIR$/common" />
+        <option name="externalSystemIdString" value="GRADLE" />
+        <option name="scriptParameters" value="" />
+        <option name="taskDescriptions">
+          <list />
+        </option>
+        <option name="taskNames">
+          <list>
+            <option value=":common:cleanDesktopTest" />
+            <option value=":common:desktopTest" />
+            <option value="--tests &quot;MarkdownTest&quot;" />
+          </list>
+        </option>
+        <option name="vmOptions" />
+      </ExternalSystemSettings>
+      <ExternalSystemDebugServerProcess>false</ExternalSystemDebugServerProcess>
+      <ExternalSystemReattachDebugProcess>true</ExternalSystemReattachDebugProcess>
+      <DebugAllEnabled>false</DebugAllEnabled>
+      <RunAsTest>true</RunAsTest>
+      <method v="2" />
+    </configuration>
+    <configuration name="TasksWidget [dependencies]" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
+      <ExternalSystemSettings>
+        <option name="executionName" />
+        <option name="externalProjectPath" value="$PROJECT_DIR$" />
+        <option name="externalSystemIdString" value="GRADLE" />
+        <option name="scriptParameters" value="" />
+        <option name="taskDescriptions">
+          <list />
+        </option>
+        <option name="taskNames">
+          <list>
+            <option value="dependencies" />
+          </list>
+        </option>
+        <option name="vmOptions" />
+      </ExternalSystemSettings>
+      <ExternalSystemDebugServerProcess>true</ExternalSystemDebugServerProcess>
+      <ExternalSystemReattachDebugProcess>true</ExternalSystemReattachDebugProcess>
+      <DebugAllEnabled>false</DebugAllEnabled>
+      <RunAsTest>false</RunAsTest>
+      <method v="2" />
+    </configuration>
     <configuration name="TasksWidget [desktop:signMsi]" type="GradleRunConfiguration" factoryName="Gradle" activateToolWindowBeforeRun="false" nameIsGenerated="true">
       <ExternalSystemSettings>
         <option name="executionName" />
@@ -282,18 +344,18 @@
       <RunAsTest>false</RunAsTest>
       <method v="2" />
     </configuration>
-    <configuration name="TasksWidget:desktop [clean]" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
+    <configuration name="TasksWidget [signingReport]" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
       <ExternalSystemSettings>
         <option name="executionName" />
-        <option name="externalProjectPath" value="$PROJECT_DIR$/desktop" />
+        <option name="externalProjectPath" value="$PROJECT_DIR$" />
         <option name="externalSystemIdString" value="GRADLE" />
-        <option name="scriptParameters" />
+        <option name="scriptParameters" value="" />
         <option name="taskDescriptions">
           <list />
         </option>
         <option name="taskNames">
           <list>
-            <option value="clean" />
+            <option value="signingReport" />
           </list>
         </option>
         <option name="vmOptions" />
@@ -326,55 +388,7 @@
       <RunAsTest>false</RunAsTest>
       <method v="2" />
     </configuration>
-    <configuration name="TasksWidget:desktop [packageReleaseMsi]" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
-      <ExternalSystemSettings>
-        <option name="executionName" />
-        <option name="externalProjectPath" value="$PROJECT_DIR$/desktop" />
-        <option name="externalSystemIdString" value="GRADLE" />
-        <option name="scriptParameters" value="" />
-        <option name="taskDescriptions">
-          <list />
-        </option>
-        <option name="taskNames">
-          <list>
-            <option value="packageReleaseMsi" />
-          </list>
-        </option>
-        <option name="vmOptions" />
-      </ExternalSystemSettings>
-      <ExternalSystemDebugServerProcess>true</ExternalSystemDebugServerProcess>
-      <ExternalSystemReattachDebugProcess>true</ExternalSystemReattachDebugProcess>
-      <DebugAllEnabled>false</DebugAllEnabled>
-      <RunAsTest>false</RunAsTest>
-      <method v="2" />
-    </configuration>
-    <configuration name="TasksWidget:desktop [runDistributable]" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
-      <ExternalSystemSettings>
-        <option name="executionName" />
-        <option name="externalProjectPath" value="$PROJECT_DIR$/desktop" />
-        <option name="externalSystemIdString" value="GRADLE" />
-        <option name="scriptParameters" />
-        <option name="taskDescriptions">
-          <list />
-        </option>
-        <option name="taskNames">
-          <list>
-            <option value="runDistributable" />
-          </list>
-        </option>
-        <option name="vmOptions" />
-      </ExternalSystemSettings>
-      <ExternalSystemDebugServerProcess>true</ExternalSystemDebugServerProcess>
-      <ExternalSystemReattachDebugProcess>true</ExternalSystemReattachDebugProcess>
-      <DebugAllEnabled>false</DebugAllEnabled>
-      <RunAsTest>false</RunAsTest>
-      <method v="2" />
-    </configuration>
     <configuration name="MainKt" type="JetRunConfigurationType" temporary="true" nameIsGenerated="true">
-      <envs>
-        <env name="GOOGLE_APPLICATION_CREDENTIALS" value="C:\Users\fbou-\IdeaProjects\TasksWidget\common\src\commonMain\resources\google-services.json" />
-        <env name="IS_DEV" value="true" />
-      </envs>
       <option name="MAIN_CLASS_NAME" value="MainKt" />
       <module name="TasksWidget.desktop.jvmMain" />
       <shortenClasspath name="ARGS_FILE" />
@@ -392,19 +406,19 @@
     <list>
       <item itemvalue="Android App.android" />
       <item itemvalue="Gradle.TasksWidget [desktop:signMsi]" />
-      <item itemvalue="Gradle.TasksWidget:desktop [clean]" />
-      <item itemvalue="Gradle.TasksWidget:desktop [runDistributable]" />
+      <item itemvalue="Gradle.TasksWidget [dependencies]" />
+      <item itemvalue="Gradle.MarkdownTest" />
+      <item itemvalue="Gradle.TasksWidget [signingReport]" />
       <item itemvalue="Gradle.TasksWidget:desktop [packageMsi]" />
-      <item itemvalue="Gradle.TasksWidget:desktop [packageReleaseMsi]" />
       <item itemvalue="Kotlin.MainKt" />
     </list>
     <recent_temporary>
       <list>
-        <item itemvalue="Kotlin.MainKt" />
-        <item itemvalue="Gradle.TasksWidget:desktop [packageReleaseMsi]" />
-        <item itemvalue="Gradle.TasksWidget:desktop [runDistributable]" />
-        <item itemvalue="Gradle.TasksWidget:desktop [clean]" />
         <item itemvalue="Gradle.TasksWidget:desktop [packageMsi]" />
+        <item itemvalue="Kotlin.MainKt" />
+        <item itemvalue="Gradle.TasksWidget [dependencies]" />
+        <item itemvalue="Gradle.TasksWidget [signingReport]" />
+        <item itemvalue="Gradle.MarkdownTest" />
       </list>
     </recent_temporary>
   </component>
@@ -745,7 +759,15 @@
       <option name="project" value="LOCAL" />
       <updated>1727904319065</updated>
     </task>
-    <option name="localTasksCounter" value="42" />
+    <task id="LOCAL-00042" summary="fix:&#10; - catch all errors&#10; - working on the updates">
+      <option name="closed" value="true" />
+      <created>1728755782342</created>
+      <option name="number" value="00042" />
+      <option name="presentableId" value="LOCAL-00042" />
+      <option name="project" value="LOCAL" />
+      <updated>1728755782342</updated>
+    </task>
+    <option name="localTasksCounter" value="43" />
     <servers />
   </component>
   <component name="UnknownFeatures">
@@ -766,7 +788,6 @@
   </component>
   <component name="VcsManagerConfiguration">
     <option name="ADD_EXTERNAL_FILES_SILENTLY" value="true" />
-    <MESSAGE value="fix:&#10; - Better performances&#10; - Moved configs to appdata" />
     <MESSAGE value="fix:&#10; - Better performances" />
     <MESSAGE value="fix:&#10; - Better performances&#10; - Moved configs to AppData" />
     <MESSAGE value="fix:&#10; - Added toasts when copying emotes" />
@@ -791,7 +812,8 @@
     <MESSAGE value="fix:&#10; - Searching also apply the task done filter&#10; - Removed Cards settings while not in use&#10; - Color selection&#10;feat:&#10; - Added Texts translations&#10; - Replaced description icon" />
     <MESSAGE value="feat:&#10; - Add markdown formated text&#10; - Authentication no more needed on launch&#10;fix:&#10; - Add and remove to startup path" />
     <MESSAGE value="fix:&#10; - Markdown header issue" />
-    <option name="LAST_COMMIT_MESSAGE" value="fix:&#10; - Markdown header issue" />
+    <MESSAGE value="fix:&#10; - catch all errors&#10; - working on the updates" />
+    <option name="LAST_COMMIT_MESSAGE" value="fix:&#10; - catch all errors&#10; - working on the updates" />
   </component>
   <component name="XSLT-Support.FileAssociations.UIState">
     <expand />

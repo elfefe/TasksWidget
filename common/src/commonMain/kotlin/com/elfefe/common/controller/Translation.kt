@@ -3,7 +3,7 @@ package com.elfefe.common.controller
 val currentLanguage: String
     get() = Tasks.Configs.configs.language
 
-class Traductions(val language: String = currentLanguage) {
+class Translation(val language: String = currentLanguage) {
     val emotes: String
         get() = when (language) {
             "fr" -> "Emotes"
@@ -57,6 +57,30 @@ class Traductions(val language: String = currentLanguage) {
             "fr" -> "Texte des tâches"
             "en" -> "Tasks text"
             else -> "Tasks text"
+        }
+    val color: String
+        get() = when (language) {
+            "fr" -> "Couleur"
+            "en" -> "Color"
+            else -> "Color"
+        }
+    val grayscale: String
+        get() = when (language) {
+            "fr" -> "Echelle de gris"
+            "en" -> "Gray scale"
+            else -> "Gray scale"
+        }
+    val brightness: String
+        get() = when (language) {
+            "fr" -> "Luminositée"
+            "en" -> "Brightness"
+            else -> "Brightness"
+        }
+    val opacity: String
+        get() = when (language) {
+            "fr" -> "Opacité"
+            "en" -> "Opacity"
+            else -> "Opacity"
         }
 }
 

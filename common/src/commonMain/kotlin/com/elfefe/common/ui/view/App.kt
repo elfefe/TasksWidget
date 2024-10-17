@@ -30,6 +30,11 @@ import com.elfefe.common.model.Task
 import com.elfefe.common.model.github.GithubLatestRelease
 import com.elfefe.common.ui.theme.TasksTheme
 import com.google.gson.Gson
+//import dev.gitlive.firebase.Firebase
+//import dev.gitlive.firebase.FirebaseApp
+//import dev.gitlive.firebase.FirebaseOptions
+//import dev.gitlive.firebase.analytics.FirebaseAnalytics
+//import dev.gitlive.firebase.initialize
 import io.ktor.util.InternalAPI
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
@@ -43,6 +48,19 @@ import java.net.http.HttpResponse
 @OptIn(ExperimentalFoundationApi::class, ExperimentalComposeUiApi::class, InternalAPI::class)
 @Composable
 fun App(windowInteractions: WindowInteractions) {
+//    Firebase.initialize(FirebaseOptions(
+//        applicationId = "1:1086878445333:web:d1df64870bd3f52b3f431c",
+//        apiKey = "AIzaSyAjCTwotALydy0JBZXAKxYPT7rF-M3Boos",
+//        databaseUrl = "",
+//        gaTrackingId = "",
+//        storageBucket = "taskwidget-b17c3.appspot.com",
+//        projectId = "taskwidget-b17c3",
+//        gcmSenderId = "1086878445333",
+//        authDomain = "taskwidget-b17c3.firebaseapp.com"
+//    ))?.run {
+//        FirebaseAnalytics().logEvent("app_open")
+//    }
+
     val scope = rememberCoroutineScope()
 
     var tasks by remember { mutableStateOf(listOf<Task>()) }
@@ -53,12 +71,13 @@ fun App(windowInteractions: WindowInteractions) {
     Tasks.onUpdate = {
 //        println(it)
         tasks = it
+        /* TODO: Uncomment to automatically scroll to the last task
         scope.launch {
             Tasks.lastTask?.let { task ->
                 val index = tasks.indexOf(task)
                 listState.animateScrollToItem(if (index < 0) 0 else index)
             }
-        }
+        }*/
     }
     Tasks.filter { !it.done }
 

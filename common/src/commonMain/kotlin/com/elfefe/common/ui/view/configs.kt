@@ -6,8 +6,6 @@ import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.ExperimentalFoundationApi
-import androidx.compose.foundation.background
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.gestures.detectHorizontalDragGestures
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.*
@@ -19,28 +17,23 @@ import androidx.compose.material.icons.filled.ArrowDropDown
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.rotate
 import androidx.compose.ui.geometry.CornerRadius
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.graphics.*
 import androidx.compose.ui.input.pointer.pointerInput
-import androidx.compose.ui.platform.ClipboardManager
-import androidx.compose.ui.platform.LocalClipboardManager
 import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.OffsetMapping
 import androidx.compose.ui.text.input.TransformedText
-import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.elfefe.common.controller.*
 import com.elfefe.common.model.TaskFieldOrder
-import com.elfefe.common.ui.theme.primary
 import grayScale
 import hexToColor
 import maxSaturation
@@ -49,18 +42,16 @@ import org.burnoutcrew.reorderable.detectReorderAfterLongPress
 import org.burnoutcrew.reorderable.rememberReorderableLazyListState
 import org.burnoutcrew.reorderable.reorderable
 import toHexString
-import java.io.File
-import java.nio.file.Files
 import kotlin.math.absoluteValue
 import kotlin.math.floor
 import kotlin.math.max
 import kotlin.math.min
 
 enum class ConfigNavDestination(val text: String) {
-//    EMOTES(Traductions().emotes),
+    //    EMOTES(Traductions().emotes),
 //    CARDS(Traductions().cards),
-    GENERAL(Traductions().general),
-    THEMES(Traductions().theme),
+    GENERAL(Translation().general),
+    THEMES(Translation().theme),
 }
 
 @Composable
@@ -71,6 +62,7 @@ fun Configs(windowInteractions: WindowInteractions) {
         NavigationBar {
             currentDestination = it
         }
+        Spacer(Modifier.width(16.dp))
         Navigator(currentDestination, windowInteractions)
     }
 }
@@ -86,24 +78,23 @@ fun AnimatedNavigation(visible: Boolean, page: @Composable () -> Unit) {
 
 @Composable
 fun Navigator(destination: ConfigNavDestination, windowInteractions: WindowInteractions) {
-//    AnimatedNavigation(destination == ConfigNavDestination.EMOTES) { Emotes(windowInteractions) }
-//    AnimatedNavigation(destination == ConfigNavDestination.CARDS) { Cards(windowInteractions) }
     AnimatedNavigation(destination == ConfigNavDestination.GENERAL) { General(windowInteractions) }
     AnimatedNavigation(destination == ConfigNavDestination.THEMES) { Theme(windowInteractions) }
 }
 
 @Composable
 fun NavigationBar(onNavigate: (ConfigNavDestination) -> Unit) {
-    Column(
+    Card(
         modifier = Modifier
-            .background(color = Color(0xFF2C2F33))
-            .padding(16.dp)
             .fillMaxHeight()
-            .width(128.dp)
+            .width(128.dp),
+        shape = RoundedCornerShape(8.dp),
+        backgroundColor = Color(0xFF2C2F33)
     ) {
         LazyColumn(
             modifier = Modifier
-                .fillMaxSize()
+                .fillMaxSize(),
+            contentPadding = PaddingValues(16.dp),
         ) {
             items(ConfigNavDestination.values()) { destination ->
                 TextButton(onClick = {
@@ -228,40 +219,33 @@ fun CardsOrderCondition(modifier: Modifier, elevation: Dp, taskField: TaskFieldO
 
 @Composable
 fun Theme(windowInteractions: WindowInteractions) {
-    Column(
+    LazyColumn(
         modifier = Modifier
-            .padding(16.dp)
             .fillMaxSize(),
-        verticalArrangement = Arrangement.Top,
-        horizontalAlignment = Alignment.Start
+        contentPadding = PaddingValues(16.dp),
     ) {
-        LazyColumn(
-            modifier = Modifier
-                .fillMaxSize()
-        ) {
-            themePartConfig(Traductions().toolbarBackground, Tasks.Configs.configs.themeColors.primary) {
-                Tasks.Configs.configs.updateThemeColors(primary = it)
-                Tasks.Configs.update()
-            }
-            themePartConfig(Traductions().toolbarIcons, Tasks.Configs.configs.themeColors.onPrimary) {
-                Tasks.Configs.configs.updateThemeColors(onPrimary = it)
-                Tasks.Configs.update()
-            }
-            /*themePartConfig("Secondary", Tasks.Configs.configs.themeColors.secondary) {
-                Tasks.Configs.configs.updateThemeColors(secondary = it)
-                Tasks.Configs.update()
-            }
-            themePartConfig("On secondary", Tasks.Configs.configs.themeColors.onSecondary) {
-                Tasks.Configs.configs.updateThemeColors(onSecondary = it)
-                Tasks.Configs.update()
-            }*/
-            themePartConfig(Traductions().tasksBackground, Tasks.Configs.configs.themeColors.background) {
-                Tasks.Configs.configs.updateThemeColors(background = it)
-                Tasks.Configs.update()
-            }
-            themePartConfig(Traductions().tasksContent, Tasks.Configs.configs.themeColors.onBackground) {
-                Tasks.Configs.configs.updateThemeColors(onBackground = it)
-            }
+        themePartConfig(Translation().toolbarBackground, Tasks.Configs.configs.themeColors.primary) {
+            Tasks.Configs.configs.updateThemeColors(primary = it)
+            Tasks.Configs.update()
+        }
+        themePartConfig(Translation().toolbarIcons, Tasks.Configs.configs.themeColors.onPrimary) {
+            Tasks.Configs.configs.updateThemeColors(onPrimary = it)
+            Tasks.Configs.update()
+        }
+        /*themePartConfig("Secondary", Tasks.Configs.configs.themeColors.secondary) {
+            Tasks.Configs.configs.updateThemeColors(secondary = it)
+            Tasks.Configs.update()
+        }
+        themePartConfig("On secondary", Tasks.Configs.configs.themeColors.onSecondary) {
+            Tasks.Configs.configs.updateThemeColors(onSecondary = it)
+            Tasks.Configs.update()
+        }*/
+        themePartConfig(Translation().tasksBackground, Tasks.Configs.configs.themeColors.background) {
+            Tasks.Configs.configs.updateThemeColors(background = it)
+            Tasks.Configs.update()
+        }
+        themePartConfig(Translation().tasksContent, Tasks.Configs.configs.themeColors.onBackground) {
+            Tasks.Configs.configs.updateThemeColors(onBackground = it)
         }
     }
 }
@@ -281,7 +265,8 @@ fun General(windowInteractions: WindowInteractions) {
             modifier = Modifier
                 .height(256.dp)
                 .fillMaxWidth(),
-            elevation = 4.dp
+            elevation = 4.dp,
+            backgroundColor = Color.White
         ) {
             Column(
                 modifier = Modifier
@@ -315,7 +300,7 @@ fun General(windowInteractions: WindowInteractions) {
                     Spacer(Modifier.width(16.dp))
 
                     Text(
-                        text = Traductions().startupLabel,
+                        text = Translation().startupLabel,
                         fontWeight = FontWeight.Normal,
                         fontSize = 16.sp,
                         color = Color.DarkGray
@@ -329,15 +314,25 @@ fun General(windowInteractions: WindowInteractions) {
 @OptIn(ExperimentalFoundationApi::class)
 fun LazyListScope.themePartConfig(label: String, defaultColor: Color, onColorChange: (Color) -> Unit) {
     stickyHeader {
-        Text(
-            text = label,
-            fontWeight = FontWeight.Thin,
-            fontSize = 18.sp,
-            color = Color.DarkGray
-        )
-    }
-    item {
-        ThemeColor(defaultColor, onColorChange)
+        Card(
+            shape = RoundedCornerShape(8.dp),
+            backgroundColor = Color.White,
+        ) {
+            Column(
+                modifier = Modifier
+                    .padding(16.dp)
+            ) {
+                Text(
+                    text = label,
+                    fontWeight = FontWeight.Normal,
+                    fontSize = 18.sp,
+                    color = Color.DarkGray
+                )
+                Spacer(Modifier.height(8.dp))
+                ThemeColor(defaultColor, onColorChange)
+            }
+        }
+        Spacer(Modifier.height(16.dp))
     }
 }
 
@@ -373,6 +368,13 @@ fun ThemeColor(default: Color, onColorChange: (Color) -> Unit) {
                 Color(1f, 0f, 0f),
             )
 
+            Text(
+                text = Translation().color,
+                fontWeight = FontWeight.Thin,
+                fontSize = 16.sp,
+                color = Color.DarkGray
+            )
+
             Canvas(
                 modifier = Modifier
                     .fillMaxWidth()
@@ -393,18 +395,19 @@ fun ThemeColor(default: Color, onColorChange: (Color) -> Unit) {
                         Color(1f, 0f, 1f, alphaCursorPosition),
                         Color(1f, 0f, 0f, alphaCursorPosition),
                     )
-
-                drawRect(
+                drawRoundRect(
                     brush = Brush.horizontalGradient(
                         colorGradient,
                         tileMode = TileMode.Clamp
                     ),
-                    size = size
+                    size = size,
+                    cornerRadius = CornerRadius(4f, 4f)
                 )
-                drawRect(
-                    color = Color.DarkGray,
+                drawRoundRect(
+                    color = Color.LightGray,
                     topLeft = Offset(max(0f, min(size.width, colorCursorPosition)), 0f),
-                    size = Size(2f, size.height)
+                    size = Size(2f, size.height),
+                    cornerRadius = CornerRadius(2f, 2f)
                 )
 
                 val colorIndexNormalized = (colorCursorPosition / size.width).let { if (it.isNaN()) 0f else it }
@@ -429,6 +432,15 @@ fun ThemeColor(default: Color, onColorChange: (Color) -> Unit) {
                     )
             }
 
+            Spacer(Modifier.height(8.dp))
+
+            Text(
+                text = Translation().brightness,
+                fontWeight = FontWeight.Thin,
+                fontSize = 16.sp,
+                color = Color.DarkGray
+            )
+
             Canvas(
                 modifier = Modifier
                     .fillMaxWidth()
@@ -445,22 +457,21 @@ fun ThemeColor(default: Color, onColorChange: (Color) -> Unit) {
                     if (saturated) currentColor.maxSaturation() else Color.Gray,
                     Color(1f, 1f, 1f, alphaCursorPosition)
                 )
-                drawRect(
+                drawRoundRect(
                     brush = Brush.horizontalGradient(
                         colorGradient,
                         tileMode = TileMode.Clamp
                     ),
+                    cornerRadius = CornerRadius(4f, 4f),
                     size = size
                 )
-                drawRect(
-                    color = currentColor.grayScale().run { Color(
-                        (1 - red).absoluteValue.coerceIn(0f, 1f),
-                        (1 - green).absoluteValue.coerceIn(0f, 1f),
-                        (1 - blue).absoluteValue.coerceIn(0f, 1f),
-                        1f
-                    ) },
+                drawRoundRect(
+                    color = currentColor.grayScale().run {
+                        if ((red + green + blue) / 3 > .5f ) Color.DarkGray else Color.LightGray
+                    },
                     topLeft = Offset(max(0f, min(size.width, darknessCursorPosition)), 0f),
-                    size = Size(2f, size.height)
+                    size = Size(2f, size.height),
+                    cornerRadius = CornerRadius(2f, 2f)
                 )
 
                 val indexNormalized = (darknessCursorPosition / size.width).let {
@@ -477,6 +488,16 @@ fun ThemeColor(default: Color, onColorChange: (Color) -> Unit) {
                 currentColor =
                     lerp(colorAlphaGradient[colorIndex], colorAlphaGradient[colorIndex + 1], colorLerpFraction)
             }
+
+            Spacer(Modifier.height(8.dp))
+
+            Text(
+                text = Translation().opacity,
+                fontWeight = FontWeight.Thin,
+                fontSize = 16.sp,
+                color = Color.DarkGray
+            )
+
             Row(
                 modifier = Modifier
                     .fillMaxWidth()
@@ -545,7 +566,7 @@ fun ThemeColor(default: Color, onColorChange: (Color) -> Unit) {
                 visualTransformation = {
                     TransformedText(
                         text = AnnotatedString("#${it.text}"),
-                        offsetMapping = object :OffsetMapping {
+                        offsetMapping = object : OffsetMapping {
                             override fun originalToTransformed(offset: Int): Int {
                                 return offset + 1
                             }

@@ -55,7 +55,7 @@ class Configs(
     }
 
     override fun toString(): String {
-        return "Configs(themeColors=$themeColors, taskFieldsOrder=$taskFieldsOrder)"
+        return "Configs(themeColors=$themeColors, taskFieldsOrder=$taskFieldsOrder, language=$language)"
     }
 }
 

@@ -1,6 +1,7 @@
 package com.elfefe.common.controller.firebase.firestore
 
 import androidx.compose.ui.res.useResource
+import com.elfefe.common.controller.log
 import com.elfefe.common.model.Task
 import com.elfefe.common.model.User
 import com.google.auth.oauth2.GoogleCredentials
@@ -20,7 +21,7 @@ class FirestoreApi private constructor() {
                 )
             }
         } catch (e: Exception) {
-            e.printStackTrace()
+            log(e.stackTraceToString())
         }
     }
 

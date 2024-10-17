@@ -3,32 +3,32 @@ package com.elfefe.common.ui.view
 import androidx.compose.animation.core.EaseInOutCubic
 import androidx.compose.animation.core.animateDpAsState
 import androidx.compose.animation.core.tween
+import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
+import androidx.compose.foundation.gestures.detectDragGesturesAfterLongPress
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.heightIn
-import androidx.compose.foundation.layout.widthIn
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.Card
 import androidx.compose.material.Text
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.shadow
+import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.DpSize
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.max
 import androidx.compose.ui.unit.min
 import androidx.compose.ui.window.*
+import androidx.compose.ui.window.WindowPosition
 import com.elfefe.common.controller.*
 import java.awt.GraphicsEnvironment
 import java.awt.MouseInfo
 import java.awt.Toolkit
-import java.io.File
 
 
 fun preload() {
@@ -131,7 +131,7 @@ fun ApplicationScope.TasksWindow(windowInteractions: WindowInteractions) {
         )
     )
 
-    CrashWindow(
+    ThemedWindow(
         onCloseRequest = ::exitApplication,
         state = WindowState(
             position = WindowPosition(windowHorizontalPosition, 5.dp),
@@ -140,8 +140,6 @@ fun ApplicationScope.TasksWindow(windowInteractions: WindowInteractions) {
         visible = isVisible,
         title = "Tasks",
         icon = painterResource("logo-taskswidget.png"),
-        transparent = true,
-        undecorated = true,
         resizable = false,
         focusable = true,
         alwaysOnTop = true
@@ -159,41 +157,27 @@ fun ApplicationScope.TasksWindow(windowInteractions: WindowInteractions) {
     }
 }
 
+@OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun ApplicationScope.ConfigsWindow(windowInteractions: WindowInteractions) {
     var isConfigsVisible by remember { mutableStateOf(windowInteractions.showConfigs.value ?: false) }
     windowInteractions.showConfigs.onChange = {
+        throw Exception("Not implemented")
         isConfigsVisible = it
     }
 
     if (isConfigsVisible)
-        CrashWindow(
+        ThemedWindow(
             onCloseRequest = {
                 windowInteractions.showConfigs.value = false
             },
-            state = WindowState(position = WindowPosition(Alignment.Center)),
             title = "Tasks - configs",
             icon = painterResource("logo-taskswidget.png"),
             resizable = true,
             focusable = true,
-            undecorated = true,
-            transparent = true,
             alwaysOnTop = false
         ) {
-            Card(
-                modifier = Modifier
-                    .fillMaxSize(),
-                shape = RoundedCornerShape(32.dp),
-                elevation = 16.dp,
-                backgroundColor = Color.White
-            ) {
-                Column(
-                    modifier = Modifier
-                        .fillMaxSize()
-                ) {
-                    Configs(windowInteractions)
-                }
-            }
+            Configs(windowInteractions)
         }
 }
 
@@ -217,7 +201,7 @@ fun ApplicationScope.PopupWindow(windowInteractions: WindowInteractions) {
     }
 
     if (isPopupVisible) {
-        CrashWindow(
+        ThemedWindow(
             state = WindowState(
                 position = WindowPosition(
                     screenSize.width / 4,
@@ -231,8 +215,6 @@ fun ApplicationScope.PopupWindow(windowInteractions: WindowInteractions) {
             onCloseRequest = { windowInteractions.popup.value = Popup.HIDE },
             title = "Tasks - popup",
             icon = painterResource("logo-taskswidget.png"),
-            undecorated = true,
-            transparent = true,
             resizable = false,
             focusable = false,
             alwaysOnTop = true
@@ -257,7 +239,7 @@ fun ApplicationScope.EmotesWindow(windowInteractions: WindowInteractions) {
     }
 
     if (isConfigsVisible)
-        CrashWindow(
+        ThemedWindow(
             onCloseRequest = {
                 windowInteractions.showEmotes.value = false
             },

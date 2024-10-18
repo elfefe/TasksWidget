@@ -58,11 +58,10 @@ import kotlin.math.min
 
 @Composable
 fun Emotes(windowInteractions: WindowInteractions) {
-    Column(
+    Card(
         modifier = Modifier
             .fillMaxSize(),
-        verticalArrangement = Arrangement.Center,
-        horizontalAlignment = Alignment.CenterHorizontally
+        shape = RoundedCornerShape(16.dp),
     ) {
         val clipboardManager: ClipboardManager = LocalClipboardManager.current
 
@@ -72,6 +71,7 @@ fun Emotes(windowInteractions: WindowInteractions) {
 
         LazyColumn(
             modifier = Modifier
+                .background(Color.White)
                 .fillMaxSize(),
             state = categoryScrollState,
             contentPadding = PaddingValues(16.dp)

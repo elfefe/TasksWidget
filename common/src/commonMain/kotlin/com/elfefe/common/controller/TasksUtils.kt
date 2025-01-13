@@ -23,8 +23,8 @@ fun fromDate(date: String): Long {
 
 fun deadlineDate(date: String): Int {
         return Calendar.getInstance().apply {
-            val day = date.substring(0, 2).toInt()
-            val month = date.substring(2, 4).toInt()
+            val day = if (date.length > 2) date.substring(0, 2).toInt() else 0
+            val month = if (date.length > 4) date.substring(2, 4).toInt() else 0
             set(Calendar.DAY_OF_MONTH, day)
             set(Calendar.MONTH, month - 1)
         }.compareTo(Calendar.getInstance())

@@ -4,10 +4,14 @@ import androidx.compose.ui.res.useResource
 import com.elfefe.common.controller.log
 import com.elfefe.common.model.Task
 import com.elfefe.common.model.User
+import com.google.auth.Credentials
+import com.google.auth.oauth2.AccessToken
 import com.google.auth.oauth2.GoogleCredentials
 import com.google.auth.oauth2.ServiceAccountCredentials
+import com.google.auth.oauth2.UserCredentials
 import com.google.cloud.firestore.FirestoreOptions
 import com.google.gson.Gson
+import org.apache.http.client.CredentialsProvider
 import java.lang.Exception
 
 class FirestoreApi private constructor() {
@@ -23,6 +27,19 @@ class FirestoreApi private constructor() {
         } catch (e: Exception) {
             log(e.stackTraceToString())
         }
+    }
+
+    fun analytics(accessToken: AccessToken) {
+        val firestoreOptions = FirestoreOptions.getDefaultInstance().toBuilder()
+            .setProjectId(PROJECT_ID)
+            .setCredentials(GoogleCredentials.create(accessToken))
+            .build()
+        firestoreOptions.service
+            .collection(USERS)
+            .get().get()
+            .documents.forEach { userSnapshot ->
+                log(userSnapshot.id)
+            }
     }
 
     fun connectTasks(user: User, onUpdate: (User) -> Unit) {

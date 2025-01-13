@@ -26,6 +26,13 @@ import androidx.compose.ui.unit.min
 import androidx.compose.ui.window.*
 import androidx.compose.ui.window.WindowPosition
 import com.elfefe.common.controller.*
+import com.elfefe.common.controller.firebase.authentication.OAuthApi
+import com.elfefe.common.controller.firebase.firestore.FirestoreApi
+import com.google.auth.oauth2.AccessToken
+//import com.google.firebase.FirebaseOptions
+//import com.google.firebase.auth.FirebaseAuth
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
 import java.awt.GraphicsEnvironment
 import java.awt.MouseInfo
 import java.awt.Toolkit
@@ -67,6 +74,29 @@ fun ApplicationScope.TasksWidget() {
             showConfigs = Interactable(false),
             popup = Interactable(Popup())
         )
+
+//        FirebaseOptions.Builder()
+//            .setCredentials(FirestoreApi.instance.credentials)
+//            .setProjectId("taskwidget-b17c3")
+//            .build()
+//        FirebaseAuth
+//            .getInstance()
+//            .signInWithEmailAndPassword("f.bou-reiff@orange.fr", "***REMOVED-SECRET***")
+//            .addOnCompleteListener {
+//                if (it.isSuccessful) {
+//                    log("Connected to Firebase")
+//                } else {
+//                    log("Failed to connect to Firebase")
+//                }
+//            }
+
+//        OAuthApi(CoroutineScope(Dispatchers.IO)).auth(
+//            clientId = "1086878445333-tgnhihe3rkaigfqs39umarbfsptb1lr5.apps.googleusercontent.com",
+//            clientSecret = "***SECRET-PURGE-2026-07-27***",
+//        ) { token, payload ->
+//            log("Connected with\n$token\n$payload")
+//            FirestoreApi.instance.analytics(AccessToken.newBuilder().apply { tokenValue = token.accessToken }.build())
+//        }
 
         TrayWindow(windowInteractions)
         TasksWindow(windowInteractions)
@@ -162,7 +192,6 @@ fun ApplicationScope.TasksWindow(windowInteractions: WindowInteractions) {
 fun ApplicationScope.ConfigsWindow(windowInteractions: WindowInteractions) {
     var isConfigsVisible by remember { mutableStateOf(windowInteractions.showConfigs.value ?: false) }
     windowInteractions.showConfigs.onChange = {
-        throw Exception("Not implemented")
         isConfigsVisible = it
     }
 
@@ -233,7 +262,7 @@ fun ApplicationScope.PopupWindow(windowInteractions: WindowInteractions) {
 
 @Composable
 fun ApplicationScope.EmotesWindow(windowInteractions: WindowInteractions) {
-    var isConfigsVisible by remember { mutableStateOf(windowInteractions.showEmotes.value ?: false) }
+    var isConfigsVisible by remember { mutableStateOf(windowInteractions.showEmotes.value == true) }
     windowInteractions.showEmotes.onChange = {
         isConfigsVisible = it
     }
@@ -243,7 +272,6 @@ fun ApplicationScope.EmotesWindow(windowInteractions: WindowInteractions) {
             onCloseRequest = {
                 windowInteractions.showEmotes.value = false
             },
-            state = WindowState(position = WindowPosition(Alignment.Center)),
             title = "Tasks - Emotes",
             icon = painterResource("logo-taskswidget.png"),
             resizable = true,

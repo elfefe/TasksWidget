@@ -10,37 +10,23 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="342136dd-9d95-4b6b-84e1-4a9c7fc0eeb8" name="Changes" comment="fix:&#10; - catch all errors&#10; - working on the updates">
-      <change afterPath="$PROJECT_DIR$/common/src/commonTest/kotlin/ConfigsTest.kt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/common/src/commonTest/kotlin/GithubTest.kt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/common/src/commonTest/kotlin/MarkdownTest.kt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/common/src/commonTest/kotlin/TaskTest.kt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/common/src/commonTest/kotlin/TaskUtilsTest.kt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/common/src/commonTest/kotlin/TasksTest.kt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/common/src/commonTest/kotlin/TimerTest.kt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/artifacts/common_desktop_1_4_1.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/artifacts/desktop_jvm_1_4_1.xml" afterDir="false" />
       <change afterPath="$PROJECT_DIR$/desktop/cert-password" afterDir="false" />
       <change afterPath="$PROJECT_DIR$/desktop/certificate.crt" afterDir="false" />
       <change afterPath="$PROJECT_DIR$/desktop/certificate.csr" afterDir="false" />
       <change afterPath="$PROJECT_DIR$/desktop/certificate.pfx" afterDir="false" />
       <change afterPath="$PROJECT_DIR$/desktop/key-password" afterDir="false" />
       <change afterPath="$PROJECT_DIR$/desktop/private-key.key" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/hs_err_pid2304.log" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/hs_err_pid6380.log" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/vcs.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/vcs.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/build.gradle.kts" beforeDir="false" afterPath="$PROJECT_DIR$/build.gradle.kts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/common/build.gradle.kts" beforeDir="false" afterPath="$PROJECT_DIR$/common/build.gradle.kts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/common/src/commonMain/kotlin/com/elfefe/common/controller/Tasks.kt" beforeDir="false" afterPath="$PROJECT_DIR$/common/src/commonMain/kotlin/com/elfefe/common/controller/Tasks.kt" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/common/src/commonMain/kotlin/com/elfefe/common/controller/TasksUtils.kt" beforeDir="false" afterPath="$PROJECT_DIR$/common/src/commonMain/kotlin/com/elfefe/common/controller/TasksUtils.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/common/src/commonMain/kotlin/com/elfefe/common/controller/TextFieldValueCustom.kt" beforeDir="false" afterPath="$PROJECT_DIR$/common/src/commonMain/kotlin/com/elfefe/common/controller/mailer.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/common/src/commonMain/kotlin/com/elfefe/common/controller/Traductions.kt" beforeDir="false" afterPath="$PROJECT_DIR$/common/src/commonMain/kotlin/com/elfefe/common/controller/Translation.kt" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/common/src/commonMain/kotlin/com/elfefe/common/controller/crashwindow.kt" beforeDir="false" afterPath="$PROJECT_DIR$/common/src/commonMain/kotlin/com/elfefe/common/controller/crashwindow.kt" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/common/src/commonMain/kotlin/com/elfefe/common/controller/firebase/firestore/FirestoreApi.kt" beforeDir="false" afterPath="$PROJECT_DIR$/common/src/commonMain/kotlin/com/elfefe/common/controller/firebase/firestore/FirestoreApi.kt" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/common/src/commonMain/kotlin/com/elfefe/common/controller/log.kt" beforeDir="false" afterPath="$PROJECT_DIR$/common/src/commonMain/kotlin/com/elfefe/common/controller/log.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/common/src/commonMain/kotlin/com/elfefe/common/model/Configs.kt" beforeDir="false" afterPath="$PROJECT_DIR$/common/src/commonMain/kotlin/com/elfefe/common/model/Configs.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/common/src/commonMain/kotlin/com/elfefe/common/model/github/GithubLatestRelease.kt" beforeDir="false" afterPath="$PROJECT_DIR$/common/src/commonMain/kotlin/com/elfefe/common/model/github/GithubLatestRelease.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/common/src/commonMain/kotlin/com/elfefe/common/ui/view/App.kt" beforeDir="false" afterPath="$PROJECT_DIR$/common/src/commonMain/kotlin/com/elfefe/common/ui/view/App.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/common/src/commonMain/kotlin/com/elfefe/common/ui/view/configs.kt" beforeDir="false" afterPath="$PROJECT_DIR$/common/src/commonMain/kotlin/com/elfefe/common/ui/view/configs.kt" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/common/src/commonMain/kotlin/com/elfefe/common/ui/view/main.kt" beforeDir="false" afterPath="$PROJECT_DIR$/common/src/commonMain/kotlin/com/elfefe/common/ui/view/main.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/common/src/commonMain/kotlin/com/elfefe/common/ui/view/taskCard.kt" beforeDir="false" afterPath="$PROJECT_DIR$/common/src/commonMain/kotlin/com/elfefe/common/ui/view/taskCard.kt" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/common/src/commonMain/resources/version" beforeDir="false" afterPath="$PROJECT_DIR$/common/src/commonMain/resources/version" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/desktop/resources/version" beforeDir="false" afterPath="$PROJECT_DIR$/desktop/resources/version" afterDir="false" />
     </list>
@@ -163,50 +149,51 @@
     <option name="autoscrollFromSource" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent">{
-  &quot;keyToString&quot;: {
-    &quot;ASKED_ADD_EXTERNAL_FILES&quot;: &quot;true&quot;,
-    &quot;ASKED_SHARE_PROJECT_CONFIGURATION_FILES&quot;: &quot;true&quot;,
-    &quot;Gradle.Build TasksWidget.executor&quot;: &quot;Run&quot;,
-    &quot;Gradle.ConfigsTest.Read and write Configs.executor&quot;: &quot;Run&quot;,
-    &quot;Gradle.Download Sources.executor&quot;: &quot;Run&quot;,
-    &quot;Gradle.MarkdownTest.executor&quot;: &quot;Run&quot;,
-    &quot;Gradle.TaskTest.read and write TaskFieldOrder.executor&quot;: &quot;Run&quot;,
-    &quot;Gradle.TaskTest.read and write ThemeColors.executor&quot;: &quot;Run&quot;,
-    &quot;Gradle.TaskUtilsTest.get date in correct format.executor&quot;: &quot;Run&quot;,
-    &quot;Gradle.TaskUtilsTest.test deadline date.executor&quot;: &quot;Run&quot;,
-    &quot;Gradle.TasksTest.test tasks.executor&quot;: &quot;Run&quot;,
-    &quot;Gradle.TasksWidget [dependencies].executor&quot;: &quot;Run&quot;,
-    &quot;Gradle.TasksWidget [desktop:signMsi].executor&quot;: &quot;Run&quot;,
-    &quot;Gradle.TasksWidget [javadoc].executor&quot;: &quot;Run&quot;,
-    &quot;Gradle.TasksWidget [signingReport].executor&quot;: &quot;Run&quot;,
-    &quot;Gradle.TasksWidget:desktop [build].executor&quot;: &quot;Run&quot;,
-    &quot;Gradle.TasksWidget:desktop [clean].executor&quot;: &quot;Run&quot;,
-    &quot;Gradle.TasksWidget:desktop [packageDistributionForCurrentOS].executor&quot;: &quot;Run&quot;,
-    &quot;Gradle.TasksWidget:desktop [packageMsi].executor&quot;: &quot;Run&quot;,
-    &quot;Gradle.TasksWidget:desktop [packageReleaseMsi].executor&quot;: &quot;Run&quot;,
-    &quot;Gradle.TasksWidget:desktop [package].executor&quot;: &quot;Run&quot;,
-    &quot;Gradle.TasksWidget:desktop [runDistributable].executor&quot;: &quot;Run&quot;,
-    &quot;Gradle.TasksWidget:desktop [run].executor&quot;: &quot;Run&quot;,
-    &quot;Gradle.~\\IdeaProjects\\TasksWidget\\desktop [desktop:signMsi].executor&quot;: &quot;Run&quot;,
-    &quot;Kotlin.MainKt.executor&quot;: &quot;Run&quot;,
-    &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.cidr.known.project.marker&quot;: &quot;true&quot;,
-    &quot;SHARE_PROJECT_CONFIGURATION_FILES&quot;: &quot;true&quot;,
-    &quot;cidr.known.project.marker&quot;: &quot;true&quot;,
-    &quot;external.system.has.shared.sources&quot;: &quot;true&quot;,
-    &quot;git-widget-placeholder&quot;: &quot;develop&quot;,
-    &quot;ignore.virus.scanning.warn.message&quot;: &quot;true&quot;,
-    &quot;jdk.selected.JAVA_MODULE&quot;: &quot;openjdk-19&quot;,
-    &quot;kotlin-language-version-configured&quot;: &quot;true&quot;,
-    &quot;last_opened_file_path&quot;: &quot;C:/Users/fbou-/IdeaProjects/TasksWidget/common/src/commonMain/kotlin/com/elfefe/common/ui/view&quot;,
-    &quot;project.structure.last.edited&quot;: &quot;Project&quot;,
-    &quot;project.structure.proportion&quot;: &quot;0.15&quot;,
-    &quot;project.structure.side.proportion&quot;: &quot;0.2&quot;,
-    &quot;settings.editor.selected.configurable&quot;: &quot;preferences.language.Kotlin&quot;
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "ASKED_ADD_EXTERNAL_FILES": "true",
+    "ASKED_SHARE_PROJECT_CONFIGURATION_FILES": "true",
+    "Gradle.Build TasksWidget.executor": "Run",
+    "Gradle.ConfigsTest.Read and write Configs.executor": "Run",
+    "Gradle.Download Sources.executor": "Run",
+    "Gradle.MarkdownTest.executor": "Run",
+    "Gradle.TaskTest.read and write TaskFieldOrder.executor": "Run",
+    "Gradle.TaskTest.read and write ThemeColors.executor": "Run",
+    "Gradle.TaskUtilsTest.get date in correct format.executor": "Run",
+    "Gradle.TaskUtilsTest.test deadline date.executor": "Run",
+    "Gradle.TasksTest.test tasks.executor": "Run",
+    "Gradle.TasksWidget [dependencies].executor": "Run",
+    "Gradle.TasksWidget [desktop:signMsi].executor": "Run",
+    "Gradle.TasksWidget [javadoc].executor": "Run",
+    "Gradle.TasksWidget [signingReport].executor": "Run",
+    "Gradle.TasksWidget:desktop [build].executor": "Run",
+    "Gradle.TasksWidget:desktop [clean].executor": "Run",
+    "Gradle.TasksWidget:desktop [packageDistributionForCurrentOS].executor": "Run",
+    "Gradle.TasksWidget:desktop [packageMsi].executor": "Run",
+    "Gradle.TasksWidget:desktop [packageReleaseMsi].executor": "Run",
+    "Gradle.TasksWidget:desktop [package].executor": "Run",
+    "Gradle.TasksWidget:desktop [runDistributable].executor": "Run",
+    "Gradle.TasksWidget:desktop [run].executor": "Run",
+    "Gradle.~\\IdeaProjects\\TasksWidget\\desktop [desktop:signMsi].executor": "Run",
+    "Kotlin.MainKt.executor": "Run",
+    "RunOnceActivity.OpenProjectViewOnStart": "true",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "RunOnceActivity.cidr.known.project.marker": "true",
+    "RunOnceActivity.git.unshallow": "true",
+    "SHARE_PROJECT_CONFIGURATION_FILES": "true",
+    "cidr.known.project.marker": "true",
+    "external.system.has.shared.sources": "true",
+    "git-widget-placeholder": "develop",
+    "ignore.virus.scanning.warn.message": "true",
+    "jdk.selected.JAVA_MODULE": "openjdk-19",
+    "kotlin-language-version-configured": "true",
+    "last_opened_file_path": "C:/Users/fbou-/IdeaProjects/TasksWidget/common/src/commonMain/kotlin/com/elfefe/common/ui/view",
+    "project.structure.last.edited": "Project",
+    "project.structure.proportion": "0.15",
+    "project.structure.side.proportion": "0.2",
+    "settings.editor.selected.configurable": "preferences.language.Kotlin"
   }
-}</component>
+}]]></component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
       <recent name="C:\Users\fbou-\IdeaProjects\TasksWidget\common\src\commonMain\kotlin\com\elfefe\common\ui\view" />
@@ -252,6 +239,8 @@
       <option name="DYNAMIC_FEATURES_DISABLED_LIST" value="" />
       <option name="ACTIVITY_EXTRA_FLAGS" value="" />
       <option name="MODE" value="default_activity" />
+      <option name="RESTORE_ENABLED" value="false" />
+      <option name="RESTORE_FILE" value="" />
       <option name="CLEAR_LOGCAT" value="false" />
       <option name="SHOW_LOGCAT_AUTOMATICALLY" value="false" />
       <option name="TARGET_SELECTION_MODE" value="DEVICE_AND_SNAPSHOT_COMBO_BOX" />
@@ -406,8 +395,8 @@
     <list>
       <item itemvalue="Android App.android" />
       <item itemvalue="Gradle.TasksWidget [desktop:signMsi]" />
-      <item itemvalue="Gradle.TasksWidget [dependencies]" />
       <item itemvalue="Gradle.MarkdownTest" />
+      <item itemvalue="Gradle.TasksWidget [dependencies]" />
       <item itemvalue="Gradle.TasksWidget [signingReport]" />
       <item itemvalue="Gradle.TasksWidget:desktop [packageMsi]" />
       <item itemvalue="Kotlin.MainKt" />
@@ -416,8 +405,8 @@
       <list>
         <item itemvalue="Gradle.TasksWidget:desktop [packageMsi]" />
         <item itemvalue="Kotlin.MainKt" />
-        <item itemvalue="Gradle.TasksWidget [dependencies]" />
         <item itemvalue="Gradle.TasksWidget [signingReport]" />
+        <item itemvalue="Gradle.TasksWidget [dependencies]" />
         <item itemvalue="Gradle.MarkdownTest" />
       </list>
     </recent_temporary>

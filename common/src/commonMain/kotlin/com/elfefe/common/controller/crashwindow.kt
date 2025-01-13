@@ -1,5 +1,6 @@
 package com.elfefe.common.controller
 
+import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
 import androidx.compose.foundation.gestures.detectDragGesturesAfterLongPress
 import androidx.compose.foundation.layout.fillMaxSize
@@ -22,8 +23,10 @@ import androidx.compose.ui.window.Window
 import androidx.compose.ui.window.WindowPosition
 import androidx.compose.ui.window.WindowState
 import androidx.compose.ui.window.rememberWindowState
+import java.awt.Cursor
 import java.awt.MouseInfo
 import java.awt.Toolkit
+import javax.swing.JList
 
 @Composable
 fun ThemedWindow(
@@ -45,8 +48,12 @@ fun ThemedWindow(
         (Toolkit.getDefaultToolkit().screenSize.width / 2 - 300).dp,
         (Toolkit.getDefaultToolkit().screenSize.height / 2 - 300).dp
     )) }
+
     var windowSize by remember { mutableStateOf(DpSize(800.dp, 600.dp)) }
     var mousePositionOffset by remember { mutableStateOf(Offset.Zero) }
+
+    var borderColor by remember { mutableStateOf(Color.Transparent) }
+
 
     CrashWindow(
         onCloseRequest = onCloseRequest,
@@ -81,12 +88,19 @@ fun ThemedWindow(
                                 (y - mousePositionOffset.y).dp
                             )
                         }
+                        borderColor = if (MouseInfo.getPointerInfo().location.y > Toolkit.getDefaultToolkit().screenSize.height - 100)
+                            Color.Red.copy(alpha = 0.5f)
+                        else Color.Transparent
                     },
-                    onDragEnd = {},
+                    onDragEnd = {
+                        if (MouseInfo.getPointerInfo().location.y > Toolkit.getDefaultToolkit().screenSize.height - 100)
+                            onCloseRequest()
+                    },
                     onDragCancel = {}
                 )
             },
-            color = Color.Transparent
+            color = Color.Transparent,
+            border = BorderStroke(2.dp, borderColor)
         ) { content() }
     }
 }

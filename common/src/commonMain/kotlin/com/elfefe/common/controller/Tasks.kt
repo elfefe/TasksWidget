@@ -9,6 +9,7 @@ import com.google.gson.reflect.TypeToken
 import io.ktor.client.network.sockets.mapEngineExceptions
 import kotlinx.coroutines.*
 import java.io.File
+import java.util.Date
 import java.util.concurrent.ConcurrentLinkedQueue
 import javax.swing.filechooser.FileSystemView
 
@@ -159,7 +160,16 @@ object Tasks {
         private fun query(): com.elfefe.common.model.Configs {
             val configsText = configsFile.readText()
             return if (configsText.isBlank()) Configs()
-            else json.fromJson(configsText, object : TypeToken<com.elfefe.common.model.Configs>() {}.type)
+            else try {
+                return json.fromJson(configsText, object : TypeToken<com.elfefe.common.model.Configs>() {}.type)
+            } catch (e: Exception) {
+                File("${configsFile.parent}/tmp").let {
+                    if (!it.exists()) it.mkdirs()
+                    val name = "${configsFile.name}.${Date().time}.bak"
+                    configsFile.renameTo(File(if (!it.exists()) configsFile.parent else it.absolutePath, name))
+                }
+                return Configs()
+            }
         }
     }
 }

@@ -33,6 +33,8 @@ import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.elfefe.common.controller.*
+import com.elfefe.common.controller.firebase.authentication.AuthenticationApi
+import com.elfefe.common.controller.firebase.authentication.User
 import com.elfefe.common.model.TaskFieldOrder
 import grayScale
 import hexToColor
@@ -263,48 +265,125 @@ fun General(windowInteractions: WindowInteractions) {
 
         Card(
             modifier = Modifier
-                .height(256.dp)
-                .fillMaxWidth(),
+                .fillMaxSize(),
             elevation = 4.dp,
             backgroundColor = Color.White
         ) {
-            Column(
+            LazyColumn(
                 modifier = Modifier
                     .padding(8.dp)
                     .fillMaxSize(),
                 horizontalAlignment = Alignment.Start,
-                verticalArrangement = Arrangement.Top
+                verticalArrangement = Arrangement.spacedBy(16.dp)
             ) {
-                Row(
-                    verticalAlignment = Alignment.CenterVertically,
-                ) {
-                    Checkbox(checked = startOnBoot, onCheckedChange = {
+                item {
+                    Row(
+                        verticalAlignment = Alignment.CenterVertically,
+                    ) {
+                        Checkbox(checked = startOnBoot, onCheckedChange = {
 
-                        if (!startupAppFile.exists()) {
-                            try {
-                                windowInteractions.popup.value = Popup.show(createShortcutWithAdminRights())
-                                startOnBoot = true
-                            } catch (e: Exception) {
-                                windowInteractions.popup.value = Popup.show(e.message ?: "Error while creating link")
+                            if (!startupAppFile.exists()) {
+                                try {
+                                    windowInteractions.popup.value = Popup.show(createShortcutWithAdminRights())
+                                    startOnBoot = true
+                                } catch (e: Exception) {
+                                    windowInteractions.popup.value = Popup.show(e.message ?: "Error while creating link")
+                                }
+                            } else {
+                                try {
+                                    windowInteractions.popup.value = Popup.show(deleteShortcutWithAdminRights())
+                                    startOnBoot = false
+                                } catch (e: Exception) {
+                                    windowInteractions.popup.value = Popup.show(e.message ?: "Error while deleting link")
+                                }
                             }
-                        } else {
-                            try {
-                                windowInteractions.popup.value = Popup.show(deleteShortcutWithAdminRights())
-                                startOnBoot = false
-                            } catch (e: Exception) {
-                                windowInteractions.popup.value = Popup.show(e.message ?: "Error while deleting link")
+                        })
+
+                        Spacer(Modifier.width(16.dp))
+
+                        Text(
+                            text = Translation().startupLabel,
+                            fontWeight = FontWeight.Normal,
+                            fontSize = 16.sp,
+                            color = Tasks.Configs.configs.themeColors.onBackground
+                        )
+                    }
+                }
+
+                item {
+                    Column {
+                        var email by remember { mutableStateOf("") }
+                        var password by remember { mutableStateOf("") }
+
+                        Row(
+                            verticalAlignment = Alignment.CenterVertically,
+                        ) {
+                            Column {
+                                OutlinedTextField(
+                                    value = email,
+                                    onValueChange = { email = it },
+                                    label = { Text(Translation().emailLabel) },
+                                    colors = TextFieldDefaults.outlinedTextFieldColors(
+                                        focusedBorderColor = Tasks.Configs.configs.themeColors.primary,
+                                        unfocusedBorderColor = Tasks.Configs.configs.themeColors.primary
+                                    ),
+                                    modifier = Modifier
+                                        .fillMaxWidth()
+                                        .padding(8.dp)
+                                )
+
+                                OutlinedTextField(
+                                    value = password,
+                                    onValueChange = { password = it },
+                                    label = { Text(Translation().passwordLabel) },
+                                    colors = TextFieldDefaults.outlinedTextFieldColors(
+                                        focusedBorderColor = Tasks.Configs.configs.themeColors.primary,
+                                        unfocusedBorderColor = Tasks.Configs.configs.themeColors.primary
+                                    ),
+                                    modifier = Modifier
+                                        .fillMaxWidth()
+                                        .padding(8.dp)
+                                )
                             }
                         }
-                    })
 
-                    Spacer(Modifier.width(16.dp))
+                        Row(
+                            modifier = Modifier.fillMaxWidth(),
+                            horizontalArrangement = Arrangement.End
+                        ) {
+                            Button ({
+                                AuthenticationApi.login(User(email, password))
+                            },
+                                colors = ButtonDefaults.buttonColors(
+                                    backgroundColor = Tasks.Configs.configs.themeColors.onBackground,
+                                    contentColor = Tasks.Configs.configs.themeColors.background
+                                )
+                            ) {
+                                Text(
+                                    text = Translation().loginLabel,
+                                    fontWeight = FontWeight.Normal,
+                                    fontSize = 16.sp
+                                )
+                            }
 
-                    Text(
-                        text = Translation().startupLabel,
-                        fontWeight = FontWeight.Normal,
-                        fontSize = 16.sp,
-                        color = Color.DarkGray
-                    )
+                            Spacer(Modifier.width(32.dp))
+
+                            Button ({
+                                AuthenticationApi.register(User(email, password))
+                            },
+                                colors = ButtonDefaults.buttonColors(
+                                    backgroundColor = Tasks.Configs.configs.themeColors.onBackground,
+                                    contentColor = Tasks.Configs.configs.themeColors.background
+                                )
+                            ) {
+                                Text(
+                                    text = Translation().registerLabel,
+                                    fontWeight = FontWeight.Normal,
+                                    fontSize = 16.sp
+                                )
+                            }
+                        }
+                    }
                 }
             }
         }

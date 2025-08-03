@@ -25,10 +25,17 @@ import androidx.compose.ui.unit.dp
 import com.elfefe.common.controller.Tasks
 import com.elfefe.common.model.Task
 import kotlinx.coroutines.CoroutineScope
+import java.awt.Desktop
+import java.net.URI
+import java.util.Locale
 
 
 @Composable
-fun ColumnScope.Toolbar(scope: CoroutineScope, windowInteractions: WindowInteractions, toolbarInteractions: ToolbarInteractions) {
+fun ColumnScope.Toolbar(
+    scope: CoroutineScope,
+    windowInteractions: WindowInteractions,
+    toolbarInteractions: ToolbarInteractions
+) {
 
     var showConfigs by remember { mutableStateOf(false) }
 
@@ -42,148 +49,188 @@ fun ColumnScope.Toolbar(scope: CoroutineScope, windowInteractions: WindowInterac
 
     var searching by remember { mutableStateOf("") }
 
+    windowInteractions.expand.addOnChange("Toolbar") { expanded = it }
+
     Column(
         modifier = Modifier
+            .pointerInput(Unit) {
+                detectDragGestures(
+                    onDragStart = {
+                        windowInteractions.moveWindow.isActive = true
+                        windowInteractions.moveWindow.origin = it.x
+                    },
+                    onDragEnd = {
+                        windowInteractions.moveWindow.isActive = false
+                        windowInteractions.moveWindow.origin = 0f
+                    },
+                    onDragCancel = {
+                        windowInteractions.moveWindow.isActive = false
+                        windowInteractions.moveWindow.origin = 0f
+                    }
+                ) { change, dragAmount ->
+                    windowInteractions.moveWindow.value = change.position.x
+                }
+            }
             .fillMaxWidth()
             .background(
                 color = Tasks.Configs.configs.themeColors.primary,
                 shape = RoundedCornerShape(5.dp)
             )
     ) {
-        Row(
-            modifier = Modifier
-                .fillMaxWidth()
-                .height(28.dp),
-            horizontalArrangement = Arrangement.SpaceBetween
-        ) {
-            if (expanded)
-                Row {
-                    Icon(
-                        painterResource(if (!showDescription) "baseline_notes_24.svg" else "short_text_24px.svg"),
-                        contentDescription = null,
-                        modifier = Modifier
-                            .clickable {
-                                showDescription = !showDescription
-                                toolbarInteractions.showDescription(showDescription)
-                            }
-                            .padding(3.dp),
-                        tint = Tasks.Configs.configs.themeColors.onPrimary
-                    )
-                    Icon(
-                        painterResource(if (!showDone)"check_circle_24px.svg" else "unpublished_24px.svg"),
-                        contentDescription = null,
-                        modifier = Modifier
-                            .clickable {
-                                showDone = !showDone
-                                Tasks.filter { if (showDone) true else !it.done }
-                            }
-                            .padding(3.dp),
-                        tint = Tasks.Configs.configs.themeColors.onPrimary.run {
-                            if (showDone) copy(alpha = .6f) else this
-                        }
-                    )
-                    Icon(
-                        Icons.Default.Add,
-                        contentDescription = null,
-                        modifier = Modifier
-                            .clickable {
-                                Tasks.update(Task())
-                            }
-                            .padding(3.dp),
-                        tint = Tasks.Configs.configs.themeColors.onPrimary
-                    )
-                    Icon(
-                        Icons.Default.Search,
-                        contentDescription = null,
-                        modifier = Modifier
-                            .clickable {
-                                showSearch = !showSearch
-                            }
-                            .padding(3.dp),
-                        tint = Tasks.Configs.configs.themeColors.onPrimary
-                    )
-                    /*Icon(
-                        painterResource("login.svg"),
-                        contentDescription = null,
-                        modifier = Modifier
-                            .padding(3.dp)
-                            .clickable {
-                                FirestoreApi.instance.connectTasks(
-                                    User("felion33@gmail.com", "Félix", "", mutableListOf())
-                                ) {
-                                    println(it)
-                                }
-                            OAuthApi(scope).apply {
-                                auth(
-                                    "1086878445333-tgnhihe3rkaigfqs39umarbfsptb1lr5.apps.googleusercontent.com",
-                                    "***SECRET-PURGE-2026-07-27***"
-                                ) { jwToken, payload ->
-                                    println(jwToken)
-                                    println(payload)
-                                    val credentials = GoogleCredentials
-                                        .create(AccessToken(jwToken.accessToken, Date(Date().time + jwToken.expiresIn.toLong())))
-                                        .createScoped(
-                                            "https://www.googleapis.com/auth/cloud-platform"
-                                        )
-                                }
-                            }
-                            },
-                        tint = Color.White
-                    )*/
-                    Icon(
-                        Icons.Default.Settings,
-                        contentDescription = null,
-                        modifier = Modifier
-                            .padding(3.dp)
-                            .clickable {
-                                showConfigs = !(windowInteractions.showConfigs.value ?: false)
-                                windowInteractions.showConfigs.value = showConfigs
-                            },
-                        tint = Tasks.Configs.configs.themeColors.onPrimary
-                    )
-                }
-
-            Row(horizontalArrangement = Arrangement.End) {
+        val composables = listOf<@Composable () -> Unit>(
+            {
                 Icon(
-                    Icons.Default.ArrowDropDown,
+                    painterResource(if (!showDescription) "baseline_notes_24.svg" else "short_text_24px.svg"),
                     contentDescription = null,
                     modifier = Modifier
                         .clickable {
-                            expanded = !expanded
-                            windowInteractions.expand.value = expanded
-                        }
-                        .padding(3.dp)
-                        .rotate(expandRotation),
-                    tint = Tasks.Configs.configs.themeColors.onPrimary
-                )
-                Icon(
-                    Icons.Default.ExitToApp,
-                    contentDescription = null,
-                    modifier = Modifier
-                        .clickable {
-                            windowInteractions.visibility.value = false
+                            showDescription = !showDescription
+                            toolbarInteractions.showDescription(showDescription)
                         }
                         .padding(3.dp),
                     tint = Tasks.Configs.configs.themeColors.onPrimary
                 )
+            },
+            {
+                Icon(
+                    painterResource(if (!showDone) "check_circle_24px.svg" else "unpublished_24px.svg"),
+                    contentDescription = null,
+                    modifier = Modifier
+                        .clickable {
+                            showDone = !showDone
+                            Tasks.filter("show done") {
+                                if (showDone) true else !it.done
+                            }
+                        }
+                        .padding(3.dp),
+                    tint = Tasks.Configs.configs.themeColors.onPrimary.run {
+                        if (showDone) copy(alpha = .6f) else this
+                    }
+                )
+            },
+            {
+                Icon(
+                    Icons.Default.Add,
+                    contentDescription = null,
+                    modifier = Modifier
+                        .clickable {
+                            Tasks.update(Task())
+                        }
+                        .padding(3.dp),
+                    tint = Tasks.Configs.configs.themeColors.onPrimary
+                )
+            },
+            {
+                Icon(
+                    Icons.Default.Search,
+                    contentDescription = null,
+                    modifier = Modifier
+                        .clickable {
+                            showSearch = !showSearch
+                        }
+                        .padding(3.dp),
+                    tint = Tasks.Configs.configs.themeColors.onPrimary
+                )
+            },
+            /*Icon(
+                painterResource("login.svg"),
+                contentDescription = null,
+                modifier = Modifier
+                    .padding(3.dp)
+                    .clickable {
+                        FirestoreApi.instance.connectTasks(
+                            User("felion33@gmail.com", "Félix", "", mutableListOf())
+                        ) {
+                            println(it)
+                        }
+                    OAuthApi(scope).apply {
+                        auth(
+                            "1086878445333-tgnhihe3rkaigfqs39umarbfsptb1lr5.apps.googleusercontent.com",
+                            "***SECRET-PURGE-2026-07-27***"
+                        ) { jwToken, payload ->
+                            println(jwToken)
+                            println(payload)
+                            val credentials = GoogleCredentials
+                                .create(AccessToken(jwToken.accessToken, Date(Date().time + jwToken.expiresIn.toLong())))
+                                .createScoped(
+                                    "https://www.googleapis.com/auth/cloud-platform"
+                                )
+                        }
+                    }
+                    },
+                tint = Color.White
+            )*/
+            {
+                Icon(
+                    Icons.Default.Settings,
+                    contentDescription = null,
+                    modifier = Modifier
+                        .padding(3.dp)
+                        .clickable {
+                            showConfigs = !(windowInteractions.showConfigs.value ?: false)
+                            windowInteractions.showConfigs.value = showConfigs
+                        },
+                    tint = Tasks.Configs.configs.themeColors.onPrimary
+                )
+            },
+            {
                 Icon(
                     Icons.Default.Place,
                     contentDescription = null,
                     modifier = Modifier
                         .padding(3.dp)
-                        .pointerInput(Unit) {
-                            detectDragGestures(
-                                onDragStart = {
-                                    windowInteractions.moveWindow.value = WindowMovement(true, it.x)
+                        .clickable {
+                            fun openInBrowser(uri: URI) {
+                                val osName by lazy(LazyThreadSafetyMode.NONE) { System.getProperty("os.name").lowercase(
+                                    Locale.getDefault()) }
+                                val desktop = Desktop.getDesktop()
+                                when {
+                                    Desktop.isDesktopSupported() && desktop.isSupported(Desktop.Action.BROWSE) -> desktop.browse(uri)
+                                    "mac" in osName -> Runtime.getRuntime().exec("open $uri")
+                                    "nix" in osName || "nux" in osName -> Runtime.getRuntime().exec("xdg-open $uri")
+                                    else -> throw RuntimeException("cannot open $uri")
                                 }
-                            ) { change, dragAmount ->
-                                windowInteractions.moveWindow.value = WindowMovement(false, 0f)
                             }
+
+                            openInBrowser(URI("https://domain.tld/page"))
                         },
                     tint = Tasks.Configs.configs.themeColors.onPrimary
                 )
-            }
+            })
+        Row(
+            modifier = Modifier
+                .padding(8.dp, 0.dp)
+                .fillMaxWidth()
+                .height(28.dp),
+            horizontalArrangement = if (windowInteractions.moveWindow.isRight.value) Arrangement.End else Arrangement.Start,
+        ) {
+            val parameters = if (windowInteractions.moveWindow.isRight.value) composables else composables.reversed()
+            parameters.forEach { it() }
         }
+
+//            Row(horizontalArrangement = Arrangement.End) {
+//                Icon(
+//                    Icons.Default.ArrowDropDown,
+//                    contentDescription = null,
+//                    modifier = Modifier
+//                        .clickable {
+//                            windowInteractions.expand.value = !expanded
+//                        }
+//                        .padding(3.dp)
+//                        .rotate(expandRotation),
+//                    tint = Tasks.Configs.configs.themeColors.onPrimary
+//                )
+//                Icon(
+//                    Icons.Default.ExitToApp,
+//                    contentDescription = null,
+//                    modifier = Modifier
+//                        .clickable {
+//                            windowInteractions.expand.value = false
+//                        }
+//                        .padding(3.dp),
+//                    tint = Tasks.Configs.configs.themeColors.onPrimary
+//                )
+//            }
         AnimatedVisibility(visible = showSearch, enter = expandVertically(), exit = shrinkVertically()) {
             Row(
                 modifier = Modifier
@@ -200,10 +247,10 @@ fun ColumnScope.Toolbar(scope: CoroutineScope, windowInteractions: WindowInterac
                     value = searching,
                     onValueChange = {
                         searching = it
-                        Tasks.filter { task ->
+                        Tasks.filter("searching") { task ->
                             (task.title.contains(searching, true) ||
-                            task.deadline.contains(searching, true) ||
-                            task.description.contains(searching, true)) &&
+                                    task.deadline.contains(searching, true) ||
+                                    task.description.contains(searching, true)) &&
                                     ((!task.done && !showDone) || showDone)
                         }
                     },

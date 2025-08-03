@@ -30,6 +30,7 @@ kotlin {
                 implementation(compose("org.jetbrains.compose.ui:ui-util"))
                 implementation("com.google.guava:guava:32.1.1-jre")
                 implementation("com.google.cloud:google-cloud-firestore:3.13.4")
+                implementation("com.google.cloud:google-cloud-logging:3.15.0")
                 implementation("com.google.auth:google-auth-library-oauth2-http:1.19.0")
                 api("io.jsonwebtoken:jjwt-api:0.11.5")
                 runtimeOnly("io.jsonwebtoken:jjwt-impl:0.11.5")

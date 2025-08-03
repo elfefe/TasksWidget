@@ -1,63 +1,52 @@
 package com.elfefe.common.controller
 
-import jakarta.mail.Authenticator
-import jakarta.mail.Message
-import jakarta.mail.PasswordAuthentication
-import jakarta.mail.Session
-import jakarta.mail.Transport
-import jakarta.mail.internet.InternetAddress
-import jakarta.mail.internet.MimeMessage
-import org.simplejavamail.api.email.Email
-import org.simplejavamail.email.EmailBuilder
-import org.simplejavamail.mailer.MailerBuilder
-import java.time.Instant
-import java.time.LocalDateTime
-import java.time.ZoneId
-import java.time.ZoneOffset
-import java.time.format.DateTimeFormatter
-import java.util.Date
-import java.util.Properties
+import androidx.compose.ui.res.useResource
+import com.google.auth.oauth2.ServiceAccountCredentials
+import com.google.cloud.logging.LogEntry
+import com.google.cloud.logging.Logging
+import com.google.cloud.logging.LoggingOptions
+import com.google.cloud.logging.Payload.StringPayload
+import com.google.cloud.logging.Severity
+import java.util.logging.Logger
 
-private val logdate: String
-    get() = Instant
-        .ofEpochMilli(System.currentTimeMillis())
-        .atZone(ZoneId.systemDefault())
-        .toLocalDateTime()
-        .format(DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm"))
-
-private fun logText(log: String) = "$logdate - $log\n"
-
-fun Any.log(message: String) {
-    val log = "${javaClass.simpleName}: $message"
-    println(log)
-    val fullLog = logText(log)
-    logsFile.appendText(fullLog)
-    sendMail(fullLog)
+private val logging: Logging by lazy {
+    LoggingOptions.newBuilder()
+        .setCredentials(
+            useResource("taskwidget-logger-1.json") { resource ->
+                ServiceAccountCredentials.fromStream(resource)
+            }
+        )
+        .setProjectId("taskwidget-b17c3")
+        .build()
+        .service
 }
 
-fun sendMail(content: String) {
-    val username = "f.bou-reiff@orange.fr"
-    val password = "***REMOVED-SECRET***"
-    // FYI: passwords as a command arguments isn't safe
-    // They go into your bash/zsh history and are visible when running ps
-
-    val emailFrom = "f.bou-reiff@orange.fr"
-    val emailTo = "felion33+taskswidget@gmail.com"
-
-    val subject = "TasksWidget - log"
-
+fun sendLogs(content: String, level: Severity = Severity.INFO) {
     try {
-        val mailer = MailerBuilder.withSMTPServer("smtp.orange.fr", 587, username, password).buildMailer()
-        mailer.sendMail(EmailBuilder.startingBlank().apply {
-            from(emailFrom)
-            to(emailTo)
-            withSubject(subject)
-            withPlainText(content)
-        }.buildEmail()).get()
-
-        println("Email sent successfully.")
-    } catch (emailException: Exception) {
-        println(emailException.stackTraceToString())
-        logsFile.appendText(emailException.stackTraceToString())
+        println("Sending log to GCP")
+        val entry = LogEntry.newBuilder(StringPayload.of(content))
+            .setSeverity(level)
+            .setLogName("TasksWidgetLog")
+            .build()
+        logging.write(listOf(entry))
+    } catch (e: Exception) {
+        println(e.stackTraceToString())
+        logsFile.appendText(e.stackTraceToString())
     }
+}
+
+fun Any.log(message: Any, level: Severity = Severity.INFO) {
+
+    println(message)
+    Logger.getLogger(this::class.java.name).run {
+        when(level) {
+            Severity.DEBUG -> fine(message.toString())
+            Severity.INFO -> info(message.toString())
+            Severity.WARNING -> warning(message.toString())
+            Severity.ERROR -> severe(message.toString())
+            Severity.CRITICAL -> severe("CRITICAL: $message")
+            else -> info(message.toString())
+        }
+    }
+    sendLogs(message.toString(), level)
 }

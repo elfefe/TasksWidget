@@ -23,6 +23,7 @@ import androidx.compose.ui.window.Window
 import androidx.compose.ui.window.WindowPosition
 import androidx.compose.ui.window.WindowState
 import androidx.compose.ui.window.rememberWindowState
+import com.elfefe.common.ui.theme.TasksTheme
 import java.awt.Cursor
 import java.awt.MouseInfo
 import java.awt.Toolkit
@@ -44,10 +45,14 @@ fun ThemedWindow(
     onKeyEvent: (KeyEvent) -> Boolean = { false },
     content: @Composable FrameWindowScope.() -> Unit
 ) {
-    var windowPosition by remember { mutableStateOf(WindowPosition.Absolute(
-        (Toolkit.getDefaultToolkit().screenSize.width / 2 - 300).dp,
-        (Toolkit.getDefaultToolkit().screenSize.height / 2 - 300).dp
-    )) }
+    var windowPosition by remember {
+        mutableStateOf(
+            WindowPosition.Absolute(
+                (Toolkit.getDefaultToolkit().screenSize.width / 2 - 300).dp,
+                (Toolkit.getDefaultToolkit().screenSize.height / 2 - 300).dp
+            )
+        )
+    }
 
     var windowSize by remember { mutableStateOf(DpSize(800.dp, 600.dp)) }
     var mousePositionOffset by remember { mutableStateOf(Offset.Zero) }
@@ -70,38 +75,44 @@ fun ThemedWindow(
         onPreviewKeyEvent = onPreviewKeyEvent,
         onKeyEvent = onKeyEvent
     ) {
-        Surface(modifier = Modifier
-            .fillMaxSize()
-            .pointerInput(Unit) {
-                detectDragGesturesAfterLongPress(
-                    onDragStart = {
-                        mousePositionOffset = MouseInfo.getPointerInfo().location
-                            .run { Offset(
-                                x - windowPosition.x.toPx(),
-                                y - windowPosition.y.toPx()
-                            ) }
+        TasksTheme {
+            Surface(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .pointerInput(Unit) {
+                        detectDragGesturesAfterLongPress(
+                            onDragStart = {
+                                mousePositionOffset = MouseInfo.getPointerInfo().location
+                                    .run {
+                                        Offset(
+                                            x - windowPosition.x.toPx(),
+                                            y - windowPosition.y.toPx()
+                                        )
+                                    }
+                            },
+                            onDrag = { _, _ ->
+                                MouseInfo.getPointerInfo().location.run {
+                                    windowPosition = WindowPosition.Absolute(
+                                        (x - mousePositionOffset.x).dp,
+                                        (y - mousePositionOffset.y).dp
+                                    )
+                                }
+                                borderColor =
+                                    if (MouseInfo.getPointerInfo().location.y > Toolkit.getDefaultToolkit().screenSize.height - 100)
+                                        Color.Red.copy(alpha = 0.5f)
+                                    else Color.Transparent
+                            },
+                            onDragEnd = {
+                                if (MouseInfo.getPointerInfo().location.y > Toolkit.getDefaultToolkit().screenSize.height - 100)
+                                    onCloseRequest()
+                            },
+                            onDragCancel = {}
+                        )
                     },
-                    onDrag = { _, _ ->
-                        MouseInfo.getPointerInfo().location.run {
-                            windowPosition = WindowPosition.Absolute(
-                                (x - mousePositionOffset.x).dp,
-                                (y - mousePositionOffset.y).dp
-                            )
-                        }
-                        borderColor = if (MouseInfo.getPointerInfo().location.y > Toolkit.getDefaultToolkit().screenSize.height - 100)
-                            Color.Red.copy(alpha = 0.5f)
-                        else Color.Transparent
-                    },
-                    onDragEnd = {
-                        if (MouseInfo.getPointerInfo().location.y > Toolkit.getDefaultToolkit().screenSize.height - 100)
-                            onCloseRequest()
-                    },
-                    onDragCancel = {}
-                )
-            },
-            color = Color.Transparent,
-            border = BorderStroke(2.dp, borderColor)
-        ) { content() }
+                color = Color.Transparent,
+                border = BorderStroke(2.dp, borderColor)
+            ) { content() }
+        }
     }
 }
 

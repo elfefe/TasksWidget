@@ -7,79 +7,86 @@ class Translation(val language: String = currentLanguage) {
     val emotes: String
         get() = when (language) {
             "fr" -> "Emotes"
-            "en" -> "Emotes"
             else -> "Emotes"
         }
     val cards: String
         get() = when (language) {
             "fr" -> "Cartes"
-            "en" -> "Cards"
             else -> "Cards"
         }
     val theme: String
         get() = when (language) {
             "fr" -> "Theme"
-            "en" -> "Theme"
             else -> "Theme"
         }
     val general: String
         get() = when (language) {
             "fr" -> "Général"
-            "en" -> "General"
             else -> "General"
         }
     val startupLabel: String
         get() = when (language) {
             "fr" -> "Lancer l'application au démarrage."
-            "en" -> "Launch the application at startup."
             else -> "Launch the application at startup."
+        }
+    val loginLabel: String
+        get() = when (language) {
+            "fr" -> "Connexion"
+            else -> "Login"
+        }
+    val registerLabel: String
+        get() = when (language) {
+            "fr" -> "Inscription"
+            else -> "Register"
+        }
+    val emailLabel: String
+        get() = when (language) {
+            "fr" -> "Email"
+            else -> "Email"
+        }
+    val passwordLabel: String
+        get() = when (language) {
+            "fr" -> "Mot de passe"
+            else -> "Password"
         }
     val toolbarBackground: String
         get() = when (language) {
             "fr" -> "Arrière-plan de la barre d'outils"
-            "en" -> "Toolbar background"
             else -> "Toolbar background"
         }
     val toolbarIcons: String
         get() = when (language) {
             "fr" -> "Icônes de la barre d'outils"
-            "en" -> "Toolbar icons"
             else -> "Toolbar icons"
         }
     val tasksBackground: String
         get() = when (language) {
             "fr" -> "Arrière-plan des tâches"
-            "en" -> "Tasks background"
             else -> "Tasks background"
         }
     val tasksContent: String
         get() = when (language) {
             "fr" -> "Texte des tâches"
-            "en" -> "Tasks text"
             else -> "Tasks text"
         }
     val color: String
         get() = when (language) {
             "fr" -> "Couleur"
-            "en" -> "Color"
             else -> "Color"
         }
     val grayscale: String
         get() = when (language) {
             "fr" -> "Echelle de gris"
-            "en" -> "Gray scale"
             else -> "Gray scale"
         }
     val brightness: String
         get() = when (language) {
             "fr" -> "Luminositée"
-            "en" -> "Brightness"
             else -> "Brightness"
         }
     val opacity: String
         get() = when (language) {
             "fr" -> "Opacité"
-            "en" -> "Opacity"
             else -> "Opacity"
         }
 }

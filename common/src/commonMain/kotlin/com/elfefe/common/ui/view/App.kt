@@ -19,6 +19,7 @@ import androidx.compose.ui.platform.LocalUriHandler
 import androidx.compose.ui.res.useResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.unit.IntSize
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.ApplicationScope
@@ -28,7 +29,6 @@ import com.elfefe.common.controller.log
 import com.elfefe.common.controller.update
 import com.elfefe.common.model.Task
 import com.elfefe.common.model.github.GithubLatestRelease
-import com.elfefe.common.ui.theme.TasksTheme
 import com.google.gson.Gson
 //import dev.gitlive.firebase.Firebase
 //import dev.gitlive.firebase.FirebaseApp
@@ -47,7 +47,7 @@ import java.net.http.HttpResponse
 
 @OptIn(ExperimentalFoundationApi::class, ExperimentalComposeUiApi::class, InternalAPI::class)
 @Composable
-fun App(windowInteractions: WindowInteractions) {
+fun App(modifier: Modifier, windowInteractions: WindowInteractions) {
 //    Firebase.initialize(FirebaseOptions(
 //        applicationId = "1:1086878445333:web:d1df64870bd3f52b3f431c",
 //        apiKey = "***SECRET-PURGE-2026-07-27***",
@@ -79,12 +79,24 @@ fun App(windowInteractions: WindowInteractions) {
             }
         }*/
     }
-    Tasks.filter { !it.done }
 
-    TasksTheme {
+    LaunchedEffect(Unit) {
+        Tasks.filter("show done") {
+            !it.done
+        }
+    }
+
+//        Box(
+//            modifier = Modifier
+//                .background(Color(0f, 0f, 0f, 0.1f), RoundedCornerShape(6.dp))
+//                .fillMaxSize()
+//                .graphicsLayer {
+//                    renderEffect = BlurEffect(10f, 10f, TileMode.Clamp)
+//                }
+//        )
         Column(
             modifier = Modifier
-                .fillMaxSize(),
+                .then(modifier),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
             val uriHandler = LocalUriHandler.current
@@ -175,42 +187,83 @@ fun App(windowInteractions: WindowInteractions) {
             Toolbar(scope, windowInteractions, ToolbarInteractions { showDescription = it })
             TasksList(tasks, windowInteractions, listState, showDescription)
         }
-    }
 }
 
 data class WindowInteractions(
     val application: ApplicationScope,
     val window: Interactable<Window>,
     val visibility: Interactable<Boolean>,
-    val expand: Interactable<Boolean>,
-    val moveWindow: Interactable<WindowMovement>,
+    val expand: Expanding,
+    val moveWindow: WindowMovement,
+    val windowSize: Interactable<IntSize>,
     val showConfigs: Interactable<Boolean>,
     val showEmotes: Interactable<Boolean>,
     val popup: Interactable<Popup>
 )
 
-class Interactable<T>(value: T? = null, onChange: (T) -> Unit = {}) {
+open class Interactable<T>(value: T? = null) {
+    private val changes = mutableMapOf<Any, (T) -> Unit>()
 
-    var value: T? = value
+    open var value: T? = value
         set(value) {
             field = value
             value?.let {
-                onChange(it)
+                changes.forEach { (_, v) -> v(it) }
             }
         }
-    var onChange: (T) -> Unit = onChange
+    var onChange: (T) -> Unit
+        set(value) = addOnChange { value }
+        get() = changes[DEFAULT_UPDATE_KEY] ?: { }
+    fun addOnChange(key: Any = DEFAULT_UPDATE_KEY, onChange: (T) -> Unit) {
+        changes[key] = onChange
+    }
+
+    companion object {
+        const val DEFAULT_UPDATE_KEY = "default"
+    }
 }
 
 data class ToolbarInteractions(
     val showDescription: (Boolean) -> Unit,
 )
 
-data class WindowMovement(val init: Boolean = false, val offset: Float = 0f)
 data class Popup(val show: Boolean = false, val text: String = "", val duration: Long = 0) {
     companion object {
         val HIDE = Popup()
         fun show(text: String) = Popup(true, text, 3)
     }
+}
+
+class Expanding(value: Boolean? = null): Interactable<Boolean>(false) {
+    val onAnimate = mutableMapOf<Any, (State) -> Unit>()
+    override var value: Boolean? = value
+        set(value) {
+            super.value = value
+            if (value == true) animate(State.Expanding)
+            else animate(State.Collapsing)
+        }
+
+    fun onAnimateChange(key: Any = DEFAULT_UPDATE_KEY, onChange: (State) -> Unit) {
+        onAnimate[key] = onChange
+    }
+
+    fun animate(state: State) {
+        onAnimate.forEach { (_, v) -> v(state) }
+    }
+
+    sealed class State {
+        object Expanded : State()
+        object Expanding : State()
+        object Collapsed : State()
+        object Collapsing : State()
+    }
+}
+
+class WindowMovement: Interactable<Float>(0f) {
+    var origin = 0f
+    var isActive = false
+
+    var isRight = mutableStateOf(true)
 }
 
 

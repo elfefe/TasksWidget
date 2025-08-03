@@ -50,3 +50,5 @@ cache/
 
 ### Mac OS ###
 .DS_Store
+
+/common/src/commonMain/resources/taskwidget-b17c3-6fa8ea1f5dbe.json

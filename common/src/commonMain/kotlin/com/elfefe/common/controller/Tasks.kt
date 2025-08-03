@@ -9,12 +9,13 @@ import com.google.gson.reflect.TypeToken
 import io.ktor.client.network.sockets.mapEngineExceptions
 import kotlinx.coroutines.*
 import java.io.File
+import java.util.Comparator
 import java.util.Date
 import java.util.concurrent.ConcurrentLinkedQueue
 import javax.swing.filechooser.FileSystemView
 
 object Tasks {
-    var currentFilter: (Task) -> Boolean = { true }
+    var currentFilters: MutableMap<Any, (Task) -> Boolean> = mutableMapOf()
 
     var scope = CoroutineScope(Dispatchers.IO)
         set(value) {
@@ -35,7 +36,9 @@ object Tasks {
         get() = GsonBuilder().setPrettyPrinting().create()
 
 
-    var sorting: MutableList<Task>.() -> Unit = { sortByDescending { it.deadline } }
+    var sorting: MutableList<Task>.() -> Unit = { toMutableList().sortByDescending {
+        it.deadline.run { (substring(2, 4) + substring(0, 2)).toInt() }
+    } }
 
     init {
         if (tasksFile.length() > 0) {
@@ -73,8 +76,8 @@ object Tasks {
         }
     }
 
-    fun filter(filter: (Task) -> Boolean) {
-        currentFilter = filter
+    fun filter(key: Any = "default", filter: (Task) -> Boolean) {
+        currentFilters[key] = filter
         refresh()
     }
 
@@ -82,7 +85,10 @@ object Tasks {
     fun refresh() {
 //        Configs.updateTasksSo rt()
         _tasks.sorting()
-        onUpdate(_tasks.filter(currentFilter))
+        onUpdate(_tasks.filter(
+            if (currentFilters.isEmpty()) { { true } }
+            else { task -> currentFilters.values.all { it(task) } }
+        ))
     }
 
     object Configs {

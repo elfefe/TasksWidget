@@ -3,8 +3,8 @@ import org.jetbrains.compose.compose
 plugins {
     kotlin("multiplatform")
     id("org.jetbrains.compose")
-    id("com.android.library")
-    kotlin("plugin.serialization") version embeddedKotlinVersion
+    kotlin("plugin.serialization")
+//    id("com.android.library")
 }
 
 group = project.group
@@ -13,9 +13,13 @@ version = project.version
 val ktorVersion = "2.2.3"
 
 kotlin {
-    android()
+//    android()
     jvm("desktop") {
-        jvmToolchain(11)
+        jvmToolchain(17)
+        compilations.all {
+            kotlinOptions.jvmTarget = "17" // or your target
+        }
+        withJava()
     }
 
     sourceSets {
@@ -58,8 +62,8 @@ kotlin {
                 implementation("org.apache.poi:poi:5.2.0")
                 implementation("org.apache.poi:poi-ooxml:5.2.0")
 
-                implementation("androidx.constraintlayout:constraintlayout:2.2.0-alpha07")
-                implementation("androidx.constraintlayout:constraintlayout-compose:1.1.0-alpha07")
+//                implementation("androidx.constraintlayout:constraintlayout:2.2.0-alpha07")
+//                implementation("androidx.constraintlayout:constraintlayout-compose:1.1.0-alpha07")
                 implementation("com.colintheshots:twain:0.3.2")
                 implementation("org.jetbrains:markdown:0.7.3")
 
@@ -76,40 +80,41 @@ kotlin {
                 implementation(kotlin("test"))
             }
         }
-        val androidMain by getting {
-            dependencies {
-                api("androidx.appcompat:appcompat:1.6.1")
-                api("androidx.core:core-ktx:1.13.1")
-            }
-        }
-        val androidTest by getting {
-            dependencies {
-                implementation("junit:junit:4.13.2")
-            }
-        }
+//        val androidMain by getting {
+//            dependencies {
+//                api("androidx.appcompat:appcompat:1.6.1")
+//                api("androidx.core:core-ktx:1.13.1")
+//            }
+//        }
+//        val androidTest by getting {
+//            dependencies {
+//                implementation("junit:junit:4.13.2")
+//            }
+//        }
         val desktopMain by getting {
             dependencies {
-                api(compose.preview)
+                implementation(compose.desktop.currentOs) // desktop-specific
+                // other desktop-only deps here if needed
             }
         }
         val desktopTest by getting
     }
 }
 
-android {
-    compileSdk = 33
-    sourceSets["main"].manifest.srcFile("src/androidMain/AndroidManifest.xml")
-    defaultConfig {
-        minSdk = 24
-        targetSdk = 33
-    }
-    compileOptions {
-        sourceCompatibility = JavaVersion.VERSION_1_8
-        targetCompatibility = JavaVersion.VERSION_1_8
-    }
-    namespace = "com.elfefe.common"
-}
-
-dependencies {
-    implementation("androidx.navigation:navigation-compose:2.7.7")
-}
+//android {
+//    compileSdk = 33
+//    sourceSets["main"].manifest.srcFile("src/androidMain/AndroidManifest.xml")
+//    defaultConfig {
+//        minSdk = 24
+//        targetSdk = 33
+//    }
+//    compileOptions {
+//        sourceCompatibility = JavaVersion.VERSION_1_8
+//        targetCompatibility = JavaVersion.VERSION_1_8
+//    }
+//    namespace = "com.elfefe.common"
+//}
+//
+//dependencies {
+//    implementation("androidx.navigation:navigation-compose:2.7.7")
+//}

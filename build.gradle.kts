@@ -12,11 +12,12 @@ allprojects {
 }
 
 plugins {
-    kotlin("multiplatform") apply false
-    kotlin("android") apply false
-    id("com.android.application") apply false
-    id("com.android.library") apply false
-    id("org.jetbrains.compose") apply false version "1.6.2"
+    kotlin("multiplatform") version "1.9.0" apply false
+    id("org.jetbrains.compose") version "1.5.0" apply false
     id("org.openjfx.javafxplugin") version "0.0.13"
+    kotlin("plugin.serialization") version "1.9.0" apply false
+//    kotlin("android") apply false
+//    id("com.android.application") apply false
+//    id("com.android.library") apply false
 }
 

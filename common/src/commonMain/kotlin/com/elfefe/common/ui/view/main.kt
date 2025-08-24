@@ -2,7 +2,7 @@ package com.elfefe.common.ui.view
 
 import androidx.compose.animation.core.Animatable
 import androidx.compose.animation.core.EaseInOutCubic
-import androidx.compose.animation.core.ExperimentalAnimationSpecApi
+//import androidx.compose.animation.core.ExperimentalAnimationSpecApi
 import androidx.compose.animation.core.animateDpAsState
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.core.animateSizeAsState
@@ -152,7 +152,7 @@ fun ApplicationScope.TrayWindow(windowInteractions: WindowInteractions) {
     )
 }
 
-@OptIn(ExperimentalAnimationSpecApi::class)
+//@OptIn(ExperimentalAnimationSpecApi::class)
 @Composable
 fun ApplicationScope.TasksWindow(windowInteractions: WindowInteractions) {
     var isVisible by remember { mutableStateOf(windowInteractions.visibility.value ?: true) }

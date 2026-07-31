@@ -95,30 +95,6 @@ fun ApplicationScope.TasksWidget() {
             popup = Interactable(Popup())
         )
 
-//        throw RuntimeException("Test exception") // Uncomment to test error handling
-
-        /* FirebaseOptions.Builder()
-             .setCredentials(FirestoreApi.instance.credentials)
-             .setProjectId("taskwidget-b17c3")
-             .build()
-         FirebaseAuth
-             .getInstance()
-             .signInWithEmailAndPassword("f.bou-reiff@orange.fr", "***REMOVED-SECRET***")
-             .addOnCompleteListener {
-                 if (it.isSuccessful) {
-                     log("Connected to Firebase")
-                 } else {
-                     log("Failed to connect to Firebase")
-                 }
-             }
-
-         OAuthApi(CoroutineScope(Dispatchers.IO)).auth(
-             clientId = "1086878445333-tgnhihe3rkaigfqs39umarbfsptb1lr5.apps.googleusercontent.com",
-             clientSecret = "***SECRET-PURGE-2026-07-27***",
-         ) { token, payload ->
-             log("Connected with\n$token\n$payload")
-             FirestoreApi.instance.analytics(AccessToken.newBuilder().apply { tokenValue = token.accessToken }.build())
-         }*/
 
         TrayWindow(windowInteractions)
         TasksWindow(windowInteractions)

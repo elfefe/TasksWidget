@@ -52,3 +52,10 @@ cache/
 .DS_Store
 
 /common/src/commonMain/resources/taskwidget-b17c3-6fa8ea1f5dbe.json
+
+# Materiel de signature de code — jamais dans le depot (secret)
+desktop/certificate.pfx
+desktop/key-password
+
+# Captures video de demonstration (les PNG du README restent)
+medias/*.mp4

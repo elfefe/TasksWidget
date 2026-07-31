@@ -70,7 +70,9 @@ kotlin {
                 implementation("net.java.dev.jna:jna:5.15.0")
                 implementation("net.java.dev.jna:jna-platform:5.15.0")
 
-                implementation("com.guardsquare:proguard-gradle:7.2.2")
+                // proguard-gradle retire : c'est un plugin Gradle, pas une
+                // bibliotheque d'execution, et aucun code ne le reference. Il
+                // n'avait rien a faire dans le classpath de l'application.
 
                 api("io.github.kevinnzou:compose-webview-multiplatform:1.9.6")
             }

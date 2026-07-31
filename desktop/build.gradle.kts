@@ -14,7 +14,9 @@ version = project.version
 
 kotlin {
     jvm {
-        jvmToolchain(11)
+        // 17 comme le module common : deux niveaux de bytecode dans un meme
+        // binaire n'avaient pas lieu d'etre.
+        jvmToolchain(17)
         withJava()
     }
     sourceSets {

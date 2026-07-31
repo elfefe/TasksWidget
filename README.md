@@ -1,109 +1,145 @@
 TasksWidget
 ===========
 
-[![License: MIT](https://img.shields.io/badge/License-MIT-green.svg)](https://opensource.org/licenses/MIT) ![GitHub Release](https://img.shields.io/github/v/release/elfefe/taskswidget) 
+[![CI](https://github.com/elfefe/TasksWidget/actions/workflows/ci.yml/badge.svg)](https://github.com/elfefe/TasksWidget/actions/workflows/ci.yml) [![License: MIT](https://img.shields.io/badge/License-MIT-green.svg)](https://opensource.org/licenses/MIT) ![GitHub Release](https://img.shields.io/github/v/release/elfefe/taskswidget)
 
+TasksWidget est un **widget de tâches pour le bureau Windows** : une fenêtre
+fine et discrète, posée sur le bord de l'écran, pour noter et suivre ses tâches
+sans quitter ce qu'on fait. Interface minimaliste, descriptions en Markdown,
+échéances colorées selon l'urgence.
 
-TasksWidget is a multiplatform application designed to help you manage your tasks efficiently. This lightweight, easy-to-use widget allows you to create, update, and organize tasks right from your desktop. The widget seamlessly integrates with your device's native operating system and offers a clean and intuitive user interface for effective task management.
+Plateformes
+-----------
 
-Table of Contents
------------------
+L'application est écrite avec **Compose Multiplatform**, mais **seule la cible
+Windows est active et testée aujourd'hui**. Les cibles macOS (`.dmg`) et Linux
+(`.deb`) sont déclarées dans la configuration de packaging mais n'ont jamais été
+produites ni vérifiées — les considérer comme non supportées en l'état.
 
-* [Features](#features)
-* [Installation](#installation)
-    * [Desktop](#desktop)
-* [Usage](#usage)
-* [Contributing](#contributing)
-* [License](#license)
+> Note d'historique : une cible Android a existé puis a été retirée. Il n'y a
+> **pas** de code natif C/C++ dans ce projet — ce que d'anciens scans prenaient
+> pour du code natif était le toolset WiX (fabrication de l'installeur), qui a
+> depuis été sorti du dépôt.
 
-Features
---------
+Fonctionnalités
+---------------
 
-* Multiplatform support: Works on Windows only for now.
-* Minimalistic design: Clean, clutter-free interface for easy navigation.
-* Task management: Create, update, and delete tasks with just a few clicks.
-* Task prioritization: Organize tasks by priority levels to focus on what's most important.
-* Task filtering: Filter tasks by status, priority, or custom tags for easy searching.
-* Reminder notifications: Receive notifications for upcoming tasks or deadlines.
-* Sync tasks across devices: Automatically sync tasks across all your devices using a secure cloud storage.
-* Customizable appearance: Choose from a variety of themes and widget sizes to match your personal style.
+* Widget de bureau discret, sans bordure, ancré sur le côté de l'écran.
+* Création, édition et suppression de tâches en quelques clics.
+* **Descriptions en Markdown** (gras, italique, code, barré, titres…).
+* Échéances datées : la date est **rouge** si la tâche est due aujourd'hui,
+  **jaune** si elle est dépassée, **noire** pour plus tard.
+* Historique des tâches terminées.
+* Masquage des descriptions pour voir plus de tâches, recherche, format réduit.
+* Réduction dans la barre système, et ajout au démarrage de Windows depuis les
+  réglages.
+
+> La synchronisation cloud entre appareils, mentionnée dans d'anciennes
+> versions, est **actuellement désactivée** : elle demandait des identifiants
+> OAuth qui ne peuvent pas vivre dans un dépôt public. L'application fonctionne
+> pleinement en local sans elle.
 
 Installation
 ------------
 
-The app is currently only available on windows, the implementation in other platforms is still in progress.* 
+Application disponible pour **Windows** uniquement.
 
-### Desktop
+1. Télécharger la dernière version depuis la page [Releases](https://github.com/elfefe/TasksWidget/releases).
+2. Lancer `TasksWidget-<version>.msi` pour installer l'application.
 
-#### Windows
+Compilation
+-----------
 
-1.  Download the latest release of TasksWidget from the [Releases](https://github.com/elfefe/TasksWidget/releases) page.
-2.  Run the `TasksWidget.msi` executable file to start the application.
+Prérequis : **JDK 17**. Le wrapper Gradle s'occupe de Gradle.
+
+```bash
+# Lancer l'application
+gradlew.bat :desktop:run
+
+# Lancer les tests
+gradlew.bat :common:desktopTest
+
+# Produire l'installeur MSI (Windows, nécessite le WiX Toolset sur le PATH)
+gradlew.bat :desktop:packageMsi
+```
+
+> Sur ce dépôt, l'invocation `./gradlew` depuis Git Bash échoue sur un argument
+> vide ; utiliser `gradlew.bat`.
+
+Le **WiX Toolset** (nécessaire pour l'installeur MSI) n'est **pas** versionné :
+le télécharger depuis [wixtoolset.org](https://wixtoolset.org/) (version 3.11) et
+ajouter son dossier `bin` au PATH.
 
 Usage
 -----
 
-> *You’ll find the instructions here to help you understand how to use the app.*
-
 ![image.png](./medias/image.png)
 
-*Default TasksWidget*
+*TasksWidget par défaut*
 
-To create a new task click on the ![add](./medias/add_24dp_999999_FILL0_wght400_GRAD0_opsz24.svg) icon.
+Pour créer une tâche, cliquer sur l'icône ![add](./medias/add_24dp_999999_FILL0_wght400_GRAD0_opsz24.svg).
 
 ![](./medias/Capture%20d%E2%80%99%C3%A9cran%202024-09-28%20195256.png)
 
-*New task added*
+*Nouvelle tâche*
 
-The date will be **red** if it’s due for today, **yellow** if the date is passed, and **black** for a later due date.
-
-The blank space at the right of the date is a text field to input the task title.
-
-The white space below the task title is a text field to input the task description.
+La date est **rouge** si la tâche est due aujourd'hui, **jaune** si elle est
+dépassée, **noire** pour plus tard. L'espace à droite de la date est le champ du
+titre ; l'espace en dessous, celui de la description.
 
 ![](./medias/Capture%20d%E2%80%99%C3%A9cran%202024-09-28%20200003.png)
 
-*Task with a description and a title*
+*Tâche avec titre et description*
 
-The icon on the right indicates if the task is done (![done](./medias/check_24dp_0ED600_FILL0_wght400_GRAD0_opsz24.svg)) or not (![undone](./medias/close_24dp_EA3323_FILL0_wght400_GRAD0_opsz24.svg)).
+L'icône de droite indique si la tâche est faite
+(![done](./medias/check_24dp_0ED600_FILL0_wght400_GRAD0_opsz24.svg)) ou non
+(![undone](./medias/close_24dp_EA3323_FILL0_wght400_GRAD0_opsz24.svg)). Un clic
+la retire des tâches actives ; l'icône
+![history](./medias/unpublished_24dp_999999_FILL0_wght400_GRAD0_opsz24.svg)
+affiche l'historique.
 
-If this icon is clicked the task will be removed from the active tasks. Clicking on the ![history](./medias/unpublished_24dp_999999_FILL0_wght400_GRAD0_opsz24.svg) icon will show the history of all the tasks.
-
-If you want to hide all the descriptions to see more tasks, click the ![description](./medias/notes_24dp_999999_FILL0_wght400_GRAD0_opsz24.svg) icon.
-
-To search through your tasks click the ![search](./medias/search_24dp_999999_FILL0_wght400_GRAD0_opsz24.svg) icon.
+L'icône ![description](./medias/notes_24dp_999999_FILL0_wght400_GRAD0_opsz24.svg)
+masque les descriptions,
+![search](./medias/search_24dp_999999_FILL0_wght400_GRAD0_opsz24.svg) ouvre la
+recherche.
 
 ![](./medias/Capture%20d%E2%80%99%C3%A9cran%202024-09-28%20201232.png)
 
-*Reduced app*
+*Application réduite*
 
-The ![reduce](./medias/arrow_drop_up_24dp_999999_FILL0_wght400_GRAD0_opsz24.svg) icon reduces TasksWidget to a less invasive format.
-
-The ![hide](./medias/exit_to_app_24dp_999999_FILL0_wght400_GRAD0_opsz24.svg) icon hides TasksWidget in the system trail bar.
-
-The ![location](./medias/location_on_24dp_999999_FILL0_wght400_GRAD0_opsz24.svg) icon allows you to move the app horizontally across the window.
+![reduce](./medias/arrow_drop_up_24dp_999999_FILL0_wght400_GRAD0_opsz24.svg)
+réduit la fenêtre à un format moins envahissant,
+![hide](./medias/exit_to_app_24dp_999999_FILL0_wght400_GRAD0_opsz24.svg) la cache
+dans la barre système, et
+![location](./medias/location_on_24dp_999999_FILL0_wght400_GRAD0_opsz24.svg)
+permet de la déplacer horizontalement.
 
 ![](./medias/Capture%20d%E2%80%99%C3%A9cran%202024-09-28%20201346.png)
 
-*App in system trail*
+*Application dans la barre système*
 
-Click on the app icon in the system trail bar to show it back or right click and exit to stop the app.
+Depuis les réglages (icône
+![settings](./medias/settings_24dp_999999_FILL0_wght400_GRAD0_opsz24.svg),
+onglet *General*), on peut **ajouter l'application au démarrage de Windows**.
 
-By clicking the ![settings](./medias/settings_24dp_999999_FILL0_wght400_GRAD0_opsz24.svg) icon and going to the *General* tab, you can **add the app to the startup programs**.
+Structure du projet
+-------------------
 
-Contributing
+| Module | Rôle |
+|---|---|
+| `common` | tout le code : modèle de tâches, rendu Markdown, interface Compose, persistance |
+| `desktop` | point d'entrée et packaging de l'application de bureau |
+
+`DIAGNOSTIC.md` consigne l'état du projet établi lors de sa remise au propre.
+
+Contribution
 ------------
 
-We welcome contributions from the community! If you'd like to help improve TasksWidget, please follow these steps:
+Les contributions sont bienvenues : forkez le dépôt, créez une branche,
+committez vos changements et ouvrez une pull request en décrivant vos
+modifications.
 
-1.  Fork the repository on GitHub.
-2.  Create a new branch for your changes.
-3.  Commit your changes to the new branch.
-4.  Submit a pull request with a description of your changes.
-
-Please read [CONTRIBUTING.md](CONTRIBUTING.md) for more information on how to contribute to the project.
-
-License
+Licence
 -------
 
-TasksWidget is released under the MIT License. See [LICENSE.md](LICENSE.md) for more information.
+Publié sous licence MIT — voir [License.md](License.md).

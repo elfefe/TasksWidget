@@ -16,10 +16,10 @@ jobs:
     runs-on: windows-latest
 
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
 
       - name: JDK 17
-        uses: actions/setup-java@v4
+        uses: actions/setup-java@v5
         with:
           distribution: temurin
           java-version: '17'
@@ -30,7 +30,7 @@ jobs:
         run: choco install wixtoolset --no-progress -y
 
       - name: Gradle
-        uses: gradle/actions/setup-gradle@v4
+        uses: gradle/actions/setup-gradle@v6
 
       # MSI non signé : le certificat de signature a été retiré du dépôt (il
       # était compromis). Pour signer, ajouter le nouveau certificat en secret

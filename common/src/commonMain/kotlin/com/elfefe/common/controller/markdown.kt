@@ -141,6 +141,18 @@ class MarkdownVisualTransformation : VisualTransformation {
 
                             // Apply style to the range
                             annotatedStringBuilder.addStyle(style, transformedStart, transformedEnd)
+
+                            // Annotation portant le symbole, pour retrouver la
+                            // portee stylee par son tag. Sans elle, les styles
+                            // imbriques (gras contenant italique contenant code)
+                            // etaient stylises mais introuvables par
+                            // getStringAnnotations — ce que verifient les tests.
+                            annotatedStringBuilder.addStringAnnotation(
+                                tag = symbol,
+                                annotation = symbol,
+                                start = transformedStart,
+                                end = transformedEnd,
+                            )
                         } else {
                             // Opening symbol
                             openSymbols.getOrPut(symbol) { mutableListOf() }.add(originalIndex)

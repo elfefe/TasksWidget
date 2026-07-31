@@ -59,7 +59,11 @@ class MarkdownTest {
 
         val strikethroughAnnotation = strikethroughAnnotations.first()
         assertEquals(0, strikethroughAnnotation.start)
-        assertEquals(expectedText.length, strikethroughAnnotation.end)
+        // Le "~~" se ferme avant le point final ("...text~~."), donc la portée
+        // barrée s'arrête à la fin de "text", pas à la fin du texte affiché :
+        // le point est hors des marqueurs. L'ancienne attente (length) incluait
+        // le point à tort.
+        assertEquals(expectedText.length - 1, strikethroughAnnotation.end)
 
         // Check bold annotations
         val boldAnnotations =

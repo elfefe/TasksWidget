@@ -34,6 +34,53 @@ fun installUpdater() {
     }
 }
 
+/** Découpe "v1.4.4" / "1.4.4-rc1" en [1, 4, 4] pour comparer proprement. */
+fun versionParts(version: String): List<Int> =
+    version.trim().removePrefix("v").removePrefix("V")
+        .split('.', '-', '_', '+')
+        .mapNotNull { part -> part.takeWhile { it.isDigit() }.toIntOrNull() }
+
+/**
+ * Vrai si la release distante est strictement plus récente que la version
+ * embarquée. Le tag GitHub porte un "v" que la version locale n'a pas : sans
+ * cette normalisation, "v1.4.4" et "1.4.4" étaient jugés différents et l'appli
+ * se croyait perpétuellement périmée.
+ */
+fun isRemoteNewer(remoteTag: String?, localVersion: String?): Boolean {
+    if (remoteTag == null || localVersion == null) return false
+    val remote = versionParts(remoteTag)
+    val local = versionParts(localVersion)
+    if (remote.isEmpty()) return false
+    for (i in 0 until maxOf(remote.size, local.size)) {
+        val r = remote.getOrElse(i) { 0 }
+        val l = local.getOrElse(i) { 0 }
+        if (r != l) return r > l
+    }
+    return false
+}
+
+/**
+ * Lance l'installation de façon détachée : un petit script attend que l'appli
+ * se ferme, applique le MSI en silencieux, puis relance TasksWidget. Il survit
+ * à la fermeture de l'appli (nécessaire pour que msiexec puisse remplacer les
+ * fichiers verrouillés par le processus en cours).
+ */
+fun launchInstaller(installer: File) {
+    val script = File(tmpDir, "update-${UUID.randomUUID()}.cmd")
+    val exe = appFile.absolutePath
+    script.writeText(
+        buildString {
+            append("@echo off\r\n")
+            append("timeout /t 2 /nobreak >nul\r\n")
+            append("msiexec /i \"${installer.absolutePath}\" /qb\r\n")
+            append("start \"\" \"$exe\"\r\n")
+        }
+    )
+    ProcessBuilder("cmd", "/c", "start", "", "/min", script.absolutePath)
+        .directory(tmpDir)
+        .start()
+}
+
 @OptIn(InternalAPI::class)
 fun update(release: GithubLatestRelease, onStatus: suspend CoroutineScope.(Updater) -> Unit) {
     updateJob = updaterScope.launch(Dispatchers.IO) {
@@ -46,8 +93,13 @@ fun update(release: GithubLatestRelease, onStatus: suspend CoroutineScope.(Updat
                     onStatus(Updater.Download)
 
                     client.get(it).content.copyAndClose(updateFile.writeChannel())
-                    updateFile.renameTo(File(tmpDir, name ?: "TasksWidget-latest.msi"))
+                    val installer = File(tmpDir, name ?: "TasksWidget-latest.msi")
+                    updateFile.renameTo(installer)
 
+                    // On démarre l'installeur détaché AVANT de signaler Install :
+                    // le statut Install déclenche la fermeture de l'appli côté
+                    // bandeau, et le script doit déjà tourner pour lui survivre.
+                    launchInstaller(installer)
                     onStatus(Updater.Install)
                 } catch (e: Exception) {
                     this@launch.log(e.stackTraceToString())

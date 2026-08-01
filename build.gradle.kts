@@ -1,6 +1,6 @@
 allprojects {
     group = "com.elfefe"
-    version = "1.4.12"
+    version = "1.4.13"
 
     repositories {
         google()

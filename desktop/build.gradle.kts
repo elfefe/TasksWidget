@@ -44,6 +44,15 @@ compose.desktop {
 
             description = "TasksWidget is a multiplatform application designed to help you manage your tasks efficiently."
             copyright = "© 2024 Fedacier"
+
+            windows {
+                // Installation par-utilisateur : dans %LOCALAPPDATA%, sans
+                // élévation. Les mises à jour (msiexec) s'appliquent alors sans
+                // invite UAC — indispensable pour un auto-update sans surveillance.
+                perUserInstall = true
+                shortcut = true
+                menu = true
+            }
         }
 
         jvmArgs("--add-opens", "java.desktop/sun.awt=ALL-UNNAMED")

@@ -30,14 +30,18 @@ fun sendLogs(content: String, level: Severity = Severity.INFO) {
             .build()
         logging.write(listOf(entry))
     } catch (e: Exception) {
+        // Envoi distant best-effort : on n'écrit PAS l'échec dans app.log, sinon
+        // il masque les vrais messages (le fichier de log est écrit par log()).
         println(e.stackTraceToString())
-        logsFile.appendText(e.stackTraceToString())
     }
 }
 
 fun Any.log(message: Any, level: Severity = Severity.INFO) {
 
     println(message)
+    // On écrit le message dans app.log directement : l'envoi distant peut
+    // échouer (ressource GCP absente) et ne doit pas nous priver de la trace.
+    runCatching { logsFile.appendText("[${java.util.Date()}] $message\n") }
     Logger.getLogger(this::class.java.name).run {
         when(level) {
             Severity.DEBUG -> fine(message.toString())

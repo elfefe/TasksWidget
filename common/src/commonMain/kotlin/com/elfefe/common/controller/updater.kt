@@ -3,17 +3,18 @@ package com.elfefe.common.controller
 import androidx.compose.ui.res.useResource
 import com.elfefe.common.model.github.GithubLatestRelease
 import com.elfefe.common.ui.view.Popup
-import io.ktor.client.request.get
-import io.ktor.util.InternalAPI
-import io.ktor.util.cio.writeChannel
-import io.ktor.utils.io.copyAndClose
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import java.io.File
-import java.lang.ProcessBuilder.Redirect
+import java.io.IOException
+import java.net.URI
+import java.net.http.HttpClient
+import java.net.http.HttpRequest
+import java.net.http.HttpResponse
+import java.time.Duration
 import java.util.UUID
 import kotlin.collections.firstOrNull
 
@@ -81,20 +82,28 @@ fun launchInstaller(installer: File) {
         .start()
 }
 
-@OptIn(InternalAPI::class)
 fun update(release: GithubLatestRelease, onStatus: suspend CoroutineScope.(Updater) -> Unit) {
     updateJob = updaterScope.launch(Dispatchers.IO) {
         release.assets.firstOrNull()?.run {
             browserDownloadUrl?.let {
                 try {
                     onStatus(Updater.Start)
-                    val updateFile = File(tmpDir, "${UUID.randomUUID()}")
-
                     onStatus(Updater.Download)
 
-                    client.get(it).content.copyAndClose(updateFile.writeChannel())
+                    // Téléchargement via java.net.http (module bundlé par
+                    // jpackage) et non ktor CIO : dans le runtime réduit de
+                    // l'installeur, CIO échoue alors que java.net.http fonctionne
+                    // (c'est déjà lui qui récupère la release pour le bandeau).
                     val installer = File(tmpDir, name ?: "TasksWidget-latest.msi")
-                    updateFile.renameTo(installer)
+                    if (installer.exists()) installer.delete()
+                    val http = HttpClient.newBuilder()
+                        .followRedirects(HttpClient.Redirect.NORMAL)
+                        .connectTimeout(Duration.ofSeconds(30))
+                        .build()
+                    val request = HttpRequest.newBuilder(URI.create(it)).GET().build()
+                    val response = http.send(request, HttpResponse.BodyHandlers.ofFile(installer.toPath()))
+                    if (response.statusCode() !in 200..299)
+                        throw IOException("Téléchargement impossible (HTTP ${response.statusCode()})")
 
                     // On démarre l'installeur détaché AVANT de signaler Install :
                     // le statut Install déclenche la fermeture de l'appli côté

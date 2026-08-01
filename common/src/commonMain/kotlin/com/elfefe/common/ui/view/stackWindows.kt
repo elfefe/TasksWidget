@@ -115,6 +115,15 @@ class StackController(val workArea: Rectangle) {
     /** Liste courante des tâches filtrées/triées. */
     var tasks by mutableStateOf(listOf<Task>())
 
+    /**
+     * Instant du dernier changement de liste (ajout / suppression / « fait »).
+     * Cocher « fait » retire la tâche : l'aire des tâches rétrécit sous le
+     * curseur, qui se retrouve dehors. Sans grâce, le repli auto se déclenche et
+     * la pile disparaît — ce que l'utilisateur ne veut pas. On suspend donc le
+     * repli un court instant après chaque changement.
+     */
+    var lastChange by mutableStateOf(0L)
+
     /** Fenêtre AWT de la barre de navigation, pour la ramener au premier plan. */
     var navWindow: Window? = null
 
@@ -170,7 +179,10 @@ fun ApplicationScope.TaskStack(windowInteractions: WindowInteractions) {
 
     // Alimentation en tâches.
     LaunchedEffect(Unit) {
-        Tasks.onUpdate = { controller.tasks = it }
+        Tasks.onUpdate = {
+            controller.tasks = it
+            controller.lastChange = System.currentTimeMillis()
+        }
         Tasks.filter("show done") { !it.done }
         Tasks.refresh()
     }
@@ -222,7 +234,11 @@ fun ApplicationScope.TaskStack(windowInteractions: WindowInteractions) {
                     // (poignée mal placée, aire des tâches vide).
                     val measured = controller.navHeight > 0f &&
                             controller.tasks.all { controller.heights.containsKey(it.created) }
-                    if (measured) {
+                    // Grâce après un changement de liste : cocher « fait » fait
+                    // rétrécir l'aire sous le curseur ; on ne replie pas dans la
+                    // foulée, le temps que l'utilisateur bouge.
+                    val settled = System.currentTimeMillis() - controller.lastChange > 900
+                    if (measured && settled) {
                         val left = controller.baseX
                         val right = controller.baseX + controller.stackWidth.value
                         if (!inside(left, controller.baseY, right, controller.stackBottom(), 16))

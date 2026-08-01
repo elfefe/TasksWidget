@@ -43,6 +43,7 @@ import androidx.compose.ui.window.ApplicationScope
 import androidx.compose.ui.window.WindowPosition
 import androidx.compose.ui.window.rememberWindowState
 import com.elfefe.common.controller.ClaudeCode
+import com.elfefe.common.controller.ClaudePilot
 import com.elfefe.common.controller.CrashWindow
 import com.elfefe.common.controller.Tasks
 import com.elfefe.common.controller.Updater
@@ -151,7 +152,17 @@ class StackController(val workArea: Rectangle) {
                         created = -(s.sessionId.hashCode().toLong() and 0x7fffffffL) - 1L
                     )
                 }
-            return ephemeral + tasks
+            // Sessions pilotées par le widget (interactives), en tout premier.
+            val piloted = ClaudePilot.sessions.values.map { s ->
+                Task(
+                    title = s.title,
+                    type = "pilot",
+                    claudeCwd = s.cwd,
+                    claudeSessionId = s.id,
+                    created = -(s.id.hashCode().toLong() and 0x7fffffffL) - 2_000_000_000L
+                )
+            }
+            return piloted + ephemeral + tasks
         }
 
     /** Fenêtre AWT de la barre de navigation, pour la ramener au premier plan. */

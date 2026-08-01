@@ -33,6 +33,7 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.elfefe.common.controller.ClaudeCode
+import com.elfefe.common.controller.ClaudePilot
 import com.elfefe.common.controller.Tasks
 import com.elfefe.common.model.Task
 import com.elfefe.common.model.ThemeColors
@@ -191,7 +192,7 @@ fun ClaudeLaunchPanel(colors: ThemeColors, onLaunched: () -> Unit) {
                         .clip(RoundedCornerShape(4.dp))
                         .background(colors.primary.copy(alpha = if (prompt.isBlank()) 0.4f else 1f))
                         .clickable(enabled = prompt.isNotBlank()) {
-                            ClaudeCode.launch(prompt, cwd)
+                            ClaudePilot.start(prompt, cwd)
                             prompt = ""
                             onLaunched()
                         }

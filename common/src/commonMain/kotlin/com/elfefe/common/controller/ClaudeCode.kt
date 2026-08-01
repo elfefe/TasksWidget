@@ -95,7 +95,8 @@ object ClaudeCode {
         val status: String,   // "busy", "idle"...
         val startedAt: Long,
         val updatedAt: Long,
-        val pid: Long
+        val pid: Long,
+        val bridged: Boolean = false
     ) {
         val busy: Boolean get() = status.equals("busy", ignoreCase = true)
         val project: String get() = cwd.substringAfterLast('\\').substringAfterLast('/')
@@ -116,14 +117,22 @@ object ClaudeCode {
                 val pid = o.get("pid")?.asLong ?: return@mapNotNull null
                 if (!ProcessHandle.of(pid).isPresent) return@mapNotNull null
                 val sessionId = o.get("sessionId")?.asString ?: return@mapNotNull null
+                val cwd = o.get("cwd")?.asString ?: ""
+                val derived = o.get("name")?.asString?.takeIf { it.isNotBlank() } ?: sessionId.take(8)
+                // Session en remote-control (bridgée) : on préfère son nom
+                // remote-control (le titre IA affiché dans l'app Claude) au nom
+                // dérivé « fbou-70 ».
+                val bridged = !o.get("bridgeSessionId")?.asString.isNullOrBlank()
+                val name = if (bridged) aiTitleOf(cwd, sessionId) ?: derived else derived
                 RunningSession(
                     sessionId = sessionId,
-                    cwd = o.get("cwd")?.asString ?: "",
-                    name = o.get("name")?.asString?.takeIf { it.isNotBlank() } ?: sessionId.take(8),
+                    cwd = cwd,
+                    name = name,
                     status = o.get("status")?.asString ?: "",
                     startedAt = o.get("startedAt")?.asLong ?: 0L,
                     updatedAt = o.get("updatedAt")?.asLong ?: 0L,
-                    pid = pid
+                    pid = pid,
+                    bridged = bridged
                 )
             }.getOrNull()
         }.sortedByDescending { it.startedAt } // ordre stable (updatedAt bougerait sans cesse)
@@ -144,6 +153,21 @@ object ClaudeCode {
 
     /** Encodage d'un chemin en nom de dossier projet, comme Claude Code. */
     fun encodeCwd(cwd: String): String = cwd.replace(Regex("[^A-Za-z0-9]"), "-")
+
+    /** Titre IA (le nom affiché en remote-control), lu en tête du transcript. */
+    fun aiTitleOf(cwd: String, sessionId: String): String? {
+        val file = File(File(projectsDir, encodeCwd(cwd)), "$sessionId.jsonl")
+        if (!file.exists()) return null
+        var title: String? = null
+        readHead(file, 32 * 1024).forEach { line ->
+            val obj = parse(line) ?: return@forEach
+            when (obj.get("type")?.asString) {
+                "ai-title" -> obj.get("aiTitle")?.asString?.let { if (it.isNotBlank()) title = it }
+                "agent-name" -> obj.get("agentName")?.asString?.let { if (title.isNullOrBlank()) title = it }
+            }
+        }
+        return title
+    }
 
     /**
      * Session la plus récente à surveiller. Si [cwd] est fourni, on se limite à

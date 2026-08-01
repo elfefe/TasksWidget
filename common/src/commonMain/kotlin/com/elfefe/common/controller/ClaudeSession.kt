@@ -26,18 +26,27 @@ import kotlin.concurrent.thread
 object ClaudePilot {
     val sessions = mutableStateMapOf<String, ClaudeSession>()
 
-    fun start(prompt: String, cwd: String): ClaudeSession {
+    /** Session de la tâche active dont la fenêtre latérale est ouverte. */
+    var active by mutableStateOf<String?>(null)
+
+    fun start(prompt: String, cwd: String, title: String = "Session", resumeId: String? = null): ClaudeSession {
         val id = UUID.randomUUID().toString()
-        val session = ClaudeSession(id, cwd.ifBlank { System.getProperty("user.home") })
+        val session = ClaudeSession(id, cwd.ifBlank { System.getProperty("user.home") }, title)
         sessions[id] = session
-        session.launch(prompt)
+        session.launch(prompt, resumeId)
+        active = id
         return session
     }
+
+    /** Reprend une session existante en la forkant dans une session pilotée. */
+    fun resume(sessionId: String, cwd: String, title: String): ClaudeSession =
+        start(prompt = "", cwd = cwd, title = title, resumeId = sessionId)
 
     fun get(id: String): ClaudeSession? = sessions[id]
 
     fun close(id: String) {
         sessions.remove(id)?.stop()
+        if (active == id) active = null
     }
 }
 
@@ -47,7 +56,7 @@ data class ChatMsg(val role: ChatRole, val text: String, val id: String = UUID.r
 
 enum class SessionStatus { STARTING, IDLE, THINKING, WORKING, ENDED }
 
-class ClaudeSession(val id: String, val cwd: String) {
+class ClaudeSession(val id: String, val cwd: String, initialTitle: String = "Session") {
     private val gson = Gson()
 
     val messages = mutableStateListOf<ChatMsg>()
@@ -57,23 +66,29 @@ class ClaudeSession(val id: String, val cwd: String) {
         private set
     var slashCommands by mutableStateOf<List<String>>(emptyList())
         private set
-    var title by mutableStateOf("Session")
+    var title by mutableStateOf(initialTitle)
         private set
 
     private var process: Process? = null
     private var writer: BufferedWriter? = null
     private var lastAssistantId: String? = null
 
-    fun launch(initialPrompt: String) {
+    fun launch(initialPrompt: String, resumeId: String? = null) {
         runCatching {
-            val pb = ProcessBuilder(
+            val args = mutableListOf(
                 "claude", "-p",
                 "--input-format", "stream-json",
                 "--output-format", "stream-json",
                 "--verbose",
                 "--permission-mode", "bypassPermissions",
                 "--include-partial-messages"
-            ).directory(File(cwd))
+            )
+            // Reprise : on forke la session existante pour ne pas entrer en
+            // conflit avec celle qui tourne éventuellement dans un terminal.
+            if (!resumeId.isNullOrBlank()) {
+                args.add("--resume"); args.add(resumeId); args.add("--fork-session")
+            }
+            val pb = ProcessBuilder(args).directory(File(cwd))
             pb.environment()["CLAUDE_CODE_ENTRYPOINT"] = "sdk-taskswidget"
             val proc = pb.start()
             process = proc

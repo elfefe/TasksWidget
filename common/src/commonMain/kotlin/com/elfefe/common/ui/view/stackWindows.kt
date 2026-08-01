@@ -356,6 +356,22 @@ fun ApplicationScope.TaskStack(windowInteractions: WindowInteractions) {
         }
     }
 
+    // Fenêtre latérale de la session pilotée active, juste à côté de sa carte.
+    val activePilot = ClaudePilot.active
+    if (activePilot != null && !fullyCollapsed) {
+        val idx = controller.displayed.indexOfFirst { it.type == "pilot" && it.claudeSessionId == activePilot }
+        if (idx >= 0) {
+            val top = controller.viewportTop + controller.cumulativeBefore(idx) - controller.scrollOffset
+            val sideWidth = 340f
+            val x = if (controller.isRight) controller.baseX + slidePx - sideWidth - 6f
+            else controller.baseX + slidePx + controller.stackWidth.value + 6f
+            PilotSideWindow(
+                xDp = x,
+                yDp = top.coerceIn(controller.baseY, controller.viewportBottom - 120f)
+            )
+        }
+    }
+
     // Poignée de repli sur le bord.
     StackHandle(controller, visible = fullyCollapsed)
 }

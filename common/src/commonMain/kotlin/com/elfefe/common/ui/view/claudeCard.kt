@@ -18,6 +18,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Build
 import androidx.compose.material.icons.filled.ChatBubbleOutline
 import androidx.compose.material.icons.filled.FolderOpen
+import androidx.compose.material.icons.filled.PlayArrow
 import androidx.compose.material.icons.filled.SmartToy
 import androidx.compose.material.icons.filled.SubdirectoryArrowRight
 import androidx.compose.runtime.*
@@ -111,6 +112,19 @@ fun ClaudeTaskCard(task: Task) {
                     color = if (busy) Color(0xFF3FB950) else colors.onBackground.copy(alpha = 0.6f),
                     fontSize = 10.sp,
                     fontWeight = FontWeight.SemiBold
+                )
+                // « Reprendre ici » : forke cette session en session pilotée.
+                Spacer(Modifier.width(6.dp))
+                Icon(
+                    Icons.Default.PlayArrow,
+                    contentDescription = "Reprendre ici",
+                    tint = colors.primary,
+                    modifier = Modifier
+                        .size(18.dp)
+                        .clip(CircleShape)
+                        .clickable {
+                            ClaudePilot.resume(task.claudeSessionId, task.claudeCwd, name)
+                        }
                 )
             }
             if (activity.isNotBlank() || project.isNotBlank()) {

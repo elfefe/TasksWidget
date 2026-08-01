@@ -129,12 +129,16 @@ object ClaudeCode {
         }.sortedByDescending { it.startedAt } // ordre stable (updatedAt bougerait sans cesse)
     }
 
+    /** Nature de la dernière activité, pour choisir l'icône côté UI. */
+    enum class Activity { NONE, TEXT, TOOL, RESULT }
+
     data class SessionState(
         val sessionId: String,
         val cwd: String,
         val title: String,
         val running: Boolean,
         val lastActivity: String,
+        val activity: Activity,
         val lastModified: Long
     )
 
@@ -184,11 +188,12 @@ object ClaudeCode {
         }
 
         var lastActivity = ""
+        var lastKind = Activity.NONE
         var lastCwd = cwd
         tail.forEach { line ->
             val obj = parse(line) ?: return@forEach
             obj.get("cwd")?.asString?.let { if (it.isNotBlank()) lastCwd = it }
-            summarize(obj)?.let { lastActivity = it }
+            summarize(obj)?.let { (kind, text) -> lastKind = kind; lastActivity = text }
         }
 
         if (title.isBlank()) title = "Session ${sessionId.take(8)}"
@@ -199,12 +204,13 @@ object ClaudeCode {
             title = title,
             running = running,
             lastActivity = lastActivity,
+            activity = lastKind,
             lastModified = file.lastModified()
         )
     }
 
-    /** Résumé court de la dernière activité d'un événement de transcript. */
-    private fun summarize(obj: JsonObject): String? {
+    /** Résumé court (nature + texte) de la dernière activité d'un événement. */
+    private fun summarize(obj: JsonObject): Pair<Activity, String>? {
         val type = obj.get("type")?.asString ?: return null
         if (type != "assistant" && type != "user") return null
         val message = obj.getAsJsonObject("message") ?: return null
@@ -212,7 +218,7 @@ object ClaudeCode {
 
         if (content.isJsonPrimitive) {
             val text = content.asString.trim()
-            return if (text.isBlank()) null else "💬 " + text.take(120)
+            return if (text.isBlank()) null else Activity.TEXT to text.take(120)
         }
         if (!content.isJsonArray) return null
 
@@ -228,9 +234,9 @@ object ClaudeCode {
             }
         }
         return when {
-            tool != null -> "🔧 $tool"
-            text != null -> "💬 " + text!!.trim().take(120)
-            toolResult -> "↳ résultat d'outil"
+            tool != null -> Activity.TOOL to tool!!
+            text != null -> Activity.TEXT to text!!.trim().take(120)
+            toolResult -> Activity.RESULT to "résultat d'outil"
             else -> null
         }
     }

@@ -12,7 +12,14 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.material.Card
+import androidx.compose.material.Icon
 import androidx.compose.material.Text
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Build
+import androidx.compose.material.icons.filled.ChatBubbleOutline
+import androidx.compose.material.icons.filled.FolderOpen
+import androidx.compose.material.icons.filled.SmartToy
+import androidx.compose.material.icons.filled.SubdirectoryArrowRight
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -61,21 +68,22 @@ fun ClaudeTaskCard(task: Task) {
     val name = (live?.name ?: state?.title ?: task.title).ifBlank { "Claude Code" }
     val project = (live?.cwd ?: state?.cwd ?: task.claudeCwd)
         .substringAfterLast('\\').substringAfterLast('/')
+    val activity = state?.lastActivity.orEmpty()
+    val activityKind = state?.activity ?: ClaudeCode.Activity.NONE
 
     Card(
-        modifier = Modifier.fillMaxWidth().padding(5.dp),
+        modifier = Modifier.fillMaxWidth().padding(4.dp),
         backgroundColor = colors.background,
-        elevation = 5.dp
+        elevation = 4.dp
     ) {
-        Column(Modifier.fillMaxSize().padding(8.dp)) {
+        Column(Modifier.fillMaxWidth().padding(horizontal = 8.dp, vertical = 6.dp)) {
             Row(verticalAlignment = Alignment.CenterVertically) {
-                Text("🤖", fontSize = 14.sp)
-                Spacer(Modifier.width(6.dp))
-                when {
-                    busy -> PulsingDot(Color(0xFF3FB950))
-                    open -> Dot(Color(0xFFD9A441))
-                    else -> Dot(colors.onBackground.copy(alpha = 0.4f))
-                }
+                Icon(
+                    Icons.Default.SmartToy,
+                    contentDescription = null,
+                    tint = colors.onBackground,
+                    modifier = Modifier.size(15.dp)
+                )
                 Spacer(Modifier.width(6.dp))
                 Text(
                     name,
@@ -87,6 +95,12 @@ fun ClaudeTaskCard(task: Task) {
                     modifier = Modifier.weight(1f)
                 )
                 Spacer(Modifier.width(6.dp))
+                when {
+                    busy -> PulsingDot(Color(0xFF3FB950))
+                    open -> Dot(Color(0xFFD9A441))
+                    else -> Dot(colors.onBackground.copy(alpha = 0.4f))
+                }
+                Spacer(Modifier.width(4.dp))
                 Text(
                     when {
                         busy -> "en cours"
@@ -98,22 +112,42 @@ fun ClaudeTaskCard(task: Task) {
                     fontWeight = FontWeight.SemiBold
                 )
             }
-            if (project.isNotBlank()) {
+            if (activity.isNotBlank() || project.isNotBlank()) {
                 Spacer(Modifier.height(3.dp))
-                Text("📁 $project", color = colors.onBackground.copy(alpha = 0.55f), fontSize = 10.sp)
-            }
-            state?.lastActivity?.takeIf { it.isNotBlank() }?.let {
-                Spacer(Modifier.height(4.dp))
-                Text(
-                    it,
-                    color = colors.onBackground.copy(alpha = 0.85f),
-                    fontSize = 11.sp,
-                    maxLines = 2,
-                    overflow = TextOverflow.Ellipsis
-                )
+                Row(verticalAlignment = Alignment.CenterVertically) {
+                    activityIcon(activityKind)?.let {
+                        Icon(it, null, tint = colors.onBackground.copy(alpha = 0.7f), modifier = Modifier.size(12.dp))
+                        Spacer(Modifier.width(4.dp))
+                    }
+                    Text(
+                        activity,
+                        color = colors.onBackground.copy(alpha = 0.85f),
+                        fontSize = 11.sp,
+                        maxLines = 1,
+                        overflow = TextOverflow.Ellipsis,
+                        modifier = Modifier.weight(1f)
+                    )
+                    if (project.isNotBlank()) {
+                        Spacer(Modifier.width(6.dp))
+                        Icon(
+                            Icons.Default.FolderOpen, null,
+                            tint = colors.onBackground.copy(alpha = 0.45f),
+                            modifier = Modifier.size(11.dp)
+                        )
+                        Spacer(Modifier.width(2.dp))
+                        Text(project, color = colors.onBackground.copy(alpha = 0.5f), fontSize = 9.sp, maxLines = 1)
+                    }
+                }
             }
         }
     }
+}
+
+private fun activityIcon(kind: ClaudeCode.Activity): androidx.compose.ui.graphics.vector.ImageVector? = when (kind) {
+    ClaudeCode.Activity.TOOL -> Icons.Default.Build
+    ClaudeCode.Activity.TEXT -> Icons.Default.ChatBubbleOutline
+    ClaudeCode.Activity.RESULT -> Icons.Default.SubdirectoryArrowRight
+    ClaudeCode.Activity.NONE -> null
 }
 
 /**

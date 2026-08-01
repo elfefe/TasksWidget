@@ -15,6 +15,7 @@ import androidx.compose.material.Text
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.*
 import androidx.compose.runtime.*
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.rotate
@@ -281,11 +282,8 @@ fun ColumnScope.Toolbar(
                 modifier = Modifier.fillMaxWidth().padding(6.dp, 4.dp),
                 horizontalArrangement = Arrangement.spacedBy(8.dp)
             ) {
-                Text(
-                    "➕ Tâche",
-                    color = colors.onPrimary,
-                    fontSize = 12.sp,
-                    fontWeight = FontWeight.Bold,
+                Row(
+                    verticalAlignment = Alignment.CenterVertically,
                     modifier = Modifier
                         .clip(RoundedCornerShape(4.dp))
                         .background(colors.primary.copy(alpha = 0.35f))
@@ -293,19 +291,24 @@ fun ColumnScope.Toolbar(
                             Tasks.update(Task())
                             showAddMenu = false
                         }
-                        .padding(horizontal = 10.dp, vertical = 4.dp)
-                )
-                Text(
-                    "🤖 Ouvrir une session Claude",
-                    color = colors.onPrimary,
-                    fontSize = 12.sp,
-                    fontWeight = FontWeight.Bold,
+                        .padding(horizontal = 8.dp, vertical = 4.dp)
+                ) {
+                    Icon(Icons.Default.Add, null, tint = colors.onPrimary, modifier = Modifier.size(15.dp))
+                    Spacer(Modifier.width(4.dp))
+                    Text("Tâche", color = colors.onPrimary, fontSize = 12.sp, fontWeight = FontWeight.Bold)
+                }
+                Row(
+                    verticalAlignment = Alignment.CenterVertically,
                     modifier = Modifier
                         .clip(RoundedCornerShape(4.dp))
                         .background(colors.primary.copy(alpha = 0.35f))
                         .clickable { showClaudeLaunch = !showClaudeLaunch }
-                        .padding(horizontal = 10.dp, vertical = 4.dp)
-                )
+                        .padding(horizontal = 8.dp, vertical = 4.dp)
+                ) {
+                    Icon(Icons.Default.SmartToy, null, tint = colors.onPrimary, modifier = Modifier.size(15.dp))
+                    Spacer(Modifier.width(4.dp))
+                    Text("Session Claude", color = colors.onPrimary, fontSize = 12.sp, fontWeight = FontWeight.Bold)
+                }
             }
         }
 

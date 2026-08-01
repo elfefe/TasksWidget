@@ -30,6 +30,7 @@ kotlin {
                 api(compose.runtime)
                 api(compose.foundation)
                 api(compose.material)
+                api(compose.materialIconsExtended)
 
                 implementation(compose("org.jetbrains.compose.ui:ui-util"))
                 implementation("com.google.guava:guava:32.1.1-jre")

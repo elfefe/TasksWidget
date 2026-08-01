@@ -216,7 +216,23 @@ class StackController(val workArea: Rectangle) {
 
 @Composable
 fun ApplicationScope.TaskStack(windowInteractions: WindowInteractions) {
-    val workArea = remember { GraphicsEnvironment.getLocalGraphicsEnvironment().maximumWindowBounds }
+    // Écran PRINCIPAL (origine 0,0), pas l'écran par défaut de Java : sur une
+    // config multi-écrans, `maximumWindowBounds` peut renvoyer un écran
+    // secondaire (parfois éteint), et la pile se retrouvait invisible dessus.
+    val workArea = remember {
+        val env = GraphicsEnvironment.getLocalGraphicsEnvironment()
+        val config = env.screenDevices.map { it.defaultConfiguration }
+            .firstOrNull { it.bounds.x == 0 && it.bounds.y == 0 }
+            ?: env.defaultScreenDevice.defaultConfiguration
+        val b = config.bounds
+        val insets = java.awt.Toolkit.getDefaultToolkit().getScreenInsets(config)
+        Rectangle(
+            b.x + insets.left,
+            b.y + insets.top,
+            b.width - insets.left - insets.right,
+            b.height - insets.top - insets.bottom
+        )
+    }
     val controller = remember { StackController(workArea) }
 
     // Alimentation en tâches.

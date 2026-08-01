@@ -13,7 +13,13 @@ data class Task(
     var deadline: String = getDate(),
     var done: Boolean = false,
     val created: Long = System.currentTimeMillis(),
-    var edited: Long = System.currentTimeMillis()
+    var edited: Long = System.currentTimeMillis(),
+    // Type de tâche : "normal" (par défaut) ou "claude" (visualise/lance une
+    // session Claude Code). Les champs claude* ne servent qu'aux tâches "claude".
+    // Champs ajoutés en fin : les anciennes tâches sérialisées restent lisibles.
+    var type: String = "normal",
+    var claudeCwd: String = "",
+    var claudeSessionId: String = ""
 )
 
 @JsonAdapter(TaskFieldOrderAdapter::class)

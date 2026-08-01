@@ -11,6 +11,7 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.material.Icon
+import androidx.compose.material.Text
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.*
 import androidx.compose.runtime.*
@@ -22,6 +23,7 @@ import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import com.elfefe.common.controller.Tasks
 import com.elfefe.common.model.Task
 import kotlinx.coroutines.CoroutineScope
@@ -118,6 +120,18 @@ fun ColumnScope.Toolbar(
                         }
                         .padding(3.dp),
                     tint = Tasks.Configs.configs.themeColors.onPrimary
+                )
+            },
+            {
+                // Nouvelle tâche Claude Code (visualise / lance une session).
+                Text(
+                    text = "🤖",
+                    fontSize = 15.sp,
+                    modifier = Modifier
+                        .clickable {
+                            Tasks.update(Task(type = "claude", title = "Claude Code"))
+                        }
+                        .padding(3.dp)
                 )
             },
             {

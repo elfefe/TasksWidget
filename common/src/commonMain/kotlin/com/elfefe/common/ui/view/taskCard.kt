@@ -61,6 +61,11 @@ class TaskCardManager(val task: Task) {
 
 @Composable
 fun TaskCard(modifier: Modifier, task: Task, windowInteractions: WindowInteractions, showDescription: Boolean) {
+    if (task.type == "claude") {
+        ClaudeTaskCard(task)
+        return
+    }
+
     val taskCardManager = TaskCardManager(task)
     taskCardManager.showDescription = showDescription
 

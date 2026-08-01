@@ -159,7 +159,9 @@ object ClaudeCode {
         val file = File(File(projectsDir, encodeCwd(cwd)), "$sessionId.jsonl")
         if (!file.exists()) return null
         var title: String? = null
-        readHead(file, 32 * 1024).forEach { line ->
+        // Tête large : l'ai-title arrive après le contenu de démarrage (hook
+        // mémoire ~15-50 Ko), donc au-delà des premières dizaines de Ko.
+        readHead(file, 256 * 1024).forEach { line ->
             val obj = parse(line) ?: return@forEach
             when (obj.get("type")?.asString) {
                 "ai-title" -> obj.get("aiTitle")?.asString?.let { if (it.isNotBlank()) title = it }
@@ -197,7 +199,7 @@ object ClaudeCode {
 
     private fun readSession(file: File): SessionState {
         val sessionId = file.nameWithoutExtension
-        val head = readHead(file, 16 * 1024)
+        val head = readHead(file, 256 * 1024)
         val tail = readTail(file, 48 * 1024)
 
         var title = ""

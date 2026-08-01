@@ -16,12 +16,14 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.rotate
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.SolidColor
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.elfefe.common.controller.Tasks
@@ -50,6 +52,12 @@ fun ColumnScope.Toolbar(
     var showSearch by remember { mutableStateOf(false) }
 
     var searching by remember { mutableStateOf("") }
+
+    // Menu du « + » : choisir entre une tâche normale et une session Claude.
+    var showAddMenu by remember { mutableStateOf(false) }
+    var showClaudeLaunch by remember { mutableStateOf(false) }
+
+    val colors = Tasks.Configs.configs.themeColors
 
     windowInteractions.expand.addOnChange("Toolbar") { expanded = it }
 
@@ -116,22 +124,11 @@ fun ColumnScope.Toolbar(
                     contentDescription = null,
                     modifier = Modifier
                         .clickable {
-                            Tasks.update(Task())
+                            showAddMenu = !showAddMenu
+                            if (!showAddMenu) showClaudeLaunch = false
                         }
                         .padding(3.dp),
                     tint = Tasks.Configs.configs.themeColors.onPrimary
-                )
-            },
-            {
-                // Nouvelle tâche Claude Code (visualise / lance une session).
-                Text(
-                    text = "🤖",
-                    fontSize = 15.sp,
-                    modifier = Modifier
-                        .clickable {
-                            Tasks.update(Task(type = "claude", title = "Claude Code"))
-                        }
-                        .padding(3.dp)
                 )
             },
             {
@@ -276,6 +273,50 @@ fun ColumnScope.Toolbar(
                         .padding(8.dp, 5.dp),
                     cursorBrush = SolidColor(Tasks.Configs.configs.themeColors.onPrimary)
                 )
+            }
+        }
+
+        AnimatedVisibility(visible = showAddMenu, enter = expandVertically(), exit = shrinkVertically()) {
+            Row(
+                modifier = Modifier.fillMaxWidth().padding(6.dp, 4.dp),
+                horizontalArrangement = Arrangement.spacedBy(8.dp)
+            ) {
+                Text(
+                    "➕ Tâche",
+                    color = colors.onPrimary,
+                    fontSize = 12.sp,
+                    fontWeight = FontWeight.Bold,
+                    modifier = Modifier
+                        .clip(RoundedCornerShape(4.dp))
+                        .background(colors.primary.copy(alpha = 0.35f))
+                        .clickable {
+                            Tasks.update(Task())
+                            showAddMenu = false
+                        }
+                        .padding(horizontal = 10.dp, vertical = 4.dp)
+                )
+                Text(
+                    "🤖 Ouvrir une session Claude",
+                    color = colors.onPrimary,
+                    fontSize = 12.sp,
+                    fontWeight = FontWeight.Bold,
+                    modifier = Modifier
+                        .clip(RoundedCornerShape(4.dp))
+                        .background(colors.primary.copy(alpha = 0.35f))
+                        .clickable { showClaudeLaunch = !showClaudeLaunch }
+                        .padding(horizontal = 10.dp, vertical = 4.dp)
+                )
+            }
+        }
+
+        AnimatedVisibility(
+            visible = showAddMenu && showClaudeLaunch,
+            enter = expandVertically(),
+            exit = shrinkVertically()
+        ) {
+            ClaudeLaunchPanel(colors) {
+                showClaudeLaunch = false
+                showAddMenu = false
             }
         }
     }

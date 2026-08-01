@@ -42,6 +42,7 @@ import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.ApplicationScope
 import androidx.compose.ui.window.WindowPosition
 import androidx.compose.ui.window.rememberWindowState
+import com.elfefe.common.controller.ClaudeCode
 import com.elfefe.common.controller.CrashWindow
 import com.elfefe.common.controller.Tasks
 import com.elfefe.common.controller.Updater
@@ -124,6 +125,35 @@ class StackController(val workArea: Rectangle) {
      */
     var lastChange by mutableStateOf(0L)
 
+    /** Sessions Claude Code réellement ouvertes, rafraîchies périodiquement. */
+    var sessions by mutableStateOf<List<ClaudeCode.RunningSession>>(emptyList())
+
+    /**
+     * Liste affichée = sessions Claude en cours (éphémères, en tête) + tâches
+     * persistées. Les sessions déjà épinglées dans une tâche ne sont pas
+     * dupliquées. Les cartes éphémères ont un `created` négatif stable dérivé de
+     * la session, pour ne pas entrer en collision avec les vraies tâches
+     * (timestamps positifs) et garder une identité de fenêtre stable.
+     */
+    val displayed: List<Task>
+        get() {
+            val pinned = tasks.mapNotNull {
+                if (it.type == "claude" && it.claudeSessionId.isNotBlank()) it.claudeSessionId else null
+            }.toSet()
+            val ephemeral = sessions
+                .filter { it.sessionId !in pinned }
+                .map { s ->
+                    Task(
+                        title = s.name,
+                        type = "claude",
+                        claudeCwd = s.cwd,
+                        claudeSessionId = s.sessionId,
+                        created = -(s.sessionId.hashCode().toLong() and 0x7fffffffL) - 1L
+                    )
+                }
+            return ephemeral + tasks
+        }
+
     /** Fenêtre AWT de la barre de navigation, pour la ramener au premier plan. */
     var navWindow: Window? = null
 
@@ -133,7 +163,7 @@ class StackController(val workArea: Rectangle) {
 
     fun totalContent(): Float {
         var sum = 0f
-        tasks.forEach { sum += heights[it.created] ?: 0f }
+        displayed.forEach { sum += heights[it.created] ?: 0f }
         return sum
     }
 
@@ -143,10 +173,11 @@ class StackController(val workArea: Rectangle) {
         scrollOffset = (scrollOffset + deltaDp).coerceIn(0f, maxScroll())
     }
 
-    /** Somme des hauteurs des tâches précédant [index]. */
+    /** Somme des hauteurs des éléments affichés précédant [index]. */
     fun cumulativeBefore(index: Int): Float {
+        val items = displayed
         var sum = 0f
-        for (i in 0 until index) sum += heights[tasks[i].created] ?: 0f
+        for (i in 0 until minOf(index, items.size)) sum += heights[items[i].created] ?: 0f
         return sum
     }
 
@@ -185,6 +216,20 @@ fun ApplicationScope.TaskStack(windowInteractions: WindowInteractions) {
         }
         Tasks.filter("show done") { !it.done }
         Tasks.refresh()
+    }
+
+    // Sessions Claude Code en cours : rafraîchies en continu, affichées
+    // automatiquement comme cartes (via controller.displayed).
+    LaunchedEffect(Unit) {
+        while (true) {
+            val previous = controller.sessions.map { it.sessionId }.toSet()
+            controller.sessions = runCatching { ClaudeCode.runningSessions() }.getOrDefault(emptyList())
+            // Si l'ensemble des sessions change (ouverture/fermeture), on rafraîchit
+            // la grâce pour ne pas replier la pile à cause d'un changement de taille.
+            if (controller.sessions.map { it.sessionId }.toSet() != previous)
+                controller.lastChange = System.currentTimeMillis()
+            delay(2000)
+        }
     }
 
     // Déplacement de la pile : la toolbar publie sa position de glisser dans
@@ -233,7 +278,7 @@ fun ApplicationScope.TaskStack(windowInteractions: WindowInteractions) {
                     // replier trop tôt laisserait les hauteurs à 0 pour toujours
                     // (poignée mal placée, aire des tâches vide).
                     val measured = controller.navHeight > 0f &&
-                            controller.tasks.all { controller.heights.containsKey(it.created) }
+                            controller.displayed.all { controller.heights.containsKey(it.created) }
                     // Grâce après un changement de liste : cocher « fait » fait
                     // rétrécir l'aire sous le curseur ; on ne replie pas dans la
                     // foulée, le temps que l'utilisateur bouge.
@@ -281,8 +326,8 @@ fun ApplicationScope.TaskStack(windowInteractions: WindowInteractions) {
         visible = !fullyCollapsed
     )
 
-    // Fenêtres de tâches.
-    controller.tasks.forEachIndexed { index, task ->
+    // Fenêtres de tâches (sessions Claude en cours + tâches persistées).
+    controller.displayed.forEachIndexed { index, task ->
         key(task.created) {
             val top = controller.viewportTop + controller.cumulativeBefore(index) - controller.scrollOffset
             val height = controller.heights[task.created] ?: 0f

@@ -88,6 +88,47 @@ object ClaudeCode {
         return startedAt
     }
 
+    data class RunningSession(
+        val sessionId: String,
+        val cwd: String,
+        val name: String,
+        val status: String,   // "busy", "idle"...
+        val startedAt: Long,
+        val updatedAt: Long,
+        val pid: Long
+    ) {
+        val busy: Boolean get() = status.equals("busy", ignoreCase = true)
+        val project: String get() = cwd.substringAfterLast('\\').substringAfterLast('/')
+    }
+
+    /**
+     * Toutes les sessions Claude Code réellement ouvertes : un fichier
+     * ~/.claude/sessions/<pid>.json par session, dont on ne garde que celles
+     * dont le process (pid) est encore vivant. Le champ `status` (busy/idle)
+     * évite d'avoir à deviner l'activité via les transcripts.
+     */
+    fun runningSessions(): List<RunningSession> {
+        val dir = File(claudeDir, "sessions")
+        val files = dir.listFiles { f -> f.extension == "json" } ?: return emptyList()
+        return files.mapNotNull { file ->
+            runCatching {
+                val o = gson.fromJson(file.readText(), JsonObject::class.java) ?: return@mapNotNull null
+                val pid = o.get("pid")?.asLong ?: return@mapNotNull null
+                if (!ProcessHandle.of(pid).isPresent) return@mapNotNull null
+                val sessionId = o.get("sessionId")?.asString ?: return@mapNotNull null
+                RunningSession(
+                    sessionId = sessionId,
+                    cwd = o.get("cwd")?.asString ?: "",
+                    name = o.get("name")?.asString?.takeIf { it.isNotBlank() } ?: sessionId.take(8),
+                    status = o.get("status")?.asString ?: "",
+                    startedAt = o.get("startedAt")?.asLong ?: 0L,
+                    updatedAt = o.get("updatedAt")?.asLong ?: 0L,
+                    pid = pid
+                )
+            }.getOrNull()
+        }.sortedByDescending { it.startedAt } // ordre stable (updatedAt bougerait sans cesse)
+    }
+
     data class SessionState(
         val sessionId: String,
         val cwd: String,

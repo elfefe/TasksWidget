@@ -65,8 +65,12 @@ object ClaudeCode {
      * dossier [cwd], amorcée avec [prompt]. On passe par un petit script pour
      * éviter l'enfer des échappements. Renvoie l'instant de lancement (pour
      * ensuite rattacher la tâche à la session la plus récente du projet).
+     *
+     * [remoteControl] lance la session en **contrôle à distance** (`/rc`) : elle
+     * porte alors un nom remote-control et reste pilotable depuis l'app Claude
+     * comme depuis le widget.
      */
-    fun launch(prompt: String, cwd: String): Long {
+    fun launch(prompt: String, cwd: String, remoteControl: Boolean = true): Long {
         val startedAt = System.currentTimeMillis()
         runCatching {
             val dir = if (cwd.isNotBlank() && File(cwd).isDirectory) cwd
@@ -79,26 +83,55 @@ object ClaudeCode {
                     // Le prompt est passé en argument ; les guillemets internes
                     // sont doublés pour cmd.
                     val safe = prompt.replace("\"", "\"\"")
-                    append("claude \"$safe\"\r\n")
+                    val flag = if (remoteControl) "--remote-control " else ""
+                    if (safe.isBlank()) append("claude $flag\r\n")
+                    else append("claude $flag\"$safe\"\r\n")
                 }
             )
             ProcessBuilder("cmd", "/c", "start", "Claude Code", "cmd", "/k", script.absolutePath)
+                .apply { detachFromParentSession(environment()) }
                 .start()
         }.onFailure { log(it.stackTraceToString()) }
         return startedAt
+    }
+
+    /**
+     * Marqueurs qu'une session Claude Code pose dans l'environnement de ses
+     * processus enfants. Le widget en hérite s'il a lui-même été lancé depuis un
+     * terminal Claude ; la session qu'il ouvrirait alors se croirait fille de
+     * celle-ci, n'écrirait ni transcript ni fichier de session — et resterait
+     * donc invisible pour le widget qui vient de la créer.
+     */
+    private val CHILD_SESSION_MARKERS = listOf(
+        "CLAUDE_CODE_CHILD_SESSION",
+        "CLAUDE_CODE_SESSION_ID",
+        "CLAUDE_CODE_BRIDGE_SESSION_ID",
+        "CLAUDE_CODE_ENTRYPOINT",
+        "CLAUDE_CODE_SSE_PORT",
+        "CLAUDE_CODE_EXECPATH",
+        "CLAUDECODE",
+        "CLAUDE_PID",
+        "CLAUDE_EFFORT"
+    )
+
+    private fun detachFromParentSession(environment: MutableMap<String, String>) {
+        CHILD_SESSION_MARKERS.forEach { environment.remove(it) }
     }
 
     data class RunningSession(
         val sessionId: String,
         val cwd: String,
         val name: String,
-        val status: String,   // "busy", "idle"...
+        val status: String,   // "busy", "idle", "waiting", "shell"
         val startedAt: Long,
         val updatedAt: Long,
         val pid: Long,
-        val bridged: Boolean = false
+        val bridged: Boolean = false,
+        /** Ce que la session attend quand [waiting] : posé par le CLI. */
+        val waitingFor: String = ""
     ) {
         val busy: Boolean get() = status.equals("busy", ignoreCase = true)
+        val waiting: Boolean get() = status.equals("waiting", ignoreCase = true)
         val project: String get() = cwd.substringAfterLast('\\').substringAfterLast('/')
     }
 
@@ -132,7 +165,8 @@ object ClaudeCode {
                     startedAt = o.get("startedAt")?.asLong ?: 0L,
                     updatedAt = o.get("updatedAt")?.asLong ?: 0L,
                     pid = pid,
-                    bridged = bridged
+                    bridged = bridged,
+                    waitingFor = o.get("waitingFor")?.asString ?: ""
                 )
             }.getOrNull()
         }.sortedByDescending { it.startedAt } // ordre stable (updatedAt bougerait sans cesse)
@@ -234,6 +268,92 @@ object ClaudeCode {
             lastModified = file.lastModified()
         )
     }
+
+    /** Qui parle dans le fil d'une session. */
+    enum class Speaker { USER, CLAUDE, TOOL }
+
+    data class Line(val speaker: Speaker, val text: String, val at: Long)
+
+    /**
+     * Fil de conversation d'une session, reconstitué depuis la **queue** de son
+     * transcript. C'est la seule source qui vaille pour une session ouverte dans
+     * un terminal : elle est alimentée par le CLI quoi qu'il arrive, que la
+     * session ait été lancée par le widget ou pas.
+     *
+     * Sont écartés les messages de service (amorçage, rappels système) et les
+     * retours d'outils, qui ne sont pas de la conversation : `isMeta`,
+     * `isVisibleInTranscriptOnly`, et les blocs `tool_result`.
+     */
+    fun conversation(cwd: String, sessionId: String, maxBytes: Int = 192 * 1024): List<Line> {
+        val file = File(File(projectsDir, encodeCwd(cwd)), "$sessionId.jsonl")
+        if (!file.exists()) return emptyList()
+        val lines = mutableListOf<Line>()
+        readTail(file, maxBytes).forEach { raw ->
+            val obj = parse(raw) ?: return@forEach
+            if (obj.get("isMeta")?.asBoolean == true) return@forEach
+            if (obj.get("isVisibleInTranscriptOnly")?.asBoolean == true) return@forEach
+            val at = instant(obj.get("timestamp")?.asString)
+            when (obj.get("type")?.asString) {
+                "user" -> lines += userLines(obj, at)
+                "assistant" -> lines += assistantLines(obj, at)
+            }
+        }
+        return lines
+    }
+
+    private fun userLines(obj: JsonObject, at: Long): List<Line> {
+        val content = obj.getAsJsonObject("message")?.get("content") ?: return emptyList()
+        if (content.isJsonPrimitive) {
+            val text = content.asString.trim()
+            return if (visibleUserText(text)) listOf(Line(Speaker.USER, text, at)) else emptyList()
+        }
+        if (!content.isJsonArray) return emptyList()
+        // Un message d'utilisateur qui ne contient que des retours d'outils est
+        // une écriture de la machinerie, pas une prise de parole.
+        return content.asJsonArray.mapNotNull { element ->
+            val part = element.asJsonObject
+            if (part.get("type")?.asString != "text") return@mapNotNull null
+            val text = part.get("text")?.asString?.trim().orEmpty()
+            if (visibleUserText(text)) Line(Speaker.USER, text, at) else null
+        }
+    }
+
+    /** Les rappels système voyagent dans des messages d'utilisateur : on les tait. */
+    private fun visibleUserText(text: String): Boolean =
+        text.isNotBlank() && !text.startsWith("<system-reminder>") && !text.startsWith("<command-")
+
+    private fun assistantLines(obj: JsonObject, at: Long): List<Line> {
+        val content = obj.getAsJsonObject("message")?.getAsJsonArray("content") ?: return emptyList()
+        return content.mapNotNull { element ->
+            val part = element.asJsonObject
+            when (part.get("type")?.asString) {
+                "text" -> part.get("text")?.asString?.trim()
+                    ?.takeIf { it.isNotBlank() }
+                    ?.let { Line(Speaker.CLAUDE, it, at) }
+
+                "tool_use" -> {
+                    val name = part.get("name")?.asString ?: "outil"
+                    Line(Speaker.TOOL, name + toolHint(part), at)
+                }
+
+                else -> null
+            }
+        }
+    }
+
+    /** Ce que l'outil touche : la commande, le fichier, le motif recherché. */
+    private fun toolHint(part: JsonObject): String {
+        val input = part.getAsJsonObject("input") ?: return ""
+        val hint = input.get("command")?.asString
+            ?: input.get("file_path")?.asString
+            ?: input.get("path")?.asString
+            ?: input.get("pattern")?.asString
+            ?: input.get("description")?.asString
+        return if (hint.isNullOrBlank()) "" else " · " + hint.replace('\n', ' ').take(80)
+    }
+
+    private fun instant(iso: String?): Long =
+        runCatching { java.time.Instant.parse(iso).toEpochMilli() }.getOrDefault(0L)
 
     /** Résumé court (nature + texte) de la dernière activité d'un événement. */
     private fun summarize(obj: JsonObject): Pair<Activity, String>? {

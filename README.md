@@ -34,6 +34,26 @@ Fonctionnalités
 * Réduction dans la barre système, et ajout au démarrage de Windows depuis les
   réglages.
 
+### Sessions Claude Code
+
+Les sessions Claude Code ouvertes sur la machine apparaissent d'elles-mêmes en
+tête de la pile, une carte chacune — nom de la session, état, bouton d'édition,
+rien de plus :
+
+* **Suivi** : l'état (en cours / en attente / prête) est lu directement auprès du
+  CLI. Survoler l'icône d'état montre les dernières réponses en infobulle ; la
+  cliquer ouvre une fenêtre dédiée avec le fil complet.
+* **Envoi** : le bouton d'édition déplie l'éditeur Markdown habituel, et le
+  message part dans la **vraie session du terminal**. Le texte est déposé dans la
+  console de la session comme un collage, ce qui préserve le Markdown multiligne.
+* **Création** : le menu « + » ouvre une nouvelle session en contrôle à distance
+  (`--remote-control`), pilotable depuis le widget comme depuis l'application
+  Claude.
+
+> Windows uniquement : l'envoi s'appuie sur la console de la session
+> (`AttachConsole` / `WriteConsoleInput`). Claude Code prévoit un canal local
+> dans le format de ses fichiers de session, mais ne le renseigne pas encore.
+
 > La synchronisation cloud entre appareils, mentionnée dans d'anciennes
 > versions, est **actuellement désactivée** : elle demandait des identifiants
 > OAuth qui ne peuvent pas vivre dans un dépôt public. L'application fonctionne

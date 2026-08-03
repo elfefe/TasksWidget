@@ -43,7 +43,7 @@ import androidx.compose.ui.window.ApplicationScope
 import androidx.compose.ui.window.WindowPosition
 import androidx.compose.ui.window.rememberWindowState
 import com.elfefe.common.controller.ClaudeCode
-import com.elfefe.common.controller.ClaudePilot
+import com.elfefe.common.controller.ClaudeSessions
 import com.elfefe.common.controller.CrashWindow
 import com.elfefe.common.controller.Tasks
 import com.elfefe.common.controller.Updater
@@ -82,6 +82,13 @@ import kotlin.math.abs
  * varie trop d'un pilote à l'autre pour être fiable.
  */
 private const val SCROLL_STEP = 100f
+
+/**
+ * `TW_FORCE_EXPAND=1` garde la pile déployée : sans cela, la moindre inspection
+ * de l'interface (capture d'écran, pilotage automatisé) la fait fuir sur le bord
+ * dès que le curseur s'éloigne.
+ */
+private val FORCE_EXPANDED = System.getenv("TW_FORCE_EXPAND") == "1"
 
 /** État partagé par toutes les fenêtres de la pile. */
 class StackController(val workArea: Rectangle) {
@@ -126,9 +133,6 @@ class StackController(val workArea: Rectangle) {
      */
     var lastChange by mutableStateOf(0L)
 
-    /** Sessions Claude Code réellement ouvertes, rafraîchies périodiquement. */
-    var sessions by mutableStateOf<List<ClaudeCode.RunningSession>>(emptyList())
-
     /**
      * Liste affichée = sessions Claude en cours (éphémères, en tête) + tâches
      * persistées. Les sessions déjà épinglées dans une tâche ne sont pas
@@ -141,7 +145,7 @@ class StackController(val workArea: Rectangle) {
             val pinned = tasks.mapNotNull {
                 if (it.type == "claude" && it.claudeSessionId.isNotBlank()) it.claudeSessionId else null
             }.toSet()
-            val ephemeral = sessions
+            val ephemeral = ClaudeSessions.running
                 .filter { it.sessionId !in pinned }
                 .map { s ->
                     Task(
@@ -152,18 +156,29 @@ class StackController(val workArea: Rectangle) {
                         created = -(s.sessionId.hashCode().toLong() and 0x7fffffffL) - 1L
                     )
                 }
-            // Sessions pilotées par le widget (interactives), en tout premier.
-            val piloted = ClaudePilot.sessions.values.map { s ->
-                Task(
-                    title = s.title,
-                    type = "pilot",
-                    claudeCwd = s.cwd,
-                    claudeSessionId = s.id,
-                    created = -(s.id.hashCode().toLong() and 0x7fffffffL) - 2_000_000_000L
-                )
-            }
-            return piloted + ephemeral + tasks
+            // Vestiges d'une version antérieure : des tâches « claude » créées
+            // sans session rattachée. Elles ne désignent plus rien — ni statut à
+            // lire, ni session à qui écrire — et n'encombrent donc plus la pile.
+            // Le fichier de tâches, lui, n'est pas touché.
+            val orphan = { task: Task -> task.type == "claude" && task.claudeSessionId.isBlank() }
+            return ephemeral + tasks.filterNot(orphan)
         }
+
+    /** Index dans [displayed] de la carte d'une session, -1 si absente. */
+    fun indexOfSession(sessionId: String): Int =
+        displayed.indexOfFirst { it.type == "claude" && it.claudeSessionId == sessionId }
+
+    /** Ordonnée (dp) du haut de la carte à l'index [index]. */
+    fun topOf(index: Int): Float = viewportTop + cumulativeBefore(index) - scrollOffset
+
+    /** Abscisse d'une fenêtre accolée à la pile, du côté opposé au bord d'ancrage. */
+    fun sideX(slide: Float): Float =
+        if (isRight) baseX + slide - SESSION_WINDOW_WIDTH - 6f
+        else baseX + slide + stackWidth.value + 6f
+
+    /** Ordonnée d'une fenêtre accolée, maintenue entièrement dans l'écran. */
+    fun sideY(top: Float, height: Float): Float =
+        top.coerceIn(baseY, (viewportBottom - height).coerceAtLeast(baseY))
 
     /** Fenêtre AWT de la barre de navigation, pour la ramener au premier plan. */
     var navWindow: Window? = null
@@ -245,16 +260,19 @@ fun ApplicationScope.TaskStack(windowInteractions: WindowInteractions) {
         Tasks.refresh()
     }
 
-    // Sessions Claude Code en cours : rafraîchies en continu, affichées
+    // Sessions Claude Code en cours : relevées en continu, affichées
     // automatiquement comme cartes (via controller.displayed).
     LaunchedEffect(Unit) {
         while (true) {
-            val previous = controller.sessions.map { it.sessionId }.toSet()
-            controller.sessions = runCatching { ClaudeCode.runningSessions() }.getOrDefault(emptyList())
+            val previous = ClaudeSessions.running.map { it.sessionId }.toSet()
+            ClaudeSessions.running = runCatching { ClaudeCode.runningSessions() }.getOrDefault(emptyList())
+            val current = ClaudeSessions.running.map { it.sessionId }.toSet()
             // Si l'ensemble des sessions change (ouverture/fermeture), on rafraîchit
             // la grâce pour ne pas replier la pile à cause d'un changement de taille.
-            if (controller.sessions.map { it.sessionId }.toSet() != previous)
+            if (current != previous) {
+                (previous - current).forEach { ClaudeSessions.forget(it) }
                 controller.lastChange = System.currentTimeMillis()
+            }
             delay(2000)
         }
     }
@@ -310,7 +328,10 @@ fun ApplicationScope.TaskStack(windowInteractions: WindowInteractions) {
                     // rétrécir l'aire sous le curseur ; on ne replie pas dans la
                     // foulée, le temps que l'utilisateur bouge.
                     val settled = System.currentTimeMillis() - controller.lastChange > 900
-                    if (measured && settled) {
+                    // Un message en cours d'écriture retient la pile : replier
+                    // sous les doigts de l'utilisateur perdrait sa saisie de vue.
+                    val writing = ClaudeSessions.editing != null
+                    if (measured && settled && !writing && !FORCE_EXPANDED) {
                         val left = controller.baseX
                         val right = controller.baseX + controller.stackWidth.value
                         if (!inside(left, controller.baseY, right, controller.stackBottom(), 16))
@@ -372,20 +393,28 @@ fun ApplicationScope.TaskStack(windowInteractions: WindowInteractions) {
         }
     }
 
-    // Fenêtre latérale de la session pilotée active, juste à côté de sa carte.
-    val activePilot = ClaudePilot.active
-    if (activePilot != null && !fullyCollapsed) {
-        val idx = controller.displayed.indexOfFirst { it.type == "pilot" && it.claudeSessionId == activePilot }
-        if (idx >= 0) {
-            val top = controller.viewportTop + controller.cumulativeBefore(idx) - controller.scrollOffset
-            val sideWidth = 340f
-            val x = if (controller.isRight) controller.baseX + slidePx - sideWidth - 6f
-            else controller.baseX + slidePx + controller.stackWidth.value + 6f
-            PilotSideWindow(
-                xDp = x,
-                yDp = top.coerceIn(controller.baseY, controller.viewportBottom - 120f)
-            )
-        }
+    // Aperçu des réponses au survol de l'icône d'état, contre la carte survolée.
+    val hovered = ClaudeSessions.hovered
+    if (hovered != null && !fullyCollapsed) {
+        val index = controller.indexOfSession(hovered)
+        if (index >= 0) SessionTooltipWindow(
+            sessionId = hovered,
+            xDp = controller.sideX(slidePx),
+            yDp = controller.sideY(controller.topOf(index), 200f)
+        )
+    }
+
+    // Fenêtre de conversation : elle survit au repli de la pile, sans quoi lire
+    // une réponse en éloignant la souris la ferait disparaître.
+    val opened = ClaudeSessions.opened
+    if (opened != null) {
+        val index = controller.indexOfSession(opened)
+        val top = if (index >= 0) controller.topOf(index) else controller.viewportTop
+        SessionConversationWindow(
+            sessionId = opened,
+            xDp = controller.sideX(if (fullyCollapsed) 0f else slidePx),
+            yDp = controller.sideY(top, 480f)
+        )
     }
 
     // Poignée de repli sur le bord.

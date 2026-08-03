@@ -51,7 +51,12 @@ object ClaudeSessions {
     private val editors = mutableMapOf<String, TaskCardManager>()
 
     fun editor(sessionId: String): TaskCardManager =
-        editors.getOrPut(sessionId) { TaskCardManager(Task(title = sessionId)) }
+        editors.getOrPut(sessionId) {
+            // La barre markdown est montée d'emblée : la carte ne l'affiche que
+            // lorsqu'elle déplie l'éditeur, et la poser ici évite d'écrire cet
+            // état depuis la composition, ce que Compose ne pardonne pas.
+            TaskCardManager(Task(title = sessionId)).apply { showEditor = true }
+        }
 
     /** Bascule l'éditeur d'une session (un seul ouvert à la fois). */
     fun toggleEditing(sessionId: String) {

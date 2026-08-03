@@ -32,7 +32,8 @@ object ClaudeInject {
     private const val KEY_EVENT: Short = 1
     private const val VK_RETURN: Short = 0x0D
 
-    /** Échappement ASCII (0x1B), en séquence pour rester lisible dans le source. */
+    /** Échappement ASCII (0x1B), construit plutôt qu'écrit : un caractère de
+     * contrôle dans un littéral ne survit pas au premier outil qui reformate. */
     private val ESC = Char(27).toString()
     private const val CR = "\r"
 

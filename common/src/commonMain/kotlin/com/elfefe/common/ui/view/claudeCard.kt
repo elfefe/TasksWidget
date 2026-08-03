@@ -110,7 +110,6 @@ fun ClaudeTaskCard(task: Task, windowInteractions: WindowInteractions) {
                     Spacer(Modifier.height(4.dp))
                     // Barre markdown des tâches : mêmes gestes pour écrire à une
                     // session que pour écrire une description.
-                    manager.showEditor = true
                     Editor(manager, windowInteractions)
                     MessageField(session, manager, colors)
                 }

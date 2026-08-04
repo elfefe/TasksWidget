@@ -470,11 +470,17 @@ fun ApplicationScope.TaskStack(windowInteractions: WindowInteractions) {
                     // Un message en cours d'écriture retient la pile : replier
                     // sous les doigts de l'utilisateur perdrait sa saisie de vue.
                     val writing = ClaudeSessions.editing != null
+                    // Une conversation ouverte la retient aussi : on la lit à
+                    // côté de sa carte, souris hors de la pile, et celle-ci
+                    // n'avait aucune raison de fuir. La refermer rend la pile à
+                    // son comportement ordinaire — elle se replie donc dans la
+                    // foulée, la souris étant alors hors de son aire.
+                    val reading = ClaudeSessions.opened != null
                     // La poignée fait partie de la pile, même posée à l'autre
                     // bout de l'écran : la souris qui s'y trouve n'est pas
                     // « partie », et replier là-dessus relançait aussitôt le
                     // déploiement depuis cette même poignée.
-                    if (measured && settled && !writing && !FORCE_EXPANDED &&
+                    if (measured && settled && !writing && !reading && !FORCE_EXPANDED &&
                         !overHandle && !controller.isHeldExpanded()
                     ) {
                         val left = controller.baseX

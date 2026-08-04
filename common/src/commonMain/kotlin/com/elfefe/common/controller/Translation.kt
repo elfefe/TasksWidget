@@ -89,6 +89,38 @@ class Translation(val language: String = currentLanguage) {
             "fr" -> "Opacité"
             else -> "Opacity"
         }
+    val accountLabel: String
+        get() = when (language) {
+            "fr" -> "Compte"
+            else -> "Account"
+        }
+    val accountConnected: String
+        get() = when (language) {
+            "fr" -> "Connecté"
+            else -> "Signed in"
+        }
+    val accountConnecting: String
+        get() = when (language) {
+            "fr" -> "Connexion en cours dans le navigateur…"
+            else -> "Signing in through your browser…"
+        }
+    val signInLabel: String
+        get() = when (language) {
+            "fr" -> "Se connecter avec Google"
+            else -> "Sign in with Google"
+        }
+    val signOutLabel: String
+        get() = when (language) {
+            "fr" -> "Se déconnecter"
+            else -> "Sign out"
+        }
+    val signInHint: String
+        get() = when (language) {
+            "fr" -> "Aucun mot de passe à saisir : votre navigateur vous identifie, " +
+                    "et l'application se reconnecte seule ensuite."
+            else -> "No password to type: your browser identifies you, and the app " +
+                    "signs in on its own from then on."
+        }
     val resetTheme: String
         get() = when (language) {
             "fr" -> "Rétablir les couleurs d'origine"

@@ -37,6 +37,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.*
 import androidx.compose.ui.window.WindowPosition
 import com.elfefe.common.controller.*
+import com.elfefe.common.controller.auth.GoogleAuth
 import kotlinx.coroutines.delay
 //import com.google.firebase.FirebaseOptions
 //import com.google.firebase.auth.FirebaseAuth
@@ -65,6 +66,10 @@ fun preload() {
 fun start() {
     System.setProperty("java.util.logging.config.file", logsFile.absolutePath)
     preload()
+    // Reprend la session Google s'il reste un jeton de rafraîchissement : c'est
+    // ce qui fait qu'il n'y a rien à faire au lancement, l'accord n'étant
+    // demandé qu'une seule fois.
+    GoogleAuth.restore()
     application {
         runCatching {
             TasksWidget()

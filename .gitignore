@@ -59,3 +59,7 @@ desktop/key-password
 
 # Captures video de demonstration (les PNG du README restent)
 medias/*.mp4
+
+# Identifiants du client OAuth : deposes a la construction depuis les secrets
+# du depot, jamais versionnes.
+oauth-client.json

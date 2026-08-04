@@ -36,7 +36,7 @@ import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.elfefe.common.controller.*
-import com.elfefe.common.controller.firebase.authentication.AuthenticationApi
+import com.elfefe.common.controller.auth.GoogleAuth
 import com.elfefe.common.controller.firebase.authentication.User
 import com.elfefe.common.model.HoldKey
 import com.elfefe.common.model.TaskFieldOrder
@@ -271,6 +271,87 @@ fun Theme(windowInteractions: WindowInteractions) {
 }
 
 /**
+ * Compte Google.
+ *
+ * Il y avait ici deux champs — adresse et mot de passe — envoyés à Firebase
+ * avec une clé d'API qui a depuis été purgée du dépôt : le formulaire ne menait
+ * donc plus nulle part. La connexion passe maintenant par le navigateur, où la
+ * session Google est déjà ouverte : un accord donné une fois, et l'application
+ * se reconnecte seule ensuite.
+ */
+@Composable
+fun AccountConfig() {
+    val colors = Tasks.Configs.configs.themeColors
+    val state = GoogleAuth.state
+
+    Column(Modifier.fillMaxWidth()) {
+        Text(
+            text = Translation().accountLabel,
+            fontWeight = FontWeight.Normal,
+            fontSize = 16.sp,
+            color = colors.onBackground
+        )
+        Spacer(Modifier.height(8.dp))
+
+        when (state) {
+            is GoogleAuth.State.SignedIn -> Row(verticalAlignment = Alignment.CenterVertically) {
+                Column(Modifier.weight(1f)) {
+                    Text(
+                        text = state.name.ifBlank { state.email.ifBlank { Translation().accountConnected } },
+                        fontSize = 14.sp,
+                        fontWeight = FontWeight.Bold,
+                        color = colors.onBackground
+                    )
+                    if (state.email.isNotBlank() && state.name.isNotBlank())
+                        Text(state.email, fontSize = 12.sp, color = colors.onBackground.copy(alpha = 0.7f))
+                }
+                Text(
+                    text = Translation().signOutLabel,
+                    fontSize = 13.sp,
+                    fontWeight = FontWeight.Bold,
+                    color = colors.onBackground,
+                    modifier = Modifier
+                        .clip(RoundedCornerShape(4.dp))
+                        .background(colors.onBackground.copy(alpha = 0.08f))
+                        .clickable { GoogleAuth.signOut() }
+                        .padding(horizontal = 12.dp, vertical = 8.dp)
+                )
+            }
+
+            is GoogleAuth.State.Connecting -> Text(
+                text = Translation().accountConnecting,
+                fontSize = 13.sp,
+                color = colors.onBackground.copy(alpha = 0.7f)
+            )
+
+            else -> Column {
+                if (state is GoogleAuth.State.Failed) {
+                    Text(state.reason, fontSize = 12.sp, color = Color(0xFFCC5555))
+                    Spacer(Modifier.height(6.dp))
+                }
+                Text(
+                    text = Translation().signInLabel,
+                    fontSize = 14.sp,
+                    fontWeight = FontWeight.Bold,
+                    color = colors.onPrimary,
+                    modifier = Modifier
+                        .clip(RoundedCornerShape(4.dp))
+                        .background(colors.primary)
+                        .clickable { GoogleAuth.signIn() }
+                        .padding(horizontal = 14.dp, vertical = 10.dp)
+                )
+                Spacer(Modifier.height(6.dp))
+                Text(
+                    text = Translation().signInHint,
+                    fontSize = 12.sp,
+                    color = colors.onBackground.copy(alpha = 0.7f)
+                )
+            }
+        }
+    }
+}
+
+/**
  * Choix de la touche qui, maintenue, empeche la pile de se deployer a
  * l'approche et libere la poignee.
  */
@@ -375,81 +456,7 @@ fun General(windowInteractions: WindowInteractions) {
                     }
                 }
 
-                item {
-                    Column {
-                        var email by remember { mutableStateOf("") }
-                        var password by remember { mutableStateOf("") }
-
-                        Row(
-                            verticalAlignment = Alignment.CenterVertically,
-                        ) {
-                            Column {
-                                OutlinedTextField(
-                                    value = email,
-                                    onValueChange = { email = it },
-                                    label = { Text(Translation().emailLabel) },
-                                    colors = TextFieldDefaults.outlinedTextFieldColors(
-                                        focusedBorderColor = Tasks.Configs.configs.themeColors.primary,
-                                        unfocusedBorderColor = Tasks.Configs.configs.themeColors.primary
-                                    ),
-                                    modifier = Modifier
-                                        .fillMaxWidth()
-                                        .padding(8.dp)
-                                )
-
-                                OutlinedTextField(
-                                    value = password,
-                                    onValueChange = { password = it },
-                                    label = { Text(Translation().passwordLabel) },
-                                    colors = TextFieldDefaults.outlinedTextFieldColors(
-                                        focusedBorderColor = Tasks.Configs.configs.themeColors.primary,
-                                        unfocusedBorderColor = Tasks.Configs.configs.themeColors.primary
-                                    ),
-                                    modifier = Modifier
-                                        .fillMaxWidth()
-                                        .padding(8.dp)
-                                )
-                            }
-                        }
-
-                        Row(
-                            modifier = Modifier.fillMaxWidth(),
-                            horizontalArrangement = Arrangement.End
-                        ) {
-                            Button ({
-                                AuthenticationApi.login(User(email, password))
-                            },
-                                colors = ButtonDefaults.buttonColors(
-                                    backgroundColor = Tasks.Configs.configs.themeColors.onBackground,
-                                    contentColor = Tasks.Configs.configs.themeColors.background
-                                )
-                            ) {
-                                Text(
-                                    text = Translation().loginLabel,
-                                    fontWeight = FontWeight.Normal,
-                                    fontSize = 16.sp
-                                )
-                            }
-
-                            Spacer(Modifier.width(32.dp))
-
-                            Button ({
-                                AuthenticationApi.register(User(email, password))
-                            },
-                                colors = ButtonDefaults.buttonColors(
-                                    backgroundColor = Tasks.Configs.configs.themeColors.onBackground,
-                                    contentColor = Tasks.Configs.configs.themeColors.background
-                                )
-                            ) {
-                                Text(
-                                    text = Translation().registerLabel,
-                                    fontWeight = FontWeight.Normal,
-                                    fontSize = 16.sp
-                                )
-                            }
-                        }
-                    }
-                }
+                item { AccountConfig() }
             }
         }
     }

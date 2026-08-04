@@ -1,0 +1,21 @@
+Polices embarquees dans TasksWidget
+===================================
+
+Les quatre familles ci-dessous sont distribuees sous SIL Open Font License 1.1,
+dont le texte complet est joint dans OFL.txt.
+
+Inter
+  Copyright 2020 The Inter Project Authors
+  https://github.com/rsms/inter
+
+IBM Plex Sans
+  Copyright 2017 IBM Corp.
+  https://github.com/IBM/plex
+
+Atkinson Hyperlegible
+  Copyright 2020 Braille Institute of America, Inc.
+  https://www.brailleinstitute.org/freefont
+
+JetBrains Mono
+  Copyright 2020 The JetBrains Mono Project Authors
+  https://github.com/JetBrains/JetBrainsMono

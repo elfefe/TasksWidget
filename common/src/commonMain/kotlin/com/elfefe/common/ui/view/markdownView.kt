@@ -13,6 +13,7 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.ClickableText
+import androidx.compose.material.LocalTextStyle
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
@@ -20,7 +21,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalUriHandler
 import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.TextStyle
-import androidx.compose.ui.text.font.FontFamily
+import com.elfefe.common.ui.theme.monoFontFamily
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.TextUnit
@@ -63,7 +64,7 @@ private fun MarkdownBlockView(
         is MarkdownBlock.Paragraph -> LinkableText(
             text = block.text,
             colors = colors,
-            style = TextStyle(color = colors.onBackground, fontSize = fontSize),
+            style = LocalTextStyle.current.copy(color = colors.onBackground, fontSize = fontSize),
             maxLines = maxLines,
             modifier = Modifier.fillMaxWidth().padding(vertical = 2.dp)
         )
@@ -105,7 +106,7 @@ private fun MarkdownBlockView(
             LinkableText(
                 text = block.text,
                 colors = colors,
-                style = TextStyle(color = colors.onBackground, fontSize = fontSize),
+                style = LocalTextStyle.current.copy(color = colors.onBackground, fontSize = fontSize),
                 maxLines = maxLines,
                 modifier = Modifier.alignByBaseline().weight(1f)
             )
@@ -123,7 +124,7 @@ private fun MarkdownBlockView(
                     block.language,
                     color = colors.onBackground.copy(alpha = 0.45f),
                     fontSize = fontSize * 0.8f,
-                    fontFamily = FontFamily.Monospace
+                    fontFamily = monoFontFamily
                 )
                 Spacer(Modifier.height(2.dp))
             }
@@ -134,7 +135,7 @@ private fun MarkdownBlockView(
                     block.code,
                     color = colors.onBackground,
                     fontSize = fontSize * 0.95f,
-                    fontFamily = FontFamily.Monospace,
+                    fontFamily = monoFontFamily,
                     softWrap = false
                 )
             }

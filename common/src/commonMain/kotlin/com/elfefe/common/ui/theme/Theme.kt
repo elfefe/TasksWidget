@@ -41,9 +41,12 @@ fun TasksTheme(
         )
     }
 
+    val font = Tasks.Configs.configs.font
+    val typography = remember(font) { typographyOf(font) }
+
     MaterialTheme(
         colors = colors,
-        typography = Typography,
+        typography = typography,
         content = content
     )
 }

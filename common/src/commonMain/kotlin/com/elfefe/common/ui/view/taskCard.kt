@@ -16,6 +16,7 @@ import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.onClick
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.text.BasicTextField
+import androidx.compose.material.LocalTextStyle
 import androidx.compose.material.Card
 import androidx.compose.material.Icon
 import androidx.compose.material.Text
@@ -131,7 +132,7 @@ fun TopBar(manager: TaskCardManager) {
             modifier = Modifier
                 .width(IntrinsicSize.Max)
                 .padding(10.dp, 0.dp),
-            textStyle = TextStyle(
+            textStyle = LocalTextStyle.current.copy(
                 color =
                 if (done || deadlineDate == 1) Tasks.Configs.configs.themeColors.onBackground
                 else if (deadlineDate == -1) Color(0xFFFFB900)
@@ -185,7 +186,7 @@ fun TopBar(manager: TaskCardManager) {
             },
             modifier = Modifier
                 .weight(1f),
-            textStyle = TextStyle(
+            textStyle = LocalTextStyle.current.copy(
                 color = Tasks.Configs.configs.themeColors.onBackground,
                 fontWeight = FontWeight.SemiBold
             ),
@@ -460,7 +461,7 @@ fun Content(manager: TaskCardManager, showDescription: Boolean) {
                             }
                         }
                     }*/
-                textStyle = TextStyle(color = Tasks.Configs.configs.themeColors.onBackground),
+                textStyle = LocalTextStyle.current.copy(color = Tasks.Configs.configs.themeColors.onBackground),
                 visualTransformation = MarkdownVisualTransformation(),
                 /*interactionSource = remember { MutableInteractionSource() }.apply {
                     interactions.onEach {

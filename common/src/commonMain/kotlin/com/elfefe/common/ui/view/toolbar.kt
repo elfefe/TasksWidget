@@ -10,6 +10,7 @@ import androidx.compose.foundation.gestures.detectDragGestures
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.BasicTextField
+import androidx.compose.material.LocalTextStyle
 import androidx.compose.material.Icon
 import androidx.compose.material.Text
 import androidx.compose.material.icons.Icons
@@ -290,7 +291,7 @@ fun ColumnScope.Toolbar(
                                     ((!task.done && !showDone) || showDone)
                         }
                     },
-                    textStyle = TextStyle(
+                    textStyle = LocalTextStyle.current.copy(
                         color = Tasks.Configs.configs.themeColors.onPrimary
                     ),
                     modifier = Modifier

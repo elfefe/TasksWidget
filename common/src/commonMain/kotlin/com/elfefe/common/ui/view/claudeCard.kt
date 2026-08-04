@@ -15,6 +15,7 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.BasicTextField
+import androidx.compose.material.LocalTextStyle
 import androidx.compose.material.Card
 import androidx.compose.material.Icon
 import androidx.compose.material.Text
@@ -216,7 +217,7 @@ private fun MessageField(
                 .heightIn(min = 28.dp, max = 140.dp)
                 .background(colors.onBackground.copy(alpha = 0.06f), RoundedCornerShape(4.dp))
                 .padding(6.dp, 5.dp),
-            textStyle = TextStyle(color = colors.onBackground, fontSize = 11.sp),
+            textStyle = LocalTextStyle.current.copy(color = colors.onBackground, fontSize = 11.sp),
             cursorBrush = SolidColor(colors.onBackground),
             visualTransformation = MarkdownVisualTransformation()
         )
@@ -334,7 +335,7 @@ private fun LabeledField(
                 .fillMaxWidth()
                 .background(colors.onBackground.copy(alpha = 0.06f), RoundedCornerShape(4.dp))
                 .padding(6.dp, 4.dp),
-            textStyle = TextStyle(color = colors.onBackground, fontSize = 11.sp),
+            textStyle = LocalTextStyle.current.copy(color = colors.onBackground, fontSize = 11.sp),
             singleLine = singleLine,
             cursorBrush = SolidColor(colors.onBackground)
         )

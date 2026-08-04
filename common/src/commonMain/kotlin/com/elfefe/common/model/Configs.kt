@@ -42,7 +42,8 @@ class Configs(
     holdKey: HoldKey = HoldKey.CONTROL,
     handleY: Float = HANDLE_Y_AUTO,
     anchorRight: Boolean = true,
-    pinned: Boolean = false
+    pinned: Boolean = false,
+    font: AppFont = AppFont.INTER
 ) {
     var taskFieldsOrder: List<TaskFieldOrder> by mutableStateOf(taskFieldsOrder)
         private set
@@ -65,6 +66,10 @@ class Configs(
 
     /** Pile épinglée : elle reste déployée quoi qu'il arrive. */
     var pinned: Boolean by mutableStateOf(pinned)
+        private set
+
+    /** Police de l'interface. */
+    var font: AppFont by mutableStateOf(font)
         private set
 
     /**
@@ -121,9 +126,15 @@ class Configs(
         onChanged?.invoke()
     }
 
+    fun updateFont(font: AppFont) {
+        this.font = font
+        onChanged?.invoke()
+    }
+
     override fun toString(): String =
         "Configs(themeColors=$themeColors, taskFieldsOrder=$taskFieldsOrder, language=$language, " +
-                "holdKey=${holdKey.id}, handleY=$handleY, anchorRight=$anchorRight, pinned=$pinned)"
+                "holdKey=${holdKey.id}, handleY=$handleY, anchorRight=$anchorRight, pinned=$pinned, " +
+                "font=${font.id})"
 
     companion object {
         fun defaultThemeColors(): ThemeColors = ThemeColors(
@@ -153,6 +164,7 @@ class ConfigsAdapter : TypeAdapter<Configs>() {
             add("handleY", gson.toJsonTree(value?.handleY))
             add("anchorRight", gson.toJsonTree(value?.anchorRight))
             add("pinned", gson.toJsonTree(value?.pinned))
+            add("font", gson.toJsonTree(value?.font?.id))
         }, out)
     }
 
@@ -164,6 +176,7 @@ class ConfigsAdapter : TypeAdapter<Configs>() {
         var handleY = HANDLE_Y_AUTO
         var anchorRight = true
         var pinned = false
+        var font = AppFont.INTER
         `in`?.beginObject()
         while (`in`?.hasNext() == true) {
             when (`in`.nextName()) {
@@ -179,6 +192,7 @@ class ConfigsAdapter : TypeAdapter<Configs>() {
                 "handleY" -> handleY = `in`.nextDouble().toFloat()
                 "anchorRight" -> anchorRight = `in`.nextBoolean()
                 "pinned" -> pinned = `in`.nextBoolean()
+                "font" -> font = AppFont.of(`in`.nextString())
                 // Un champ inconnu était fatal : la lecture échouait, le fichier
                 // partait en .bak et l'utilisateur retrouvait un thème neuf.
                 // Ouvrir une version plus récente puis revenir en arrière ne
@@ -194,7 +208,8 @@ class ConfigsAdapter : TypeAdapter<Configs>() {
             holdKey = holdKey,
             handleY = handleY,
             anchorRight = anchorRight,
-            pinned = pinned
+            pinned = pinned,
+            font = font
         )
     }
 }

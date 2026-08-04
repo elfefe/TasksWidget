@@ -3,6 +3,7 @@ import com.elfefe.common.model.Configs
 import com.elfefe.common.model.ConfigsAdapter
 import com.elfefe.common.model.HANDLE_Y_AUTO
 import com.elfefe.common.model.HoldKey
+import com.elfefe.common.ui.theme.AppFont
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertFalse
@@ -38,6 +39,29 @@ class ConfigsPersistenceTest {
         configs.updatePinned(true)
         assertTrue(configs.pinned)
         assertEquals(1, notified)
+    }
+
+    @Test
+    fun `la police survit a un aller-retour et se signale`() {
+        val adapter = ConfigsAdapter()
+        val restored = adapter.fromJson(adapter.toJson(Configs(font = AppFont.PLEX)))
+        assertEquals(AppFont.PLEX, restored.font)
+
+        var notified = 0
+        val configs = Configs().apply { onChanged = { notified++ } }
+        assertEquals(AppFont.INTER, configs.font)
+        configs.updateFont(AppFont.ATKINSON)
+        assertEquals(AppFont.ATKINSON, configs.font)
+        assertEquals(1, notified)
+    }
+
+    @Test
+    fun `une police inconnue retombe sur Inter`() {
+        // Une configuration ecrite avant ce reglage, ou par une version future,
+        // ne doit pas empecher la lecture du reste du fichier.
+        assertEquals(AppFont.INTER, AppFont.of(null))
+        assertEquals(AppFont.INTER, AppFont.of("police-qui-n-existe-pas"))
+        assertEquals(AppFont.SYSTEM, AppFont.of("system"))
     }
 
     @Test

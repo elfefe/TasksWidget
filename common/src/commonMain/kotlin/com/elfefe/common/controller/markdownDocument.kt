@@ -2,7 +2,7 @@ package com.elfefe.common.controller
 
 import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.SpanStyle
-import androidx.compose.ui.text.font.FontFamily
+import com.elfefe.common.ui.theme.monoFontFamily
 import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextDecoration
@@ -203,7 +203,7 @@ object MarkdownDocument {
                 node.children.forEach { child ->
                     if (child.type != MarkdownTokenTypes.BACKTICK) builder.append(child.getTextInNode(source))
                 }
-                builder.addStyle(SpanStyle(fontFamily = FontFamily.Monospace), start, builder.length)
+                builder.addStyle(SpanStyle(fontFamily = monoFontFamily), start, builder.length)
             }
 
             MarkdownElementTypes.INLINE_LINK,

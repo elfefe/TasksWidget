@@ -4,7 +4,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.TextRange
-import androidx.compose.ui.text.font.FontFamily
+import com.elfefe.common.ui.theme.monoFontFamily
 import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.OffsetMapping
@@ -119,8 +119,8 @@ class MarkdownVisualTransformation : VisualTransformation {
                 "**" to SpanStyle(fontWeight = FontWeight.Bold),
                 "__" to SpanStyle(fontWeight = FontWeight.Bold),
                 "~~" to SpanStyle(textDecoration = TextDecoration.LineThrough),
-                "`" to SpanStyle(fontFamily = FontFamily.Monospace, background = Color.LightGray),
-                "```" to SpanStyle(fontFamily = FontFamily.Monospace, background = Color.LightGray),
+                "`" to SpanStyle(fontFamily = monoFontFamily, background = Color.LightGray),
+                "```" to SpanStyle(fontFamily = monoFontFamily, background = Color.LightGray),
                 "==" to SpanStyle(background = Color.Yellow),
                 // Headers will be handled separately
             )

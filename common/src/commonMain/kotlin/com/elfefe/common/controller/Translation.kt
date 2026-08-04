@@ -138,5 +138,22 @@ class Translation(val language: String = currentLanguage) {
             else -> "Held down, it keeps the stack from expanding when the mouse " +
                     "approaches, and lets you move the handle."
         }
+    val fontLabel: String
+        get() = when (language) {
+            "fr" -> "Police"
+            else -> "Font"
+        }
+    val fontHint: String
+        get() = when (language) {
+            "fr" -> "Chaque nom est écrit dans sa propre police, et l'aperçu " +
+                    "reprend la taille et le fond réels des tâches."
+            else -> "Each name is set in its own font, and the preview uses the " +
+                    "actual size and background of the tasks."
+        }
+    val fontSample: String
+        get() = when (language) {
+            "fr" -> "Session /rc — 3 tâches, échéance le 12/08"
+            else -> "Session /rc — 3 tasks, due 08/12"
+        }
 }
 

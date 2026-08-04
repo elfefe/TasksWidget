@@ -8,6 +8,7 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.material.LocalTextStyle
 import androidx.compose.material.Card
 import androidx.compose.material.Icon
 import androidx.compose.material.Text
@@ -285,7 +286,7 @@ private fun Reply(session: ClaudeCode.RunningSession, colors: ThemeColors) {
                 .heightIn(min = 28.dp, max = 120.dp)
                 .background(colors.onBackground.copy(alpha = 0.06f), RoundedCornerShape(4.dp))
                 .padding(6.dp, 5.dp),
-            textStyle = TextStyle(color = colors.onBackground, fontSize = 11.sp),
+            textStyle = LocalTextStyle.current.copy(color = colors.onBackground, fontSize = 11.sp),
             cursorBrush = SolidColor(colors.onBackground),
             // Même rendu que dans la carte : écrire à une session ne doit pas
             // dépendre de l'endroit d'où on écrit.

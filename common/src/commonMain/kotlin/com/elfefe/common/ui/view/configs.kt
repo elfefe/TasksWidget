@@ -13,6 +13,7 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.BasicTextField
+import androidx.compose.material.LocalTextStyle
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowDropDown
@@ -40,6 +41,8 @@ import com.elfefe.common.controller.auth.GoogleAuth
 import com.elfefe.common.controller.firebase.authentication.User
 import com.elfefe.common.model.HoldKey
 import com.elfefe.common.model.TaskFieldOrder
+import com.elfefe.common.ui.theme.AppFont
+import com.elfefe.common.ui.theme.family
 import grayScale
 import hexToColor
 import maxSaturation
@@ -230,6 +233,10 @@ fun Theme(windowInteractions: WindowInteractions) {
             .fillMaxSize(),
         contentPadding = PaddingValues(16.dp),
     ) {
+        item {
+            FontConfig()
+            Spacer(Modifier.height(16.dp))
+        }
         themePartConfig(Translation().toolbarBackground, Tasks.Configs.configs.themeColors.primary) {
             Tasks.Configs.configs.updateThemeColors(primary = it)
             Tasks.Configs.update()
@@ -457,6 +464,83 @@ fun General(windowInteractions: WindowInteractions) {
                 }
 
                 item { AccountConfig() }
+            }
+        }
+    }
+}
+
+/**
+ * Choix de la police.
+ *
+ * Chaque option est écrite dans sa propre police et suivie d'un aperçu au corps
+ * et sur le fond réellement utilisés par les tâches : une police se juge à la
+ * taille où on la lira, en clair sur sombre, pas dans une liste de noms tous
+ * composés pareil.
+ */
+@Composable
+fun FontConfig() {
+    val selected = Tasks.Configs.configs.font
+    val colors = Tasks.Configs.configs.themeColors
+
+    Card(shape = RoundedCornerShape(8.dp), backgroundColor = Color.White) {
+        Column(Modifier.padding(16.dp)) {
+            Text(
+                text = Translation().fontLabel,
+                fontWeight = FontWeight.Normal,
+                fontSize = 18.sp,
+                color = Color.DarkGray
+            )
+            Spacer(Modifier.height(4.dp))
+            Text(
+                text = Translation().fontHint,
+                fontSize = 12.sp,
+                color = Color.Gray
+            )
+            Spacer(Modifier.height(12.dp))
+
+            AppFont.values().forEach { font ->
+                val chosen = font == selected
+                Column(
+                    Modifier
+                        .fillMaxWidth()
+                        .padding(vertical = 3.dp)
+                        .clip(RoundedCornerShape(6.dp))
+                        .background(if (chosen) colors.primary.copy(alpha = 1f) else Color(0xFFF2F2F2))
+                        .clickable {
+                            Tasks.Configs.configs.updateFont(font)
+                            Tasks.Configs.update()
+                        }
+                        .padding(horizontal = 10.dp, vertical = 8.dp)
+                ) {
+                    Row(verticalAlignment = Alignment.CenterVertically) {
+                        Text(
+                            text = font.label,
+                            fontFamily = font.family(),
+                            fontSize = 15.sp,
+                            fontWeight = if (chosen) FontWeight.SemiBold else FontWeight.Normal,
+                            color = if (chosen) colors.onPrimary else Color.DarkGray
+                        )
+                        Spacer(Modifier.width(8.dp))
+                        Text(
+                            text = font.description,
+                            fontSize = 11.sp,
+                            color = if (chosen) colors.onPrimary.copy(alpha = 0.7f) else Color.Gray
+                        )
+                    }
+                    Spacer(Modifier.height(6.dp))
+                    // Même corps et même fond que les cartes : c'est là que se
+                    // joue la lisibilité, pas dans un échantillon en grand.
+                    Text(
+                        text = Translation().fontSample,
+                        fontFamily = font.family(),
+                        fontSize = 11.sp,
+                        color = colors.onBackground,
+                        modifier = Modifier
+                            .clip(RoundedCornerShape(4.dp))
+                            .background(colors.background)
+                            .padding(horizontal = 6.dp, vertical = 4.dp)
+                    )
+                }
             }
         }
     }
@@ -728,7 +812,7 @@ fun ThemeColor(default: Color, onColorChange: (Color) -> Unit) {
                     .padding(0.dp)
                     .width(64.dp)
                     .align(Alignment.CenterHorizontally),
-                textStyle = TextStyle(
+                textStyle = LocalTextStyle.current.copy(
                     color = Color.Black,
                     fontSize = 12.sp
                 ),

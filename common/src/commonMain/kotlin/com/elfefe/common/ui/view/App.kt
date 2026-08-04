@@ -24,9 +24,8 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.ApplicationScope
 import com.elfefe.common.controller.Tasks
-import com.elfefe.common.controller.Updater
+import com.elfefe.common.controller.AutoUpdater
 import com.elfefe.common.controller.log
-import com.elfefe.common.controller.update
 import com.elfefe.common.model.Task
 import com.elfefe.common.model.github.GithubLatestRelease
 import com.google.gson.Gson
@@ -99,56 +98,32 @@ fun App(modifier: Modifier, windowInteractions: WindowInteractions) {
                 .then(modifier),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            val uriHandler = LocalUriHandler.current
-
-            var showStatus by remember { mutableStateOf(true) }
-            var latestRelease: GithubLatestRelease? by remember { mutableStateOf(null) }
-
-            LaunchedEffect(Unit) {
-                scope.launch {
-                    val response = HttpClient.newHttpClient().send(
-                        HttpRequest.newBuilder(URI.create("https://api.github.com/repos/elfefe/TasksWidget/releases/latest"))
-                            .GET()
-                            .build(),
-                        HttpResponse.BodyHandlers.ofString()
-                    )
-
-                    latestRelease = Gson().fromJson(response.body(), GithubLatestRelease::class.java)
-                }
+            // La mise à jour se fait toute seule (voir AutoUpdater) : ce bandeau
+            // n'a plus qu'à dire où elle en est, là où il fallait auparavant
+            // cliquer dessus pour déclencher quoi que ce soit.
+            val updateMessage = when (val state = AutoUpdater.state) {
+                is AutoUpdater.State.Idle -> null
+                is AutoUpdater.State.Waiting -> "Mise à jour ${state.version} prête"
+                is AutoUpdater.State.Downloading -> "Téléchargement de ${state.version}…"
+                is AutoUpdater.State.Installing -> "Installation de ${state.version}…"
+                is AutoUpdater.State.Failed -> state.reason
             }
 
-            AnimatedVisibility(windowInteractions.expand.value == true && showStatus) {
+            AnimatedVisibility(windowInteractions.expand.value == true && updateMessage != null) {
                 Row(
                     modifier = Modifier
                         .fillMaxWidth(),
                     verticalAlignment = Alignment.CenterVertically,
                     horizontalArrangement = Arrangement.SpaceBetween,
                 ) {
-                    var searchingVersion by remember { mutableStateOf("Searching update...") }
-                    var newVersionAvailable by remember { mutableStateOf(false) }
-                    var shadowColor by remember { mutableStateOf(Color.Black) }
-
-                    latestRelease?.run {
-                        useResource("version") {
-                            val version = it.readBytes().toString(Charsets.UTF_8)
-                            newVersionAvailable = tagName != version && tagName != null
-
-                            if (newVersionAvailable) searchingVersion = "New version available: $tagName"
-                            else {
-                                searchingVersion = "Up to date"
-                                showStatus = false
-                            }
-                        }
-                    }
-
                     BasicText(
-                        text = searchingVersion,
+                        text = updateMessage.orEmpty(),
                         style = TextStyle(
                             color = Tasks.Configs.configs.themeColors.onPrimary,
                             fontSize = 11.sp,
                             fontWeight = FontWeight.Bold,
                             shadow = Shadow(
-                                color = shadowColor,
+                                color = Color.Black,
                                 blurRadius = 2f,
                                 offset = Offset.Zero
                             )
@@ -156,31 +131,6 @@ fun App(modifier: Modifier, windowInteractions: WindowInteractions) {
                         modifier = Modifier
                             .height(20.dp)
                             .padding(4.dp)
-                            .onPointerEvent(eventType = PointerEventType.Enter) { shadowColor = Color(0xFF555555) }
-                            .onPointerEvent(eventType = PointerEventType.Exit) { shadowColor = Color.Black }
-                            .onClick {
-                                shadowColor = Color.Black
-                                showStatus = false
-                                if (newVersionAvailable) latestRelease?.let {
-                                    update(it) { status ->
-                                        windowInteractions.popup.value = Popup.show(status.message)
-
-                                        when (status) {
-                                            is Updater.Error -> {
-                                                log(status.error.stackTraceToString())
-                                                it.url?.let { uriHandler.openUri(it) }
-                                            }
-
-                                            is Updater.Install -> {
-                                                delay(500)
-                                                windowInteractions.application.exitApplication()
-                                            }
-
-                                            else -> null
-                                        }
-                                    }
-                                }
-                            }
                     )
                 }
             }

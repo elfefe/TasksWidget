@@ -108,7 +108,7 @@ object AutoUpdater {
 
         return runCatching {
             state = State.Downloading(version)
-            val installer = File(tmpDir, asset.name ?: "TasksWidget-latest.msi")
+            val installer = File(downloadDir(), asset.name ?: "TasksWidget-latest.msi")
             if (installer.exists()) installer.delete()
 
             val response = http.send(
@@ -135,8 +135,24 @@ object AutoUpdater {
      * seule façon pour `msiexec` de remplacer des fichiers verrouillés par le
      * processus en cours.
      */
+    /**
+     * Où déposer l'installeur et le script — **hors du dossier d'installation**.
+     *
+     * Ils vivaient dans `%LOCALAPPDATA%\TasksWidget\tmp`, c'est-à-dire dans le
+     * dossier que `msiexec` efface en désinstallant l'ancienne version avant de
+     * poser la nouvelle : il supprimait donc le MSI qu'il était en train de
+     * lire. La mise à jour s'arrêtait au milieu et l'application disparaissait
+     * de la machine, dossier d'installation vidé et entrée de désinstallation
+     * comprise.
+     */
+    private fun downloadDir(): File {
+        val temp = System.getenv("TEMP") ?: System.getProperty("java.io.tmpdir")
+        return File(temp, "TasksWidget-update").apply { mkdirs() }
+    }
+
     private fun launchSilentInstaller(installer: File) {
-        val script = File(tmpDir, "update-${System.currentTimeMillis()}.cmd")
+        val script = File(downloadDir(), "update-${System.currentTimeMillis()}.cmd")
+        val exe = executablePath()
         script.writeText(
             buildString {
                 append("@echo off\r\n")
@@ -144,12 +160,23 @@ object AutoUpdater {
                 // /qn : aucune fenêtre. L'installeur est par-utilisateur, donc
                 // aucune élévation n'est demandée.
                 append("msiexec /i \"${installer.absolutePath}\" /qn /norestart\r\n")
-                append("start \"\" \"${executablePath()}\"\r\n")
+                // Filet de sécurité : une mise à jour majeure désinstalle avant
+                // de réinstaller. Si quoi que ce soit l'interrompt entre les
+                // deux, l'application a purement disparu de la machine — on
+                // retente une fois plutôt que de laisser l'utilisateur sans rien.
+                append("if not exist \"$exe\" (\r\n")
+                append("  timeout /t 5 /nobreak >nul\r\n")
+                append("  msiexec /i \"${installer.absolutePath}\" /qn /norestart\r\n")
+                append(")\r\n")
+                append("if exist \"$exe\" start \"\" \"$exe\"\r\n")
                 append("del \"%~f0\"\r\n")
             }
         )
+        // Le script s'exécute depuis son propre dossier : lancé depuis le
+        // dossier d'installation, `cmd` l'y maintiendrait ouvert et empêcherait
+        // msiexec de le remplacer.
         ProcessBuilder("cmd", "/c", "start", "", "/min", script.absolutePath)
-            .directory(tmpDir)
+            .directory(downloadDir())
             .start()
     }
 

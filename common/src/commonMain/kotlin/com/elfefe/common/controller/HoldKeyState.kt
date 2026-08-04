@@ -14,6 +14,7 @@ import com.sun.jna.Native
  */
 object HoldKeyState {
 
+    private const val VK_LBUTTON = 0x01
     private const val VK_SHIFT = 0x10
     private const val VK_CONTROL = 0x11
     private const val VK_MENU = 0x12 // Alt
@@ -26,6 +27,19 @@ object HoldKeyState {
         runCatching { Native.load("user32", User32::class.java) }
             .onFailure { log("HoldKeyState: user32 indisponible\n" + it.stackTraceToString()) }
             .getOrNull()
+    }
+
+    /**
+     * Le bouton principal de la souris est-il enfonce a cet instant ?
+     *
+     * Sert a reconnaitre un glisser qui n'a jamais ete conclu : Compose ne
+     * delivre pas toujours la fin du geste quand la fenetre qui le suivait
+     * disparait, et le widget restait alors persuade qu'un deplacement etait en
+     * cours — plus aucun deploiement ni repli automatique.
+     */
+    fun isPrimaryMouseDown(): Boolean {
+        val state = user32?.GetAsyncKeyState(VK_LBUTTON) ?: return false
+        return (state.toInt() and 0x8000) != 0
     }
 
     /** La touche configuree est-elle enfoncee a cet instant ? */

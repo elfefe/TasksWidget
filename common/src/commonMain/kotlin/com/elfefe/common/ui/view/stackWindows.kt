@@ -86,6 +86,10 @@ private const val SCROLL_STEP = 100f
  */
 private val FORCE_EXPANDED = System.getenv("TW_FORCE_EXPAND") == "1"
 
+/** Durée d'affichage garantie après un clic sur la poignée. */
+private val HANDLE_CLICK_HOLD_MS =
+    System.getenv("TW_HANDLE_HOLD_MS")?.toLongOrNull() ?: 2_000L
+
 /** État partagé par toutes les fenêtres de la pile. */
 class StackController(val workArea: Rectangle) {
     val stackWidth: Dp = WINDOW_MAX_WIDTH
@@ -107,6 +111,27 @@ class StackController(val workArea: Rectangle) {
 
     /** Un déplacement de la poignée est en cours. */
     var handleDragging by mutableStateOf(false)
+
+    /**
+     * Instant jusqu'auquel la pile reste déployée quoi qu'il arrive.
+     *
+     * La poignée peut être posée loin des tâches — en bas de l'écran alors que
+     * celles-ci s'affichent en haut. La souris qui la survole n'est alors jamais
+     * dans l'aire des tâches : le repli se déclenchait aussitôt, la souris se
+     * retrouvait de nouveau sur la poignée, qui redéployait — la pile
+     * clignotait sans fin. Un clic sur la poignée accorde donc un délai franc
+     * pour remonter jusqu'aux cartes.
+     */
+    var holdExpandedUntil by mutableStateOf(0L)
+
+    /** Déploie et garantit l'affichage pendant [durationMs]. */
+    fun holdExpanded(durationMs: Long = HANDLE_CLICK_HOLD_MS) {
+        expanded = true
+        holdExpandedUntil = System.currentTimeMillis() + durationMs
+    }
+
+    /** La pile est-elle sous garantie d'affichage ? */
+    fun isHeldExpanded(): Boolean = System.currentTimeMillis() < holdExpandedUntil
 
     /** La touche configurée est-elle maintenue ? Relevé par le sondage. */
     var holdKeyDown by mutableStateOf(false)
@@ -380,6 +405,22 @@ fun ApplicationScope.TaskStack(windowInteractions: WindowInteractions) {
             // clavier, car le widget n'a pas le focus quand on approche.
             controller.holdKeyDown = HoldKeyState.isHeld(Tasks.Configs.configs.holdKey)
 
+            // Un glisser dont la fin ne nous est jamais parvenue gèle tout : le
+            // sondage de proximité est entièrement sauté tant qu'un déplacement
+            // est réputé en cours, si bien que la pile ne se déploie ni ne se
+            // replie plus — elle reste hors écran sans que rien ne la rappelle.
+            // Le bouton relâché est la preuve que le geste est fini.
+            if (!HoldKeyState.isPrimaryMouseDown()) {
+                if (windowInteractions.moveWindow.isActive) {
+                    windowInteractions.moveWindow.isActive = false
+                    controller.moveActive = false
+                }
+                if (controller.handleDragging) {
+                    controller.handleDragging = false
+                    controller.commitHandlePlacement()
+                }
+            }
+
             val dragging = windowInteractions.moveWindow.isActive
             if (wasDragging && !dragging) {
                 // Fin de glisser : on aimante sur le bord le plus proche.
@@ -399,6 +440,20 @@ fun ApplicationScope.TaskStack(windowInteractions: WindowInteractions) {
                     mouse.x in (l - thr).toInt()..(r + thr).toInt() &&
                             mouse.y in (t - thr).toInt()..(b + thr).toInt()
 
+                // Clic sur la poignée : la fenêtre qui la porte est volontairement
+                // non focalisable, et Windows ne lui délivre donc pas les appuis —
+                // les guetter ici est le seul moyen fiable de les voir. Tant que
+                // le bouton reste enfoncé, le délai se recharge.
+                val handleBounds = controller.handleLeft() to controller.handleTop()
+                val overHandle = inside(
+                    handleBounds.first, handleBounds.second,
+                    handleBounds.first + controller.handleWidth,
+                    handleBounds.second + controller.handleHeight,
+                    16
+                )
+                if (overHandle && !controller.holdKeyDown && HoldKeyState.isPrimaryMouseDown())
+                    controller.holdExpanded()
+
                 if (controller.expanded) {
                     // Déployée : on replie dès que la souris quitte l'aire des
                     // tâches (nav + cartes). Mais tant que toutes les fenêtres
@@ -415,7 +470,13 @@ fun ApplicationScope.TaskStack(windowInteractions: WindowInteractions) {
                     // Un message en cours d'écriture retient la pile : replier
                     // sous les doigts de l'utilisateur perdrait sa saisie de vue.
                     val writing = ClaudeSessions.editing != null
-                    if (measured && settled && !writing && !FORCE_EXPANDED) {
+                    // La poignée fait partie de la pile, même posée à l'autre
+                    // bout de l'écran : la souris qui s'y trouve n'est pas
+                    // « partie », et replier là-dessus relançait aussitôt le
+                    // déploiement depuis cette même poignée.
+                    if (measured && settled && !writing && !FORCE_EXPANDED &&
+                        !overHandle && !controller.isHeldExpanded()
+                    ) {
                         val left = controller.baseX
                         val right = controller.baseX + controller.stackWidth.value
                         if (!inside(left, controller.baseY, right, controller.stackBottom(), 16))
@@ -725,9 +786,25 @@ private fun StackHandle(controller: StackController, visible: Boolean) {
                     .pointerInput(Unit) {
                         awaitPointerEventScope {
                             while (true) {
-                                awaitPointerEvent()
-                                if (!controller.holdKeyDown && !controller.handleDragging)
-                                    controller.expanded = true
+                                val event = awaitPointerEvent()
+                                if (controller.holdKeyDown || controller.handleDragging) continue
+                                when (event.type) {
+                                    // Un clic déploie et tient l'affichage le
+                                    // temps de remonter jusqu'aux cartes. Les
+                                    // événements sont consommés : la poignée est
+                                    // une fenêtre à part entière posée sur le
+                                    // bureau, et ce clic ne doit rien déclencher
+                                    // de ce qu'elle recouvre.
+                                    PointerEventType.Press -> {
+                                        controller.holdExpanded()
+                                        event.changes.forEach { it.consume() }
+                                    }
+
+                                    PointerEventType.Release ->
+                                        event.changes.forEach { it.consume() }
+
+                                    else -> controller.expanded = true
+                                }
                             }
                         }
                     }

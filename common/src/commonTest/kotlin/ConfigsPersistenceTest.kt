@@ -27,6 +27,20 @@ class ConfigsPersistenceTest {
     }
 
     @Test
+    fun `l'epingle survit a un aller-retour et se signale`() {
+        val adapter = ConfigsAdapter()
+        val restored = adapter.fromJson(adapter.toJson(Configs(pinned = true)))
+        assertTrue(restored.pinned)
+
+        var notified = 0
+        val configs = Configs().apply { onChanged = { notified++ } }
+        assertFalse(configs.pinned)
+        configs.updatePinned(true)
+        assertTrue(configs.pinned)
+        assertEquals(1, notified)
+    }
+
+    @Test
     fun `une configuration neuve laisse la poignee se placer d'office`() {
         val restored = ConfigsAdapter().let { it.fromJson(it.toJson(Configs())) }
         assertEquals(HANDLE_Y_AUTO, restored.handleY)

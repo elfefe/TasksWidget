@@ -41,7 +41,8 @@ class Configs(
     language: String = Locale.current.language,
     holdKey: HoldKey = HoldKey.CONTROL,
     handleY: Float = HANDLE_Y_AUTO,
-    anchorRight: Boolean = true
+    anchorRight: Boolean = true,
+    pinned: Boolean = false
 ) {
     var taskFieldsOrder: List<TaskFieldOrder> by mutableStateOf(taskFieldsOrder)
         private set
@@ -60,6 +61,10 @@ class Configs(
 
     /** Bord d'ancrage de la pile : droite par défaut. */
     var anchorRight: Boolean by mutableStateOf(anchorRight)
+        private set
+
+    /** Pile épinglée : elle reste déployée quoi qu'il arrive. */
+    var pinned: Boolean by mutableStateOf(pinned)
         private set
 
     /**
@@ -110,9 +115,15 @@ class Configs(
         onChanged?.invoke()
     }
 
+    /** Épingle ou libère la pile ; l'état survit au redémarrage. */
+    fun updatePinned(pinned: Boolean) {
+        this.pinned = pinned
+        onChanged?.invoke()
+    }
+
     override fun toString(): String =
         "Configs(themeColors=$themeColors, taskFieldsOrder=$taskFieldsOrder, language=$language, " +
-                "holdKey=${holdKey.id}, handleY=$handleY, anchorRight=$anchorRight)"
+                "holdKey=${holdKey.id}, handleY=$handleY, anchorRight=$anchorRight, pinned=$pinned)"
 
     companion object {
         fun defaultThemeColors(): ThemeColors = ThemeColors(
@@ -141,6 +152,7 @@ class ConfigsAdapter : TypeAdapter<Configs>() {
             add("holdKey", gson.toJsonTree(value?.holdKey?.id))
             add("handleY", gson.toJsonTree(value?.handleY))
             add("anchorRight", gson.toJsonTree(value?.anchorRight))
+            add("pinned", gson.toJsonTree(value?.pinned))
         }, out)
     }
 
@@ -151,6 +163,7 @@ class ConfigsAdapter : TypeAdapter<Configs>() {
         var holdKey = HoldKey.CONTROL
         var handleY = HANDLE_Y_AUTO
         var anchorRight = true
+        var pinned = false
         `in`?.beginObject()
         while (`in`?.hasNext() == true) {
             when (`in`.nextName()) {
@@ -165,6 +178,7 @@ class ConfigsAdapter : TypeAdapter<Configs>() {
                 "holdKey" -> holdKey = HoldKey.of(`in`.nextString())
                 "handleY" -> handleY = `in`.nextDouble().toFloat()
                 "anchorRight" -> anchorRight = `in`.nextBoolean()
+                "pinned" -> pinned = `in`.nextBoolean()
                 // Un champ inconnu était fatal : la lecture échouait, le fichier
                 // partait en .bak et l'utilisateur retrouvait un thème neuf.
                 // Ouvrir une version plus récente puis revenir en arrière ne
@@ -179,7 +193,8 @@ class ConfigsAdapter : TypeAdapter<Configs>() {
             language = language,
             holdKey = holdKey,
             handleY = handleY,
-            anchorRight = anchorRight
+            anchorRight = anchorRight,
+            pinned = pinned
         )
     }
 }

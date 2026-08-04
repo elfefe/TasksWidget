@@ -14,6 +14,7 @@ import androidx.compose.material.Icon
 import androidx.compose.material.Text
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.*
+import androidx.compose.material.icons.outlined.PushPin
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -182,6 +183,19 @@ fun ColumnScope.Toolbar(
                             showConfigs = !(windowInteractions.showConfigs.value ?: false)
                             windowInteractions.showConfigs.value = showConfigs
                         },
+                    tint = Tasks.Configs.configs.themeColors.onPrimary
+                )
+            },
+            {
+                // Épingle : tant qu'elle est active, la pile reste déployée
+                // quoi qu'il arrive. Pleine quand elle tient, contour sinon.
+                val pinned = toolbarInteractions.pinned()
+                Icon(
+                    if (pinned) Icons.Filled.PushPin else Icons.Outlined.PushPin,
+                    contentDescription = if (pinned) "Détacher" else "Épingler",
+                    modifier = Modifier
+                        .padding(3.dp)
+                        .clickable { toolbarInteractions.togglePinned() },
                     tint = Tasks.Configs.configs.themeColors.onPrimary
                 )
             },

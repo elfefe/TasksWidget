@@ -181,6 +181,10 @@ data class ToolbarInteractions(
     val showDescription: (Boolean) -> Unit,
     /** Ouvre ou ferme l'aide ; sans effet dans l'ancienne mise en page. */
     val toggleHelp: () -> Unit = {},
+    /** Épingle ou libère la pile ; sans effet dans l'ancienne mise en page. */
+    val togglePinned: () -> Unit = {},
+    /** État courant de l'épingle, pour dessiner l'icône. */
+    val pinned: () -> Boolean = { false },
 )
 
 data class Popup(val show: Boolean = false, val text: String = "", val duration: Long = 0) {

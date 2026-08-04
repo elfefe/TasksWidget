@@ -160,6 +160,19 @@ class StackController(val workArea: Rectangle) {
     /** Fenêtre d'aide ouverte (point d'interrogation de la barre). */
     var showHelp by mutableStateOf(false)
 
+    /**
+     * Pile épinglée : elle reste déployée quoi qu'il arrive — souris partie,
+     * clic ailleurs, conversation refermée. C'est la règle qui prime sur toutes
+     * les autres, et elle survit au redémarrage.
+     */
+    var pinned by mutableStateOf(Tasks.Configs.configs.pinned)
+
+    fun togglePinned() {
+        pinned = !pinned
+        if (pinned) expanded = true
+        Tasks.Configs.configs.updatePinned(pinned)
+    }
+
     /** Liste courante des tâches filtrées/triées. */
     var tasks by mutableStateOf(listOf<Task>())
 
@@ -434,6 +447,13 @@ fun ApplicationScope.TaskStack(windowInteractions: WindowInteractions) {
             }
             wasDragging = dragging
 
+            // Épinglée : rien ne la referme, et le reste du sondage n'a plus
+            // lieu d'être. C'est la règle qui prime sur toutes les autres.
+            if (controller.pinned) {
+                controller.expanded = true
+                return@runCatching
+            }
+
             if (!dragging) {
                 val mouse = MouseInfo.getPointerInfo().location
                 fun inside(l: Float, t: Float, r: Float, b: Float, thr: Int): Boolean =
@@ -684,7 +704,9 @@ private fun NavWindow(
                 windowInteractions = windowInteractions,
                 toolbarInteractions = ToolbarInteractions(
                     showDescription = { controller.showDescription = it },
-                    toggleHelp = { controller.showHelp = !controller.showHelp }
+                    toggleHelp = { controller.showHelp = !controller.showHelp },
+                    togglePinned = { controller.togglePinned() },
+                    pinned = { controller.pinned }
                 )
             )
         }

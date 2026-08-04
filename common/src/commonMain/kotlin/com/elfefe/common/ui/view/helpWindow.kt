@@ -67,6 +67,8 @@ private fun helpText(holdKey: String): String = """
 - **+** : ajouter une tâche, ou ouvrir une session Claude.
 - **Loupe** : rechercher dans les titres, dates et descriptions.
 - **Roue dentée** : réglages, dont les couleurs et la touche ci-dessus.
+- **Épingle** : maintient la pile déployée quoi qu'il arrive — souris partie,
+  clic ailleurs. Elle prime sur tout le reste, et son état est retenu.
 
 ## Les tâches
 

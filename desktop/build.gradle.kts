@@ -60,17 +60,9 @@ compose.desktop {
     }
 }
 
-tasks.withType(JavaExec::class.java) {
-    try {
-        File("""resources\version""").writeText(project.version.toString())
-    } catch (e: Exception) { e.printStackTrace() }
-    try {
-        File("""desktop\resources\version""").writeText(project.version.toString())
-    } catch (e: Exception) { e.printStackTrace() }
-    try {
-        File("""common\src\commonMain\resources\version""").writeText(project.version.toString())
-    } catch (e: Exception) { e.printStackTrace() }
-}
+// L'écriture des ressources de version vit dans le build racine : elle
+// alimente les deux modules, et seul le racine peut brancher la dépendance sur
+// leurs tâches de ressources.
 
 tasks.register<Exec>("signMsi") {
     dependsOn("packageMsi")

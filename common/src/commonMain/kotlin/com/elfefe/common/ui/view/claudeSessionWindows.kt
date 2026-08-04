@@ -33,6 +33,7 @@ import androidx.compose.ui.window.rememberWindowState
 import com.elfefe.common.controller.ClaudeCode
 import com.elfefe.common.controller.ClaudeSessions
 import com.elfefe.common.controller.CrashWindow
+import com.elfefe.common.controller.MarkdownVisualTransformation
 import com.elfefe.common.controller.Tasks
 import com.elfefe.common.model.ThemeColors
 import com.elfefe.common.ui.theme.TasksTheme
@@ -117,13 +118,17 @@ fun SessionTooltipWindow(sessionId: String, xDp: Float, yDp: Float) {
                         )
                     } else {
                         recent.forEach { line ->
-                            Text(
+                            if (line.speaker == ClaudeCode.Speaker.USER) Text(
                                 line.text.replace('\n', ' ').take(300),
-                                color = if (line.speaker == ClaudeCode.Speaker.USER)
-                                    colors.onBackground.copy(alpha = 0.55f) else colors.onBackground,
+                                color = colors.onBackground.copy(alpha = 0.55f),
                                 fontSize = 11.sp,
-                                maxLines = 4,
+                                maxLines = 3,
                                 overflow = TextOverflow.Ellipsis,
+                                modifier = Modifier.padding(vertical = 2.dp)
+                            ) else MarkdownText(
+                                markdown = line.text.take(600),
+                                colors = colors,
+                                maxLines = 4,
                                 modifier = Modifier.padding(vertical = 2.dp)
                             )
                         }
@@ -235,8 +240,11 @@ private fun ConversationThread(lines: List<ClaudeCode.Line>, colors: ThemeColors
                     )
                 }
 
-                ClaudeCode.Speaker.CLAUDE -> Text(
-                    line.text, color = colors.onBackground, fontSize = 11.sp,
+                // Les réponses arrivent en markdown : titres, listes, blocs de
+                // code et liens sont rendus, pas donnés à lire en balisage.
+                ClaudeCode.Speaker.CLAUDE -> MarkdownText(
+                    markdown = line.text,
+                    colors = colors,
                     modifier = Modifier.fillMaxWidth().padding(vertical = 2.dp)
                 )
 
@@ -278,7 +286,10 @@ private fun Reply(session: ClaudeCode.RunningSession, colors: ThemeColors) {
                 .background(colors.onBackground.copy(alpha = 0.06f), RoundedCornerShape(4.dp))
                 .padding(6.dp, 5.dp),
             textStyle = TextStyle(color = colors.onBackground, fontSize = 11.sp),
-            cursorBrush = SolidColor(colors.onBackground)
+            cursorBrush = SolidColor(colors.onBackground),
+            // Même rendu que dans la carte : écrire à une session ne doit pas
+            // dépendre de l'endroit d'où on écrit.
+            visualTransformation = MarkdownVisualTransformation()
         )
         Spacer(Modifier.width(4.dp))
         val canSend = manager.description.text.isNotBlank()

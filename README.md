@@ -26,7 +26,9 @@ Fonctionnalités
 
 * Widget de bureau discret, sans bordure, ancré sur le côté de l'écran.
 * Création, édition et suppression de tâches en quelques clics.
-* **Descriptions en Markdown** (gras, italique, code, barré, titres…).
+* **Descriptions en Markdown** : titres, gras, italique, barré, code inline et
+  blocs, surlignage, listes à puces et numérotées, liens et filets. Les symboles
+  s'effacent à l'affichage, le texte reste du Markdown standard.
 * Échéances datées : la date est **rouge** si la tâche est due aujourd'hui,
   **jaune** si elle est dépassée, **noire** pour plus tard.
 * Historique des tâches terminées.
@@ -42,7 +44,9 @@ rien de plus :
 
 * **Suivi** : l'état (en cours / en attente / prête) est lu directement auprès du
   CLI. Survoler l'icône d'état montre les dernières réponses en infobulle ; la
-  cliquer ouvre une fenêtre dédiée avec le fil complet.
+  cliquer ouvre une fenêtre dédiée avec le fil complet. Les réponses sont
+  **rendues** — titres, listes, blocs de code et liens cliquables — et non
+  affichées en balisage brut.
 * **Envoi** : le bouton d'édition déplie l'éditeur Markdown habituel, et le
   message part dans la **vraie session du terminal**. Le texte est déposé dans la
   console de la session comme un collage, ce qui préserve le Markdown multiligne.

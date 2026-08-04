@@ -49,6 +49,31 @@ class MarkdownVisualTransformation : VisualTransformation {
                     }
                 }
 
+                // Puce de liste, avant les symboles : sinon « * item » serait lu
+                // comme une ouverture d'italique et emporterait la suite du
+                // texte. Le marqueur fait deux caracteres et la puce affichee
+                // aussi, donc les positions restent alignees.
+                if (isStartOfLine(originalText, i) && listBulletRegex.containsMatchIn(originalText.substring(i))) {
+                    tokens.add(Token.Bullet)
+                    i += 2
+                    continue
+                }
+
+                // Lien : seul le libelle est affiche, la cible reste dans le
+                // texte source mais disparait du rendu.
+                val linkMatch = linkRegex.find(originalText.substring(i))
+                if (linkMatch != null) {
+                    tokens.add(
+                        Token.Link(
+                            label = linkMatch.groupValues[1],
+                            url = linkMatch.groupValues[2],
+                            length = linkMatch.value.length
+                        )
+                    )
+                    i += linkMatch.value.length
+                    continue
+                }
+
                 val symbol = when {
                     originalText.startsWith("```", i) -> "```"
                     originalText.startsWith("**", i) -> "**"
@@ -71,8 +96,17 @@ class MarkdownVisualTransformation : VisualTransformation {
                     while (i < originalText.length && !isMarkdownSymbolStart(originalText, i)) {
                         i++
                     }
-                    val content = originalText.substring(start, i)
-                    if (content.isNotEmpty()) tokens.add(Token.Text(content))
+                    if (i == start) {
+                        // Ce caractere annonce un symbole sans en former un —
+                        // « #tag » n'est pas un titre, « [x » n'est pas un lien.
+                        // Sans cette sortie, l'accumulation s'arrete aussitot,
+                        // aucun jeton n'est produit, i n'avance pas : la
+                        // tokenisation tourne en rond et fige l'interface.
+                        tokens.add(Token.Text(originalText[i].toString()))
+                        i++
+                    } else {
+                        tokens.add(Token.Text(originalText.substring(start, i)))
+                    }
                 }
             }
 
@@ -158,6 +192,42 @@ class MarkdownVisualTransformation : VisualTransformation {
                             openSymbols.getOrPut(symbol) { mutableListOf() }.add(originalIndex)
                         }
                     }
+                    is Token.Bullet -> {
+                        annotatedStringBuilder.append(BULLET)
+                        for (char in BULLET) {
+                            originalToTransformed.add(transformedIndex)
+                            transformedToOriginal.add(originalIndex)
+                            originalIndex++
+                            transformedIndex++
+                        }
+                    }
+                    is Token.Link -> {
+                        val labelStart = transformedIndex
+                        annotatedStringBuilder.append(token.label)
+                        // Le libelle occupe la place du lien entier : les
+                        // caracteres de balisage pointent vers son debut.
+                        for (j in 0 until token.length) {
+                            if (j < token.label.length) {
+                                originalToTransformed.add(labelStart + j)
+                                transformedToOriginal.add(originalIndex)
+                                transformedIndex++
+                            } else {
+                                originalToTransformed.add(transformedIndex)
+                            }
+                            originalIndex++
+                        }
+                        annotatedStringBuilder.addStyle(
+                            SpanStyle(textDecoration = TextDecoration.Underline),
+                            labelStart,
+                            labelStart + token.label.length
+                        )
+                        annotatedStringBuilder.addStringAnnotation(
+                            tag = MARKDOWN_URL_TAG,
+                            annotation = token.url,
+                            start = labelStart,
+                            end = labelStart + token.label.length
+                        )
+                    }
                     is Token.Header -> {
                         val content = token.content
                         val level = token.level
@@ -230,6 +300,8 @@ class MarkdownVisualTransformation : VisualTransformation {
 
     private fun isMarkdownSymbolStart(text: String, index: Int): Boolean {
         return text.startsWith("#", index) && isStartOfLine(text, index) ||
+                isStartOfLine(text, index) && listBulletRegex.containsMatchIn(text.substring(index)) ||
+                text.startsWith("[", index) ||
                 text.startsWith("```", index) ||
                 text.startsWith("**", index) ||
                 text.startsWith("__", index) ||
@@ -254,6 +326,20 @@ class MarkdownVisualTransformation : VisualTransformation {
         data class Text(val text: String) : Token()
         data class MarkdownSymbol(val symbol: String, val position: Int) : Token()
         data class Header(val level: Int, val content: String) : Token()
+
+        /** Marqueur de puce en tete de ligne (« - » ou « * » suivi d'un espace). */
+        object Bullet : Token()
+
+        /** `[label](url)` : [length] est la longueur du lien dans le texte source. */
+        data class Link(val label: String, val url: String, val length: Int) : Token()
+    }
+
+    companion object {
+        /** Puce affichee a la place du marqueur ; meme longueur que « - ». */
+        private const val BULLET = "• "
+
+        private val listBulletRegex = Regex("^[-*+][ \\t]")
+        private val linkRegex = Regex("^\\[([^\\[\\]\\n]*)]\\(([^)\\s\\n]*)\\)")
     }
 }
 
@@ -398,7 +484,10 @@ fun toggleList(
     }
 
     val (regex, addPrefix) = when (listType) {
-        "bullet" -> Regex("^\\s*([-•])\\s") to { line: String -> "• ${line.trimStart()}" }
+        // Une puce en markdown s'écrit « - » : le caractère « • » produisait un
+        // texte joli dans le widget mais illisible partout ailleurs — et
+        // désormais ces descriptions partent aussi vers des sessions Claude.
+        "bullet" -> Regex("^\\s*([-*•])\\s") to { line: String -> "- ${line.trimStart()}" }
         "numbered" -> Regex("^\\s*(\\d+)\\.\\s") to { line: String -> "" } // Placeholder
         else -> return
     }

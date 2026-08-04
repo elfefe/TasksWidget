@@ -306,7 +306,7 @@ fun Editor(manager: TaskCardManager, windowInteractions: WindowInteractions) {
                 }
 
                 // Inline Code Button
-                /*item {
+                item {
                     Text(
                         text = "{ }",
                         fontSize = 12.sp,
@@ -319,7 +319,7 @@ fun Editor(manager: TaskCardManager, windowInteractions: WindowInteractions) {
                             }
                     )
                     Spacer(Modifier.width(4.dp))
-                }*/
+                }
 
                 // Bullet List Button
                 item {
@@ -354,7 +354,7 @@ fun Editor(manager: TaskCardManager, windowInteractions: WindowInteractions) {
                 }
 
                 // Code Block Button
-                /*item {
+                item {
                     Text(
                         text = "```",
                         fontSize = 12.sp,
@@ -367,7 +367,7 @@ fun Editor(manager: TaskCardManager, windowInteractions: WindowInteractions) {
                             }
                     )
                     Spacer(Modifier.width(4.dp))
-                }*/
+                }
 
                 // Highlight Button
                 item {

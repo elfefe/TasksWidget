@@ -75,7 +75,12 @@ kotlin {
                 // bibliotheque d'execution, et aucun code ne le reference. Il
                 // n'avait rien a faire dans le classpath de l'application.
 
-                api("io.github.kevinnzou:compose-webview-multiplatform:1.9.6")
+                // compose-webview-multiplatform retire : son seul usage etait un
+                // composable `Tests()` que rien n'appelait, et il tirait
+                // kcef/jcef donc jogl et gluegen, publies sur le seul depot
+                // jogamp.org. Ce depot tiers devenu injoignable faisait echouer
+                // la construction du MSI alors qu'aucune fonctionnalite de
+                // l'application n'en dependait.
             }
         }
         val commonTest by getting {

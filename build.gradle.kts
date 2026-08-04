@@ -1,13 +1,12 @@
 allprojects {
     group = "com.elfefe"
-    version = "1.6.1"
+    version = "1.6.2"
 
     repositories {
         google()
         mavenCentral()
         maven("https://maven.pkg.jetbrains.space/public/p/compose/dev")
         maven("https://jitpack.io")
-        maven("https://jogamp.org/deployment/maven")
     }
 }
 

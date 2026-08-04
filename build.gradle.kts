@@ -1,6 +1,6 @@
-allprojects {
+﻿allprojects {
     group = "com.elfefe"
-    version = "1.7.0"
+    version = "1.7.1"
 
     repositories {
         google()
@@ -54,3 +54,4 @@ allprojects {
         dependsOn(writeVersionResources)
     }
 }
+

@@ -44,29 +44,22 @@ import androidx.compose.ui.window.ApplicationScope
 import androidx.compose.ui.window.WindowPosition
 import androidx.compose.ui.window.rememberWindowState
 import com.elfefe.common.controller.ClaudeCode
+import com.elfefe.common.controller.AutoUpdater
 import com.elfefe.common.controller.ClaudeSessions
 import com.elfefe.common.controller.CrashWindow
 import com.elfefe.common.controller.HoldKeyState
 import com.elfefe.common.model.HANDLE_Y_AUTO
 import com.elfefe.common.controller.Tasks
-import com.elfefe.common.controller.Updater
 import com.elfefe.common.controller.isRemoteNewer
 import com.elfefe.common.controller.log
-import com.elfefe.common.controller.update
 import com.elfefe.common.model.Task
-import com.elfefe.common.model.github.GithubLatestRelease
 import com.elfefe.common.ui.theme.TasksTheme
-import com.google.gson.Gson
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import java.awt.MouseInfo
 import java.awt.Rectangle
 import java.awt.GraphicsEnvironment
 import java.awt.Window
-import java.net.URI
-import java.net.http.HttpClient
-import java.net.http.HttpRequest
-import java.net.http.HttpResponse
 import kotlin.concurrent.fixedRateTimer
 import kotlin.math.abs
 
@@ -270,6 +263,18 @@ class StackController(val workArea: Rectangle) {
     fun commitHandlePlacement() {
         Tasks.Configs.configs.updateHandlePlacement(handleY, isRight)
     }
+
+    /**
+     * L'application peut-elle se fermer sans rien interrompre ? Une mise à jour
+     * ferme l'application : la déclencher pendant qu'un message s'écrit ou
+     * qu'une conversation se lit ferait perdre le fil.
+     */
+    fun idleForUpdate(): Boolean =
+        !expanded &&
+                !handleDragging &&
+                !showHelp &&
+                ClaudeSessions.editing == null &&
+                ClaudeSessions.opened == null
 }
 
 @Composable
@@ -321,6 +326,33 @@ fun ApplicationScope.TaskStack(windowInteractions: WindowInteractions) {
             // presque à chaque fois. Le titre étant désormais mis en cache, ce
             // tour ne coûte plus que la lecture des petits fichiers d'état.
             delay(700)
+        }
+    }
+
+    // Mise à jour automatique : relevé au démarrage puis à intervalle régulier.
+    // L'installation ferme l'application, aussi n'a-t-elle lieu que lorsque
+    // celle-ci est au repos — repliée, sans message en cours d'écriture ni
+    // fenêtre ouverte. Autrement on la reprend au tour suivant.
+    LaunchedEffect(Unit) {
+        while (true) {
+            val release = runCatching { AutoUpdater.latestRelease() }.getOrNull()
+            if (AutoUpdater.isWorthInstalling(release) && release != null) {
+                AutoUpdater.awaiting(release.tagName.orEmpty())
+                while (!controller.idleForUpdate()) delay(60_000)
+                if (AutoUpdater.install(release)) {
+                    // Le popup s'affiche où que soit la pile, y compris repliée :
+                    // l'application est sur le point de disparaître un instant,
+                    // mieux vaut que ce ne soit pas une surprise.
+                    windowInteractions.popup.value =
+                        Popup.show("Mise à jour ${release.tagName} : TasksWidget redémarre.")
+                    delay(2_000)
+                    windowInteractions.application.exitApplication()
+                    return@LaunchedEffect
+                }
+                delay(AutoUpdater.RETRY_INTERVAL_MS)
+            } else {
+                delay(if (release == null) AutoUpdater.RETRY_INTERVAL_MS else AutoUpdater.CHECK_INTERVAL_MS)
+            }
         }
     }
 
@@ -579,7 +611,7 @@ private fun NavWindow(
         onWindow = { controller.navWindow = it }
     ) {
         Column(Modifier.fillMaxWidth()) {
-            UpdateBanner(windowInteractions)
+            UpdateBanner()
             Toolbar(
                 scope = scope,
                 windowInteractions = windowInteractions,
@@ -593,71 +625,36 @@ private fun NavWindow(
 }
 
 /**
- * Bandeau « nouvelle version disponible » : compare la release GitHub la plus
- * récente à la version embarquée et propose la mise à jour au clic. Repris de
- * l'ancien écran, il ne s'affiche que si une version plus récente existe.
+ * Bandeau de mise à jour : il rend compte de ce que fait la mise à jour
+ * automatique, il ne l'attend plus.
+ *
+ * Il annonçait une version disponible et restait là jusqu'à ce qu'on clique
+ * dessus — un texte de onze points, en anglais, visible seulement la pile
+ * déployée. Autant dire jamais vu.
  */
-@OptIn(ExperimentalFoundationApi::class, ExperimentalComposeUiApi::class)
 @Composable
-private fun UpdateBanner(windowInteractions: WindowInteractions) {
-    val uriHandler = LocalUriHandler.current
-    var latestRelease by remember { mutableStateOf<GithubLatestRelease?>(null) }
-    var dismissed by remember { mutableStateOf(false) }
+private fun UpdateBanner() {
+    val message = when (val state = AutoUpdater.state) {
+        is AutoUpdater.State.Idle -> null
+        is AutoUpdater.State.Waiting -> "Mise à jour ${state.version} prête, elle s'installera au repos"
+        is AutoUpdater.State.Downloading -> "Téléchargement de la version ${state.version}…"
+        is AutoUpdater.State.Installing -> "Installation de ${state.version}, l'application va redémarrer"
+        is AutoUpdater.State.Failed -> state.reason
+    } ?: return
 
-    LaunchedEffect(Unit) {
-        launch {
-            runCatching {
-                val response = HttpClient.newHttpClient().send(
-                    HttpRequest.newBuilder(
-                        URI.create("https://api.github.com/repos/elfefe/TasksWidget/releases/latest")
-                    ).GET().build(),
-                    HttpResponse.BodyHandlers.ofString()
-                )
-                latestRelease = Gson().fromJson(response.body(), GithubLatestRelease::class.java)
-            }.onFailure { log(it.stackTraceToString()) }
-        }
-    }
-
-    val bundledVersion = remember {
-        runCatching { useResource("version") { it.readBytes().toString(Charsets.UTF_8) } }.getOrNull()
-    }
-    val release = latestRelease
-    val newVersion = !dismissed && isRemoteNewer(release?.tagName, bundledVersion)
-
-    if (newVersion && release != null) {
-        Row(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(4.dp)
-        ) {
-            BasicText(
-                text = "New version available: ${release.tagName}",
-                style = TextStyle(
-                    color = Tasks.Configs.configs.themeColors.onPrimary,
-                    fontSize = 11.sp,
-                    fontWeight = FontWeight.Bold
-                ),
-                modifier = Modifier
-                    .height(20.dp)
-                    .onClick {
-                        dismissed = true
-                        update(release) { status ->
-                            windowInteractions.popup.value = Popup.show(status.message)
-                            when (status) {
-                                is Updater.Error -> {
-                                    log(status.error.stackTraceToString())
-                                    (release.htmlUrl ?: release.url)?.let { uriHandler.openUri(it) }
-                                }
-                                is Updater.Install -> {
-                                    delay(500)
-                                    windowInteractions.application.exitApplication()
-                                }
-                                else -> {}
-                            }
-                        }
-                    }
+    Row(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(horizontal = 8.dp, vertical = 4.dp)
+    ) {
+        BasicText(
+            text = message,
+            style = TextStyle(
+                color = Tasks.Configs.configs.themeColors.onPrimary,
+                fontSize = 11.sp,
+                fontWeight = FontWeight.Bold
             )
-        }
+        )
     }
 }
 

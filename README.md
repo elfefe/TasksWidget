@@ -35,6 +35,14 @@ Fonctionnalités
 * Masquage des descriptions pour voir plus de tâches, recherche, format réduit.
 * Réduction dans la barre système, et ajout au démarrage de Windows depuis les
   réglages.
+* **Poignée déplaçable** : en maintenant **Ctrl** (touche modifiable), la pile ne
+  se déploie plus à l'approche de la souris et la poignée se saisit — glissez-la
+  le long du bord, ou vers l'autre côté de l'écran pour y basculer toute la pile.
+  Sa place est retenue.
+* **Aide intégrée** : le point d'interrogation de la barre de navigation ouvre un
+  mode d'emploi.
+* **Thème personnalisable** : couleurs de la barre, des icônes, du fond et du
+  texte des tâches, avec retour aux couleurs d'origine en un clic.
 
 ### Sessions Claude Code
 

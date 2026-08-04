@@ -6,6 +6,8 @@ import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.ExperimentalFoundationApi
+import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.gestures.detectHorizontalDragGestures
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.*
@@ -17,6 +19,7 @@ import androidx.compose.material.icons.filled.ArrowDropDown
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.rotate
 import androidx.compose.ui.geometry.CornerRadius
 import androidx.compose.ui.geometry.Offset
@@ -35,6 +38,7 @@ import androidx.compose.ui.unit.sp
 import com.elfefe.common.controller.*
 import com.elfefe.common.controller.firebase.authentication.AuthenticationApi
 import com.elfefe.common.controller.firebase.authentication.User
+import com.elfefe.common.model.HoldKey
 import com.elfefe.common.model.TaskFieldOrder
 import grayScale
 import hexToColor
@@ -249,6 +253,65 @@ fun Theme(windowInteractions: WindowInteractions) {
         themePartConfig(Translation().tasksContent, Tasks.Configs.configs.themeColors.onBackground) {
             Tasks.Configs.configs.updateThemeColors(onBackground = it)
         }
+        item {
+            Spacer(Modifier.height(16.dp))
+            Text(
+                text = Translation().resetTheme,
+                fontSize = 14.sp,
+                fontWeight = FontWeight.Bold,
+                color = Tasks.Configs.configs.themeColors.onPrimary,
+                modifier = Modifier
+                    .clip(RoundedCornerShape(4.dp))
+                    .background(Tasks.Configs.configs.themeColors.primary)
+                    .clickable { Tasks.Configs.configs.resetThemeColors() }
+                    .padding(horizontal = 12.dp, vertical = 8.dp)
+            )
+        }
+    }
+}
+
+/**
+ * Choix de la touche qui, maintenue, empeche la pile de se deployer a
+ * l'approche et libere la poignee.
+ */
+@Composable
+fun HoldKeyConfig() {
+    val colors = Tasks.Configs.configs.themeColors
+    val current = Tasks.Configs.configs.holdKey
+
+    Column {
+        Text(
+            text = Translation().holdKeyLabel,
+            fontWeight = FontWeight.Normal,
+            fontSize = 16.sp,
+            color = colors.onBackground
+        )
+        Spacer(Modifier.height(4.dp))
+        Text(
+            text = Translation().holdKeyHint,
+            fontSize = 12.sp,
+            color = colors.onBackground.copy(alpha = 0.7f)
+        )
+        Spacer(Modifier.height(8.dp))
+        Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+            HoldKey.values().forEach { key ->
+                val selected = key == current
+                Text(
+                    text = key.label,
+                    fontSize = 14.sp,
+                    fontWeight = if (selected) FontWeight.Bold else FontWeight.Normal,
+                    color = if (selected) colors.onPrimary else colors.onBackground,
+                    modifier = Modifier
+                        .clip(RoundedCornerShape(4.dp))
+                        .background(
+                            if (selected) colors.primary
+                            else colors.onBackground.copy(alpha = 0.08f)
+                        )
+                        .clickable { Tasks.Configs.configs.updateHoldKey(key) }
+                        .padding(horizontal = 12.dp, vertical = 6.dp)
+                )
+            }
+        }
     }
 }
 
@@ -276,6 +339,8 @@ fun General(windowInteractions: WindowInteractions) {
                 horizontalAlignment = Alignment.Start,
                 verticalArrangement = Arrangement.spacedBy(16.dp)
             ) {
+                item { HoldKeyConfig() }
+
                 item {
                     Row(
                         verticalAlignment = Alignment.CenterVertically,
@@ -431,6 +496,20 @@ fun ThemeColor(default: Color, onColorChange: (Color) -> Unit) {
         var alphaCursorPosition by remember { mutableStateOf(default.alpha) }
         var saturated by remember { mutableStateOf(default.red != default.blue && default.blue != default.green) }
 
+        /**
+         * Vrai dès que l'utilisateur a touché un curseur.
+         *
+         * `currentColor` est reconstruit à partir de la position des curseurs,
+         * eux-mêmes déduits de la couleur par une approximation : la couleur
+         * ainsi retrouvée n'est jamais tout à fait celle d'origine. Comme le
+         * changement était émis depuis le dessin de l'aperçu, ouvrir l'onglet
+         * Thème suffisait à repeindre le thème d'une teinte voisine — ce qui
+         * n'était visible que depuis que les couleurs s'enregistrent vraiment.
+         */
+        var touched by remember { mutableStateOf(false) }
+
+        LaunchedEffect(currentColor) { if (touched) onColorChange(currentColor) }
+
         Column(
             modifier = Modifier
                 .width(180.dp),
@@ -460,6 +539,7 @@ fun ThemeColor(default: Color, onColorChange: (Color) -> Unit) {
                     .height(32.dp)
                     .pointerInput(Unit) {
                         detectHorizontalDragGestures { change, _ ->
+                            touched = true
                             colorCursorPosition = change.position.x
                         }
                     }
@@ -526,6 +606,7 @@ fun ThemeColor(default: Color, onColorChange: (Color) -> Unit) {
                     .height(32.dp)
                     .pointerInput(Unit) {
                         detectHorizontalDragGestures { change, _ ->
+                            touched = true
                             darknessCursorPosition = change.position.x
                         }
                     }
@@ -584,7 +665,7 @@ fun ThemeColor(default: Color, onColorChange: (Color) -> Unit) {
             ) {
                 Slider(
                     value = alphaCursorPosition,
-                    onValueChange = { alphaCursorPosition = it },
+                    onValueChange = { touched = true; alphaCursorPosition = it },
                     modifier = Modifier
                         .fillMaxWidth(.8f)
                         .fillMaxHeight()
@@ -592,7 +673,7 @@ fun ThemeColor(default: Color, onColorChange: (Color) -> Unit) {
 
                 Spacer(Modifier.width(4.dp))
 
-                Checkbox(saturated, { saturated = !saturated })
+                Checkbox(saturated, { touched = true; saturated = !saturated })
             }
         }
 
@@ -606,7 +687,10 @@ fun ThemeColor(default: Color, onColorChange: (Color) -> Unit) {
                 modifier = Modifier
                     .size(64.dp)
             ) {
-                onColorChange(currentColor)
+                // L'aperçu se contente de montrer la couleur : la publier d'ici
+                // revenait à écrire le thème à chaque frame, y compris au tout
+                // premier dessin. C'est le `LaunchedEffect` plus haut qui la
+                // remonte, une fois l'utilisateur passé par un curseur.
                 drawRoundRect(
                     color = currentColor,
                     cornerRadius = CornerRadius(8f, 8f),

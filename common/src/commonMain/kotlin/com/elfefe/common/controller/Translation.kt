@@ -89,5 +89,22 @@ class Translation(val language: String = currentLanguage) {
             "fr" -> "Opacité"
             else -> "Opacity"
         }
+    val resetTheme: String
+        get() = when (language) {
+            "fr" -> "Rétablir les couleurs d'origine"
+            else -> "Restore default colors"
+        }
+    val holdKeyLabel: String
+        get() = when (language) {
+            "fr" -> "Touche de maintien"
+            else -> "Hold key"
+        }
+    val holdKeyHint: String
+        get() = when (language) {
+            "fr" -> "Maintenue, elle empêche la pile de se déployer à l'approche " +
+                    "de la souris et permet de déplacer la poignée."
+            else -> "Held down, it keeps the stack from expanding when the mouse " +
+                    "approaches, and lets you move the handle."
+        }
 }
 

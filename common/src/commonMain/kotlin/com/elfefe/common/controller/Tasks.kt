@@ -1,7 +1,13 @@
 package com.elfefe.common.controller
 
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.toArgb
 import com.elfefe.common.model.Configs
+import com.elfefe.common.ui.theme.background
+import com.elfefe.common.ui.theme.legacyPrimary
+import com.elfefe.common.ui.theme.onBackground
+import com.elfefe.common.ui.theme.onPrimary
+import com.elfefe.common.ui.theme.primary
 import com.elfefe.common.model.Task
 import com.google.gson.Gson
 import com.google.gson.GsonBuilder
@@ -95,22 +101,45 @@ object Tasks {
         private var _configs = Configs()
             set(value) {
                 field = value
+                value.onChanged = { update() }
                 update()
             }
         val configs: com.elfefe.common.model.Configs
             get() = _configs
 
         private var updateJob: Job? = null
+        private val configsScope = CoroutineScope(Dispatchers.IO + SupervisorJob())
 
         init {
             if (configsFile.exists()) {
-                _configs = query()
+                _configs = migrate(query())
                 println(_configs)
             } else {
                 configsFile.createNewFile()
                 configsFile.writeText(json.toJson(_configs))
             }
+            // Toute modification faite depuis les réglages écrit désormais sur
+            // disque : les mutateurs changent l'intérieur de l'objet et non sa
+            // référence, si bien que le setter ci-dessus ne les voyait pas.
+            _configs.onChanged = { update() }
             refresh()
+        }
+
+        /**
+         * Rattrape les thèmes restés sur les anciennes couleurs livrées. Comme
+         * les modifications n'ont jamais été enregistrées jusqu'ici, un fichier
+         * portant exactement l'ancien jeu de couleurs signale un thème que
+         * personne n'a choisi : il suit la nouvelle palette, plus contrastée.
+         * Un thème réellement personnalisé, lui, n'est pas touché.
+         */
+        private fun migrate(loaded: com.elfefe.common.model.Configs): com.elfefe.common.model.Configs {
+            val colors = loaded.themeColors
+            val untouched = colors.primary == Color.legacyPrimary &&
+                    colors.onPrimary == Color.onPrimary &&
+                    colors.background == Color.background &&
+                    colors.onBackground == Color.onBackground
+            if (untouched) loaded.updateThemeColors(primary = Color.primary)
+            return loaded
         }
 
         fun updateTasksSort() {
@@ -150,16 +179,27 @@ object Tasks {
             }
         }
 
+        /**
+         * Écrit la configuration après une courte accalmie.
+         *
+         * L'ancienne version renonçait purement et simplement quand une
+         * écriture était en cours (`if (updateJob?.isActive) return`) : en
+         * glissant un curseur de couleur, seule la toute première valeur
+         * partait sur disque et l'état final était perdu. On annule plutôt
+         * l'écriture en attente et on réécrit l'état courant.
+         *
+         * Le scope est propre à la configuration : `Tasks.scope` est remplacé
+         * par celui d'un composable, qui meurt avec lui et emporterait les
+         * sauvegardes suivantes.
+         */
         fun update() {
-            if (updateJob?.isActive == true) return
-
-            updateJob = scope.launch(Dispatchers.IO) {
-                try {
+            updateJob?.cancel()
+            updateJob = configsScope.launch {
+                delay(200)
+                runCatching {
                     val config = json.toJson(configs)
-                    if (config.isNotBlank())
-                        configsFile.writeText(config)
-                } catch (e: Exception) {  }
-                updateJob?.cancelAndJoin()
+                    if (config.isNotBlank()) configsFile.writeText(config)
+                }.onFailure { log("Configs: enregistrement impossible\n" + it.stackTraceToString()) }
             }
         }
 

@@ -3,10 +3,20 @@ package com.elfefe.common.ui.theme
 import androidx.compose.ui.graphics.Color
 
 
+/**
+ * Fond de la barre de navigation. Il valait `0x66222222`, soit 40 % d'opacite :
+ * le bureau transparaissait au travers et les icones blanches se perdaient des
+ * que la fenetre du dessous etait claire. Presque opaque, la barre se detache
+ * de ce qu'il y a derriere.
+ */
 val Color.Companion.primary: Color
-    get() = Color(0x66222222)
+    get() = Color(0xF0161616)
 val Color.Companion.onPrimary: Color
     get() = White
+
+/** Ancien fond de barre, reconnu pour rattraper les themes jamais personnalises. */
+val Color.Companion.legacyPrimary: Color
+    get() = Color(0x66222222)
 
 val Color.Companion.secondary: Color
     get() = Color(0xFF_005E7D)

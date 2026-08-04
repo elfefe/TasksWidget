@@ -184,7 +184,11 @@ fun App(modifier: Modifier, windowInteractions: WindowInteractions) {
                     )
                 }
             }
-            Toolbar(scope, windowInteractions, ToolbarInteractions { showDescription = it })
+            Toolbar(
+                scope,
+                windowInteractions,
+                ToolbarInteractions(showDescription = { showDescription = it })
+            )
             TasksList(tasks, windowInteractions, listState, showDescription)
         }
 }
@@ -225,6 +229,8 @@ open class Interactable<T>(value: T? = null) {
 
 data class ToolbarInteractions(
     val showDescription: (Boolean) -> Unit,
+    /** Ouvre ou ferme l'aide ; sans effet dans l'ancienne mise en page. */
+    val toggleHelp: () -> Unit = {},
 )
 
 data class Popup(val show: Boolean = false, val text: String = "", val duration: Long = 0) {

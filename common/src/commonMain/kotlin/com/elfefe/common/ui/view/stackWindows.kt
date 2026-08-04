@@ -5,6 +5,7 @@ import androidx.compose.animation.core.EaseInOutCubic
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.ExperimentalFoundationApi
+import androidx.compose.foundation.gestures.detectDragGestures
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -45,6 +46,8 @@ import androidx.compose.ui.window.rememberWindowState
 import com.elfefe.common.controller.ClaudeCode
 import com.elfefe.common.controller.ClaudeSessions
 import com.elfefe.common.controller.CrashWindow
+import com.elfefe.common.controller.HoldKeyState
+import com.elfefe.common.model.HANDLE_Y_AUTO
 import com.elfefe.common.controller.Tasks
 import com.elfefe.common.controller.Updater
 import com.elfefe.common.controller.isRemoteNewer
@@ -94,11 +97,26 @@ private val FORCE_EXPANDED = System.getenv("TW_FORCE_EXPAND") == "1"
 class StackController(val workArea: Rectangle) {
     val stackWidth: Dp = WINDOW_MAX_WIDTH
 
-    /** Bord d'ancrage : true = droite de l'écran. */
-    var isRight by mutableStateOf(true)
+    /** Bord d'ancrage : true = droite de l'écran. Repris de la configuration. */
+    var isRight by mutableStateOf(Tasks.Configs.configs.anchorRight)
 
     /** Abscisse (dp) du bord gauche de la pile, hors animation de repli. */
-    var baseX by mutableStateOf((workArea.x + workArea.width - stackWidth.value))
+    var baseX by mutableStateOf(
+        if (Tasks.Configs.configs.anchorRight) workArea.x + workArea.width - stackWidth.value
+        else workArea.x.toFloat()
+    )
+
+    /**
+     * Ordonnée choisie pour la poignée, ou [HANDLE_Y_AUTO] tant que
+     * l'utilisateur ne l'a pas placée lui-même.
+     */
+    var handleY by mutableStateOf(Tasks.Configs.configs.handleY)
+
+    /** Un déplacement de la poignée est en cours. */
+    var handleDragging by mutableStateOf(false)
+
+    /** La touche configurée est-elle maintenue ? Relevé par le sondage. */
+    var holdKeyDown by mutableStateOf(false)
 
     /** Ordonnée (dp) du haut de la barre de navigation. */
     val baseY: Float get() = workArea.y.toFloat()
@@ -120,6 +138,9 @@ class StackController(val workArea: Rectangle) {
 
     /** Description dépliée sur les cartes (piloté par la toolbar). */
     var showDescription by mutableStateOf(true)
+
+    /** Fenêtre d'aide ouverte (point d'interrogation de la barre). */
+    var showHelp by mutableStateOf(false)
 
     /** Liste courante des tâches filtrées/triées. */
     var tasks by mutableStateOf(listOf<Task>())
@@ -223,10 +244,32 @@ class StackController(val workArea: Rectangle) {
     /** Aire réellement occupée par la pile déployée (nav + tâches). */
     fun stackBottom(): Float = (viewportTop + totalContent()).coerceAtMost(viewportBottom)
 
-    // Poignée centrée verticalement sur l'aire des tâches : ainsi, en déployant
-    // depuis la poignée, la souris se trouve d'emblée dans la zone des tâches et
-    // ne déclenche pas un repli immédiat.
-    fun handleTop(): Float = ((baseY + stackBottom()) / 2f - handleHeight / 2f).coerceAtLeast(baseY)
+    /**
+     * Ordonnée de la poignée. Sans choix de l'utilisateur, elle se centre sur
+     * l'aire des tâches : en déployant depuis la poignée, la souris se trouve
+     * d'emblée dans la zone des tâches et ne déclenche pas un repli immédiat.
+     * Dès qu'elle a été déplacée, sa position prime et ne bouge plus.
+     */
+    fun handleTop(): Float {
+        val placed = handleY
+        if (placed != HANDLE_Y_AUTO) return placed.coerceIn(baseY, viewportBottom - handleHeight)
+        return ((baseY + stackBottom()) / 2f - handleHeight / 2f).coerceAtLeast(baseY)
+    }
+
+    /** Déplace la poignée pendant un glisser ; le bord suit la moitié d'écran visée. */
+    fun dragHandleTo(globalX: Int, globalY: Int, grabOffsetY: Float) {
+        handleY = (globalY - grabOffsetY).coerceIn(baseY, viewportBottom - handleHeight)
+        val right = globalX > workArea.x + workArea.width / 2
+        if (right != isRight) {
+            isRight = right
+            baseX = if (right) workArea.x + workArea.width - stackWidth.value else workArea.x.toFloat()
+        }
+    }
+
+    /** Fin du glisser : la place de la poignée est retenue d'une session à l'autre. */
+    fun commitHandlePlacement() {
+        Tasks.Configs.configs.updateHandlePlacement(handleY, isRight)
+    }
 }
 
 @Composable
@@ -300,6 +343,11 @@ fun ApplicationScope.TaskStack(windowInteractions: WindowInteractions) {
         var wasDragging = false
         val timer = fixedRateTimer("stackProximity", initialDelay = 200, period = 50) {
           runCatching {
+            // Touche maintenue : la pile ne se déploie plus à l'approche, et la
+            // poignée se laisse saisir. Relevé ici plutôt que par un événement
+            // clavier, car le widget n'a pas le focus quand on approche.
+            controller.holdKeyDown = HoldKeyState.isHeld(Tasks.Configs.configs.holdKey)
+
             val dragging = windowInteractions.moveWindow.isActive
             if (wasDragging && !dragging) {
                 // Fin de glisser : on aimante sur le bord le plus proche.
@@ -344,11 +392,14 @@ fun ApplicationScope.TaskStack(windowInteractions: WindowInteractions) {
                 } else {
                     // Repliée : seule la poignée au bord déploie la pile. Petite
                     // tolérance pour qu'elle reste facile à viser sans pour
-                    // autant redevenir une bande pleine hauteur.
+                    // autant redevenir une bande pleine hauteur. Touche
+                    // maintenue, on ne déploie pas : la poignée est alors une
+                    // prise pour la déplacer, pas un bouton d'ouverture.
                     val left = controller.handleLeft()
                     val top = controller.handleTop()
-                    if (inside(left, top, left + controller.handleWidth, top + controller.handleHeight, 16))
-                        controller.expanded = true
+                    if (!controller.holdKeyDown && !controller.handleDragging &&
+                        inside(left, top, left + controller.handleWidth, top + controller.handleHeight, 16)
+                    ) controller.expanded = true
                 }
             }
           }
@@ -418,6 +469,18 @@ fun ApplicationScope.TaskStack(windowInteractions: WindowInteractions) {
             sessionId = opened,
             xDp = controller.sideX(if (fullyCollapsed) 0f else slidePx),
             yDp = controller.sideY(top, 480f)
+        )
+    }
+
+    // Aide, accolée à la pile sous la barre de navigation. Comme la fenêtre de
+    // conversation, elle survit au repli : la lire demande d'éloigner la souris.
+    if (controller.showHelp) {
+        val x = if (controller.isRight) controller.baseX - HELP_WINDOW_WIDTH - 6f
+        else controller.baseX + controller.stackWidth.value + 6f
+        HelpWindow(
+            xDp = x.coerceIn(workArea.x.toFloat(), (workArea.x + workArea.width - HELP_WINDOW_WIDTH)),
+            yDp = controller.baseY,
+            onClose = { controller.showHelp = false }
         )
     }
 
@@ -520,7 +583,10 @@ private fun NavWindow(
             Toolbar(
                 scope = scope,
                 windowInteractions = windowInteractions,
-                toolbarInteractions = ToolbarInteractions { controller.showDescription = it }
+                toolbarInteractions = ToolbarInteractions(
+                    showDescription = { controller.showDescription = it },
+                    toggleHelp = { controller.showHelp = !controller.showHelp }
+                )
             )
         }
     }
@@ -616,6 +682,12 @@ private fun TaskWindow(
     }
 }
 
+/**
+ * Écart entre le point de saisie et le haut de la poignée, pour qu'elle ne
+ * saute pas sous le curseur au début du glisser.
+ */
+private var grabOffsetY = 0f
+
 /** Petite poignée blanche sur le bord quand la pile est repliée. */
 @Composable
 private fun StackHandle(controller: StackController, visible: Boolean) {
@@ -644,6 +716,12 @@ private fun StackHandle(controller: StackController, visible: Boolean) {
         alwaysOnTop = true
     ) {
         TasksTheme {
+            // Deux gestes sur la même poignée, départagés par la touche :
+            // survol simple = déployer, touche maintenue = saisir et déplacer.
+            // Le glisser suit la souris en coordonnées écran, la fenêtre de la
+            // poignée étant trop petite pour contenir le mouvement.
+            val grabbable = controller.holdKeyDown || controller.handleDragging
+
             Canvas(
                 modifier = Modifier
                     .fillMaxSize()
@@ -651,17 +729,45 @@ private fun StackHandle(controller: StackController, visible: Boolean) {
                         awaitPointerEventScope {
                             while (true) {
                                 awaitPointerEvent()
-                                controller.expanded = true
+                                if (!controller.holdKeyDown && !controller.handleDragging)
+                                    controller.expanded = true
+                            }
+                        }
+                    }
+                    .pointerInput(Unit) {
+                        detectDragGestures(
+                            onDragStart = {
+                                if (controller.holdKeyDown) {
+                                    controller.handleDragging = true
+                                    grabOffsetY = MouseInfo.getPointerInfo().location.y - controller.handleTop()
+                                }
+                            },
+                            onDragEnd = {
+                                if (controller.handleDragging) {
+                                    controller.handleDragging = false
+                                    controller.commitHandlePlacement()
+                                }
+                            },
+                            onDragCancel = {
+                                if (controller.handleDragging) {
+                                    controller.handleDragging = false
+                                    controller.commitHandlePlacement()
+                                }
+                            }
+                        ) { _, _ ->
+                            if (controller.handleDragging) {
+                                val mouse = MouseInfo.getPointerInfo().location
+                                controller.dragHandleTo(mouse.x, mouse.y, grabOffsetY)
                             }
                         }
                     }
             ) {
-                val barWidth = 5.dp.toPx()
+                val barWidth = (if (grabbable) 8.dp else 5.dp).toPx()
                 val left = if (controller.isRight) size.width - barWidth else 0f
                 drawRoundRect(
-                    color = Color.White.copy(alpha = 0.85f),
-                    topLeft = Offset(left, size.height * 0.1f),
-                    size = Size(barWidth, size.height * 0.8f),
+                    color = Color.White.copy(alpha = if (grabbable) 1f else 0.85f),
+                    topLeft = Offset(left, size.height * (if (grabbable) 0.02f else 0.1f)),
+                    size = Size(barWidth, size.height * (if (grabbable) 0.96f else 0.8f)),
                     cornerRadius = CornerRadius(barWidth / 2, barWidth / 2)
                 )
             }

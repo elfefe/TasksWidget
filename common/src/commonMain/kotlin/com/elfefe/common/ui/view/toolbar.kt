@@ -187,6 +187,16 @@ fun ColumnScope.Toolbar(
             },
             {
                 Icon(
+                    Icons.Default.HelpOutline,
+                    contentDescription = "Aide",
+                    modifier = Modifier
+                        .padding(3.dp)
+                        .clickable { toolbarInteractions.toggleHelp() },
+                    tint = Tasks.Configs.configs.themeColors.onPrimary
+                )
+            },
+            {
+                Icon(
                     Icons.Default.Place,
                     contentDescription = null,
                     modifier = Modifier

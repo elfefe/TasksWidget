@@ -54,8 +54,15 @@ object GoogleAuth {
         "https://www.googleapis.com/auth/datastore"
     )
 
-    /** Délai laissé à l'utilisateur pour accorder l'accès dans son navigateur. */
-    private const val CONSENT_TIMEOUT_MS = 3 * 60 * 1000
+    /**
+     * Délai laissé à l'utilisateur pour accorder l'accès dans son navigateur.
+     *
+     * Trois minutes ne suffisaient pas : tant que le projet n'est pas validé par
+     * Google, l'accord passe par un écran d'avertissement, un dépliement des
+     * paramètres avancés et un second lien — sans compter une éventuelle
+     * saisie de mot de passe Google. Le flux expirait en cours de route.
+     */
+    private const val CONSENT_TIMEOUT_MS = 10 * 60 * 1000
 
     sealed interface State {
         object SignedOut : State
@@ -354,17 +361,52 @@ object GoogleAuth {
      * qui reçoit l'URL comme argument unique : `cmd /c start`, lui, couperait
      * l'adresse au premier `&`, dont une URL OAuth est truffée.
      */
-    private fun openBrowser(url: String) {
-        // `rundll32` d'abord, et non `Desktop.browse` : ce dernier rend la main
-        // sans rien ouvrir et sans lever d'erreur, si bien qu'on ne peut pas
-        // savoir qu'il a échoué pour se rabattre sur autre chose.
-        val opened = runCatching {
-            ProcessBuilder("rundll32", "url.dll,FileProtocolHandler", url).start()
-            true
-        }.onFailure { log("GoogleAuth: rundll32 indisponible\n" + it.stackTraceToString()) }
-            .getOrDefault(false)
+    /** Ce que Windows expose pour « ouvrir » une adresse comme le ferait un clic. */
+    private interface Shell32 : com.sun.jna.Library {
+        fun ShellExecuteW(
+            hwnd: com.sun.jna.Pointer?,
+            operation: com.sun.jna.WString?,
+            file: com.sun.jna.WString,
+            parameters: com.sun.jna.WString?,
+            directory: com.sun.jna.WString?,
+            showCmd: Int
+        ): com.sun.jna.Pointer
+    }
 
-        if (opened) return
+    private val shell32: Shell32? by lazy {
+        runCatching { com.sun.jna.Native.load("shell32", Shell32::class.java) }.getOrNull()
+    }
+
+    /**
+     * Ouvre l'URL d'autorisation dans le navigateur par défaut.
+     *
+     * Deux fausses pistes avant celle-ci : `Desktop.browse` rend la main sans
+     * rien ouvrir ni lever d'erreur depuis un fil de l'application, et
+     * `rundll32 url.dll,FileProtocolHandler` ouvre un onglet **vide** — il
+     * digère mal les `%` dont une URL OAuth encodée est pleine. `ShellExecute`
+     * est ce que Windows appelle lui-même quand on clique sur un lien : elle
+     * reçoit l'adresse telle quelle et rend un code d'erreur exploitable.
+     */
+    private fun openBrowser(url: String) {
+        val shell = shell32
+        if (shell != null) {
+            // Au-delà de 32, ShellExecute a réussi ; en deçà, c'est un code
+            // d'erreur hérité de l'API 16 bits.
+            val result = runCatching {
+                com.sun.jna.Pointer.nativeValue(
+                    shell.ShellExecuteW(
+                        null,
+                        com.sun.jna.WString("open"),
+                        com.sun.jna.WString(url),
+                        null,
+                        null,
+                        1 // SW_SHOWNORMAL
+                    )
+                )
+            }.getOrDefault(0L)
+            if (result > 32L) return
+            log("GoogleAuth: ShellExecute a refusé l'URL (code $result)")
+        }
 
         runCatching {
             if (Desktop.isDesktopSupported() && Desktop.getDesktop().isSupported(Desktop.Action.BROWSE))

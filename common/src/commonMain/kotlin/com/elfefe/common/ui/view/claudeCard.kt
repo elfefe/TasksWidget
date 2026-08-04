@@ -8,6 +8,7 @@ import androidx.compose.animation.core.tween
 import androidx.compose.animation.core.rememberInfiniteTransition
 import androidx.compose.animation.expandVertically
 import androidx.compose.animation.shrinkVertically
+import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
@@ -28,6 +29,7 @@ import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.SolidColor
+import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.input.pointer.PointerEventType
 import androidx.compose.ui.input.pointer.onPointerEvent
 import androidx.compose.ui.res.painterResource
@@ -135,11 +137,13 @@ private fun StatusIcon(sessionId: String, session: ClaudeCode.RunningSession?) {
     val busy = session?.busy == true
     val waiting = session?.waiting == true
     val color = when {
-        ClaudeSessions.recentlySent(sessionId) -> colors.primary
+        ClaudeSessions.recentlySent(sessionId) -> Color(0xFF3FB950)
         busy -> Color(0xFF3FB950)
         waiting -> Color(0xFFD9A441)
-        session != null -> colors.onBackground.copy(alpha = 0.5f)
-        else -> colors.onBackground.copy(alpha = 0.25f)
+        // Ouverte et prête : même vert, en anneau. Le gris d'avant la rangeait
+        // visuellement du côté des sessions mortes.
+        session != null -> Color(0xFF3FB950)
+        else -> colors.onBackground.copy(alpha = 0.3f)
     }
 
     Box(
@@ -155,7 +159,41 @@ private fun StatusIcon(sessionId: String, session: ClaudeCode.RunningSession?) {
             },
         contentAlignment = Alignment.Center
     ) {
-        if (busy) PulsingDot(color) else Dot(color)
+        StatusDot(
+            color = color,
+            // Une session ouverte mais au repos se distingue par sa **forme**,
+            // un anneau : en jouant sur la seule opacité, elle devenait
+            // indiscernable d'une session éteinte.
+            filled = session == null || busy || waiting || ClaudeSessions.recentlySent(sessionId),
+            pulsing = busy
+        )
+    }
+}
+
+/**
+ * Pastille d'état. L'animation porte sur un halo autour de la pastille, jamais
+ * sur la pastille elle-même : en faisant varier l'opacité du disque, une session
+ * en plein travail passait la moitié du temps pour éteinte — c'est précisément
+ * ce qui faisait croire à des sessions inactives.
+ */
+@Composable
+private fun StatusDot(color: Color, filled: Boolean, pulsing: Boolean) {
+    val halo by rememberInfiniteTransition().animateFloat(
+        initialValue = 0f,
+        targetValue = 1f,
+        animationSpec = infiniteRepeatable(tween(900), RepeatMode.Reverse)
+    )
+
+    Canvas(Modifier.size(18.dp)) {
+        val core = 4.dp.toPx()
+        if (pulsing) {
+            drawCircle(
+                color = color.copy(alpha = 0.30f * (1f - halo) + 0.10f),
+                radius = core + (5.dp.toPx() * halo)
+            )
+        }
+        if (filled) drawCircle(color = color, radius = core)
+        else drawCircle(color = color, radius = core, style = Stroke(width = 1.6.dp.toPx()))
     }
 }
 
@@ -303,18 +341,8 @@ private fun LabeledField(
     }
 }
 
+/** Pastille simple, pour l'état du compte dans le panneau de lancement. */
 @Composable
 internal fun Dot(color: Color) {
     Box(Modifier.size(8.dp).clip(CircleShape).background(color))
-}
-
-@Composable
-internal fun PulsingDot(color: Color) {
-    val transition = rememberInfiniteTransition()
-    val alpha by transition.animateFloat(
-        initialValue = 0.35f,
-        targetValue = 1f,
-        animationSpec = infiniteRepeatable(tween(700), RepeatMode.Reverse)
-    )
-    Box(Modifier.size(8.dp).clip(CircleShape).alpha(alpha).background(color))
 }

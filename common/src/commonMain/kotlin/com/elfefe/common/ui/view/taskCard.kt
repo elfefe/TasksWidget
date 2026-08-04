@@ -55,7 +55,6 @@ class TaskCardManager(val task: Task) {
     var selections by mutableStateOf(EvictingQueue.create<TextRange>(2).apply { add(TextRange(0, 0)) })
     var description by mutableStateOf(TextFieldValue(task.description))
     var showEditor by mutableStateOf(false)
-    var showDescription by mutableStateOf(false)
 }
 
 
@@ -66,8 +65,12 @@ fun TaskCard(modifier: Modifier, task: Task, windowInteractions: WindowInteracti
         return
     }
 
-    val taskCardManager = TaskCardManager(task)
-    taskCardManager.showDescription = showDescription
+    // Le gestionnaire porte l'état d'édition de la carte : il doit survivre aux
+    // recompositions, sinon `showEditor` retombe à faux et la barre markdown
+    // disparaît aussitôt ouverte. La pile se recompose en continu depuis
+    // qu'elle suit les sessions Claude (leur `updatedAt` bouge sans cesse), ce
+    // qui rendait la barre d'outils inatteignable sur les tâches normales.
+    val taskCardManager = remember(task.created) { TaskCardManager(task) }
 
     Card(
         modifier = Modifier
@@ -84,7 +87,10 @@ fun TaskCard(modifier: Modifier, task: Task, windowInteractions: WindowInteracti
         ) {
             TopBar(taskCardManager)
             Editor(taskCardManager, windowInteractions)
-            Content(taskCardManager)
+            // L'affichage des descriptions est piloté par la barre de
+            // navigation : il se passe en paramètre plutôt que d'être recopié
+            // dans le gestionnaire depuis la composition.
+            Content(taskCardManager, showDescription)
         }
     }
 }
@@ -407,11 +413,11 @@ fun Editor(manager: TaskCardManager, windowInteractions: WindowInteractions) {
 }
 
 @Composable
-fun Content(manager: TaskCardManager) {
+fun Content(manager: TaskCardManager, showDescription: Boolean) {
     val scope = rememberCoroutineScope()
 //    var lastMouseEvent by remember { mutableStateOf(PointerEventType.Unknown) }
     AnimatedVisibility(
-        visible = manager.showDescription,
+        visible = showDescription,
         modifier = Modifier
             .fillMaxWidth(),
         enter = expandVertically(),

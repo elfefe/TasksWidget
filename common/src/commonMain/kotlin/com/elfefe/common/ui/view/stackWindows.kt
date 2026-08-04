@@ -273,7 +273,11 @@ fun ApplicationScope.TaskStack(windowInteractions: WindowInteractions) {
                 (previous - current).forEach { ClaudeSessions.forget(it) }
                 controller.lastChange = System.currentTimeMillis()
             }
-            delay(2000)
+            // Sondage rapide : une session peut n'être active que quelques
+            // secondes, et un relevé toutes les deux secondes la manquait
+            // presque à chaque fois. Le titre étant désormais mis en cache, ce
+            // tour ne coûte plus que la lecture des petits fichiers d'état.
+            delay(700)
         }
     }
 

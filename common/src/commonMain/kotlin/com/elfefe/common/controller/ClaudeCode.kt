@@ -156,7 +156,7 @@ object ClaudeCode {
                 // remote-control (le titre IA affiché dans l'app Claude) au nom
                 // dérivé « fbou-70 ».
                 val bridged = !o.get("bridgeSessionId")?.asString.isNullOrBlank()
-                val name = if (bridged) aiTitleOf(cwd, sessionId) ?: derived else derived
+                val name = if (bridged) cachedAiTitleOf(cwd, sessionId) ?: derived else derived
                 RunningSession(
                     sessionId = sessionId,
                     cwd = cwd,
@@ -187,6 +187,25 @@ object ClaudeCode {
 
     /** Encodage d'un chemin en nom de dossier projet, comme Claude Code. */
     fun encodeCwd(cwd: String): String = cwd.replace(Regex("[^A-Za-z0-9]"), "-")
+
+    private class CachedTitle(val title: String?, val readAt: Long)
+
+    /**
+     * Le titre ne change qu'au fil des renommages : le relire coûte une lecture
+     * de 256 Ko par session, ce qui interdisait de sonder les états souvent. Il
+     * est donc gardé en mémoire et rafraîchi de loin en loin.
+     */
+    private val titles = mutableMapOf<String, CachedTitle>()
+    private const val TITLE_TTL_MS = 30_000L
+
+    fun cachedAiTitleOf(cwd: String, sessionId: String): String? {
+        val now = System.currentTimeMillis()
+        val cached = titles[sessionId]
+        if (cached != null && now - cached.readAt < TITLE_TTL_MS) return cached.title
+        val title = aiTitleOf(cwd, sessionId)
+        titles[sessionId] = CachedTitle(title, now)
+        return title
+    }
 
     /** Titre IA (le nom affiché en remote-control), lu en tête du transcript. */
     fun aiTitleOf(cwd: String, sessionId: String): String? {

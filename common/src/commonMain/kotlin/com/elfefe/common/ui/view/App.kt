@@ -23,6 +23,7 @@ import androidx.compose.ui.unit.IntSize
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.ApplicationScope
+import com.elfefe.common.controller.StateFilter
 import com.elfefe.common.controller.Tasks
 import com.elfefe.common.controller.AutoUpdater
 import com.elfefe.common.controller.log
@@ -80,9 +81,7 @@ fun App(modifier: Modifier, windowInteractions: WindowInteractions) {
     }
 
     LaunchedEffect(Unit) {
-        Tasks.filter("show done") {
-            !it.done
-        }
+        StateFilter.apply()
     }
 
 //        Box(

@@ -3,6 +3,7 @@ import com.elfefe.common.model.Configs
 import com.elfefe.common.model.ConfigsAdapter
 import com.elfefe.common.model.HANDLE_Y_AUTO
 import com.elfefe.common.model.HoldKey
+import com.elfefe.common.model.TaskState
 import com.elfefe.common.ui.theme.AppFont
 import kotlin.test.Test
 import kotlin.test.assertEquals
@@ -62,6 +63,61 @@ class ConfigsPersistenceTest {
         assertEquals(AppFont.INTER, AppFont.of(null))
         assertEquals(AppFont.INTER, AppFont.of("police-qui-n-existe-pas"))
         assertEquals(AppFont.SYSTEM, AppFont.of("system"))
+    }
+
+    @Test
+    fun `le filtre d'etats survit a un aller-retour et se signale`() {
+        val adapter = ConfigsAdapter()
+        val choisi = setOf(TaskState.BUSY, TaskState.DONE)
+        val restored = adapter.fromJson(adapter.toJson(Configs(stateFilters = choisi)))
+        assertEquals(choisi, restored.stateFilters)
+
+        var notified = 0
+        val configs = Configs().apply { onChanged = { notified++ } }
+        assertEquals(TaskState.DEFAULT, configs.stateFilters)
+        configs.updateStateFilters(setOf(TaskState.WAITING))
+        assertEquals(setOf(TaskState.WAITING), configs.stateFilters)
+        assertEquals(1, notified)
+    }
+
+    @Test
+    fun `tout decocher est un choix, pas un fichier muet`() {
+        // Une selection vide masque toutes les cartes : c'est volontaire et cela
+        // doit se relire tel quel, sans etre repris pour un reglage absent qu'on
+        // remplacerait par celui d'origine.
+        val adapter = ConfigsAdapter()
+        val restored = adapter.fromJson(adapter.toJson(Configs(stateFilters = emptySet())))
+        assertTrue(restored.stateFilters.isEmpty())
+    }
+
+    @Test
+    fun `une configuration ecrite avant le filtre montre ce qu'elle montrait`() {
+        // Fichier d'une version anterieure : pas de champ `stateFilters`. La pile
+        // doit retrouver son affichage d'alors — tout sauf les taches terminees.
+        val json = """
+            {
+              "orders": [],
+              "language": "fr",
+              "holdKey": "ctrl"
+            }
+        """.trimIndent()
+
+        assertEquals(TaskState.DEFAULT, ConfigsAdapter().fromJson(json).stateFilters)
+    }
+
+    @Test
+    fun `un etat inconnu est ignore sans emporter les autres`() {
+        val json = """
+            {
+              "orders": [],
+              "stateFilters": ["busy", "etat-d-une-version-future", "done"]
+            }
+        """.trimIndent()
+
+        assertEquals(
+            setOf(TaskState.BUSY, TaskState.DONE),
+            ConfigsAdapter().fromJson(json).stateFilters
+        )
     }
 
     @Test

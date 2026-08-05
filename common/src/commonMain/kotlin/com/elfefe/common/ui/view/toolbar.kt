@@ -29,8 +29,11 @@ import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.elfefe.common.controller.StateFilter
 import com.elfefe.common.controller.Tasks
 import com.elfefe.common.model.Task
+import com.elfefe.common.model.TaskState
+import com.elfefe.common.model.ThemeColors
 import kotlinx.coroutines.CoroutineScope
 import java.awt.Desktop
 import java.net.URI
@@ -46,7 +49,8 @@ fun ColumnScope.Toolbar(
 
     var showConfigs by remember { mutableStateOf(false) }
 
-    var showDone by remember { mutableStateOf(false) }
+    // Menu du filtre d'états : ouvert et refermé par le même bouton de la barre.
+    var showStates by remember { mutableStateOf(false) }
     var showDescription by remember { mutableStateOf(true) }
 
     var expanded by remember { mutableStateOf(true) }
@@ -105,19 +109,17 @@ fun ColumnScope.Toolbar(
                 )
             },
             {
+                // Filtre d'états : l'entonnoir se remplit dès que la sélection
+                // s'écarte de celle d'origine — sans quoi rien ne dirait qu'une
+                // partie des cartes est tue.
                 Icon(
-                    painterResource(if (!showDone) "check_circle_24px.svg" else "unpublished_24px.svg"),
-                    contentDescription = null,
+                    if (StateFilter.isDefault()) Icons.Default.FilterList else Icons.Default.FilterAlt,
+                    contentDescription = "Filtrer par état",
                     modifier = Modifier
-                        .clickable {
-                            showDone = !showDone
-                            Tasks.filter("show done") {
-                                if (showDone) true else !it.done
-                            }
-                        }
+                        .clickable { showStates = !showStates }
                         .padding(3.dp),
                     tint = Tasks.Configs.configs.themeColors.onPrimary.run {
-                        if (showDone) copy(alpha = .6f) else this
+                        if (showStates) copy(alpha = .6f) else this
                     }
                 )
             },
@@ -284,11 +286,12 @@ fun ColumnScope.Toolbar(
                     value = searching,
                     onValueChange = {
                         searching = it
+                        // Les filtres se cumulent : celui des états dit quelles
+                        // cartes sont montrées, celui-ci ce qu'on y cherche.
                         Tasks.filter("searching") { task ->
-                            (task.title.contains(searching, true) ||
+                            task.title.contains(searching, true) ||
                                     task.deadline.contains(searching, true) ||
-                                    task.description.contains(searching, true)) &&
-                                    ((!task.done && !showDone) || showDone)
+                                    task.description.contains(searching, true)
                         }
                     },
                     textStyle = LocalTextStyle.current.copy(
@@ -300,6 +303,10 @@ fun ColumnScope.Toolbar(
                     cursorBrush = SolidColor(Tasks.Configs.configs.themeColors.onPrimary)
                 )
             }
+        }
+
+        AnimatedVisibility(visible = showStates, enter = expandVertically(), exit = shrinkVertically()) {
+            StateFilterMenu(colors)
         }
 
         AnimatedVisibility(visible = showAddMenu, enter = expandVertically(), exit = shrinkVertically()) {
@@ -345,6 +352,52 @@ fun ColumnScope.Toolbar(
             ClaudeLaunchPanel(colors) {
                 showClaudeLaunch = false
                 showAddMenu = false
+            }
+        }
+    }
+}
+
+/**
+ * Menu déroulant du filtre d'états : une ligne par état, cochée tant que cet
+ * état est montré dans la pile. Plusieurs états peuvent tenir ensemble, et
+ * chaque clic prend effet aussitôt — le bouton de la barre ne fait qu'ouvrir et
+ * refermer le menu.
+ */
+@Composable
+private fun StateFilterMenu(colors: ThemeColors) {
+    Column(
+        modifier = Modifier.fillMaxWidth().padding(horizontal = 6.dp, vertical = 4.dp),
+        verticalArrangement = Arrangement.spacedBy(1.dp)
+    ) {
+        TaskState.values().forEach { state ->
+            // Les sessions Claude d'abord, les tâches ensuite : un écart les
+            // sépare, les deux familles ne se filtrent pas pour les mêmes
+            // raisons.
+            if (state == TaskState.TODO) Spacer(Modifier.height(5.dp))
+
+            val checked = StateFilter.isSelected(state)
+            Row(
+                verticalAlignment = Alignment.CenterVertically,
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .clip(RoundedCornerShape(4.dp))
+                    .background(colors.primary.copy(alpha = if (checked) 0.35f else 0.12f))
+                    .clickable { StateFilter.toggle(state) }
+                    .padding(horizontal = 8.dp, vertical = 4.dp)
+            ) {
+                Icon(
+                    if (checked) Icons.Default.CheckBox else Icons.Default.CheckBoxOutlineBlank,
+                    contentDescription = null,
+                    tint = colors.onPrimary.run { if (checked) this else copy(alpha = .55f) },
+                    modifier = Modifier.size(14.dp)
+                )
+                Spacer(Modifier.width(6.dp))
+                Text(
+                    state.label,
+                    color = colors.onPrimary.run { if (checked) this else copy(alpha = .55f) },
+                    fontSize = 11.sp,
+                    fontWeight = if (checked) FontWeight.Bold else FontWeight.Normal
+                )
             }
         }
     }

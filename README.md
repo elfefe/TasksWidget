@@ -32,6 +32,11 @@ Fonctionnalités
 * Échéances datées : la date est **rouge** si la tâche est due aujourd'hui,
   **jaune** si elle est dépassée, **noire** pour plus tard.
 * Historique des tâches terminées.
+* **Filtre par état** : l'entonnoir de la barre de navigation déroule la liste
+  des états — sessions Claude en cours, en attente ou au repos, tâches à faire,
+  tâches terminées. Plusieurs états peuvent tenir ensemble, chaque clic prend
+  effet aussitôt, le même bouton referme le menu, et le choix est retenu d'un
+  démarrage à l'autre.
 * Masquage des descriptions pour voir plus de tâches, recherche, format réduit.
 * Réduction dans la barre système, et ajout au démarrage de Windows depuis les
   réglages.
@@ -50,6 +55,10 @@ Les sessions Claude Code ouvertes sur la machine apparaissent d'elles-mêmes en
 tête de la pile, une carte chacune — nom de la session, état, bouton d'édition,
 rien de plus :
 
+* **Rangement** : celles qui travaillent d'abord, puis celles qui attendent une
+  réponse, puis celles au repos ; à état égal, la plus récemment ouverte passe
+  devant. Le filtre de la barre permet de n'en garder qu'une partie — ne montrer
+  que ce qui travaille, par exemple.
 * **Suivi** : l'état (en cours / en attente / prête) est lu directement auprès du
   CLI. Survoler l'icône d'état montre les dernières réponses en infobulle ; la
   cliquer ouvre une fenêtre dédiée avec le fil complet. Les réponses sont

@@ -48,6 +48,7 @@ import com.elfefe.common.controller.AutoUpdater
 import com.elfefe.common.controller.ClaudeSessions
 import com.elfefe.common.controller.CrashWindow
 import com.elfefe.common.controller.HoldKeyState
+import com.elfefe.common.controller.StateFilter
 import com.elfefe.common.model.HANDLE_Y_AUTO
 import com.elfefe.common.controller.Tasks
 import com.elfefe.common.controller.isRemoteNewer
@@ -191,6 +192,11 @@ class StackController(val workArea: Rectangle) {
      * dupliquées. Les cartes éphémères ont un `created` négatif stable dérivé de
      * la session, pour ne pas entrer en collision avec les vraies tâches
      * (timestamps positifs) et garder une identité de fenêtre stable.
+     *
+     * Les sessions passent par le filtre d'états de la barre de navigation, et
+     * sont rangées par état — ce qui travaille devant, ce qui dort derrière —
+     * avant l'ordre d'ouverture. Un tri par ancienneté seule mettait une session
+     * oubliée depuis la veille au-dessus de celle qui répond.
      */
     val displayed: List<Task>
         get() {
@@ -198,7 +204,11 @@ class StackController(val workArea: Rectangle) {
                 if (it.type == "claude" && it.claudeSessionId.isNotBlank()) it.claudeSessionId else null
             }.toSet()
             val ephemeral = ClaudeSessions.running
-                .filter { it.sessionId !in pinned }
+                .filter { it.sessionId !in pinned && StateFilter.accepts(StateFilter.stateOf(it)) }
+                .sortedWith(
+                    compareBy<ClaudeCode.RunningSession> { StateFilter.stateOf(it).ordinal }
+                        .thenByDescending { it.startedAt }
+                )
                 .map { s ->
                     Task(
                         title = s.name,
@@ -213,7 +223,13 @@ class StackController(val workArea: Rectangle) {
             // lire, ni session à qui écrire — et n'encombrent donc plus la pile.
             // Le fichier de tâches, lui, n'est pas touché.
             val orphan = { task: Task -> task.type == "claude" && task.claudeSessionId.isBlank() }
-            return ephemeral + tasks.filterNot(orphan)
+            // Les tâches ordinaires sont déjà filtrées en amont par `Tasks` ;
+            // celles épinglées sur une session tiennent leur état de la session
+            // elle-même, qui change trop souvent pour un filtre posé une fois.
+            val visible = tasks.filterNot(orphan).filter {
+                it.type != "claude" || StateFilter.accepts(StateFilter.stateOf(it))
+            }
+            return ephemeral + visible
         }
 
     /** Index dans [displayed] de la carte d'une session, -1 si absente. */
@@ -342,8 +358,15 @@ fun ApplicationScope.TaskStack(windowInteractions: WindowInteractions) {
             controller.tasks = it
             controller.lastChange = System.currentTimeMillis()
         }
-        Tasks.filter("show done") { !it.done }
+        StateFilter.apply()
         Tasks.refresh()
+    }
+
+    // Changer le filtre fait varier la hauteur de la pile sous le curseur, qui
+    // peut se retrouver hors de l'aire des tâches : même grâce que pour un ajout
+    // ou un « fait », sans quoi la pile se replierait au moment du clic.
+    LaunchedEffect(Tasks.Configs.configs.stateFilters) {
+        controller.lastChange = System.currentTimeMillis()
     }
 
     // Sessions Claude Code en cours : relevées en continu, affichées

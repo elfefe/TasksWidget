@@ -43,7 +43,8 @@ class Configs(
     handleY: Float = HANDLE_Y_AUTO,
     anchorRight: Boolean = true,
     pinned: Boolean = false,
-    font: AppFont = AppFont.INTER
+    font: AppFont = AppFont.INTER,
+    stateFilters: Set<TaskState> = TaskState.DEFAULT
 ) {
     var taskFieldsOrder: List<TaskFieldOrder> by mutableStateOf(taskFieldsOrder)
         private set
@@ -70,6 +71,10 @@ class Configs(
 
     /** Police de l'interface. */
     var font: AppFont by mutableStateOf(font)
+        private set
+
+    /** États montrés dans la pile ; les autres cartes sont tues. */
+    var stateFilters: Set<TaskState> by mutableStateOf(stateFilters)
         private set
 
     /**
@@ -131,10 +136,16 @@ class Configs(
         onChanged?.invoke()
     }
 
+    /** Choix du filtre d'états ; il survit au redémarrage comme l'épingle. */
+    fun updateStateFilters(stateFilters: Set<TaskState>) {
+        this.stateFilters = stateFilters
+        onChanged?.invoke()
+    }
+
     override fun toString(): String =
         "Configs(themeColors=$themeColors, taskFieldsOrder=$taskFieldsOrder, language=$language, " +
                 "holdKey=${holdKey.id}, handleY=$handleY, anchorRight=$anchorRight, pinned=$pinned, " +
-                "font=${font.id})"
+                "font=${font.id}, stateFilters=${stateFilters.map { it.id }})"
 
     companion object {
         fun defaultThemeColors(): ThemeColors = ThemeColors(
@@ -165,6 +176,7 @@ class ConfigsAdapter : TypeAdapter<Configs>() {
             add("anchorRight", gson.toJsonTree(value?.anchorRight))
             add("pinned", gson.toJsonTree(value?.pinned))
             add("font", gson.toJsonTree(value?.font?.id))
+            add("stateFilters", gson.toJsonTree(value?.stateFilters?.map { it.id }))
         }, out)
     }
 
@@ -177,6 +189,10 @@ class ConfigsAdapter : TypeAdapter<Configs>() {
         var anchorRight = true
         var pinned = false
         var font = AppFont.INTER
+        // `null` tant que le fichier n'en dit rien : une sélection vide est un
+        // choix légitime (tout décoché) et ne doit pas être reprise pour un
+        // « non renseigné » qu'on écraserait par le réglage d'origine.
+        var stateFilters: Set<TaskState>? = null
         `in`?.beginObject()
         while (`in`?.hasNext() == true) {
             when (`in`.nextName()) {
@@ -193,6 +209,14 @@ class ConfigsAdapter : TypeAdapter<Configs>() {
                 "anchorRight" -> anchorRight = `in`.nextBoolean()
                 "pinned" -> pinned = `in`.nextBoolean()
                 "font" -> font = AppFont.of(`in`.nextString())
+                "stateFilters" -> if (`in`.peek() == JsonToken.NULL) `in`.nextNull() else {
+                    val read = mutableSetOf<TaskState>()
+                    `in`.beginArray()
+                    while (`in`.peek() != JsonToken.END_ARRAY)
+                        TaskState.of(`in`.nextString())?.let { read.add(it) }
+                    `in`.endArray()
+                    stateFilters = read
+                }
                 // Un champ inconnu était fatal : la lecture échouait, le fichier
                 // partait en .bak et l'utilisateur retrouvait un thème neuf.
                 // Ouvrir une version plus récente puis revenir en arrière ne
@@ -209,7 +233,8 @@ class ConfigsAdapter : TypeAdapter<Configs>() {
             handleY = handleY,
             anchorRight = anchorRight,
             pinned = pinned,
-            font = font
+            font = font,
+            stateFilters = stateFilters ?: TaskState.DEFAULT
         )
     }
 }

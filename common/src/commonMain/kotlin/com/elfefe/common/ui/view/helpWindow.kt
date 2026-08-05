@@ -63,7 +63,9 @@ private fun helpText(holdKey: String): String = """
 ## La barre de navigation
 
 - **Notes** : afficher ou masquer les descriptions des tâches.
-- **Coche** : afficher aussi les tâches terminées.
+- **Entonnoir** : filtrer par état — sessions Claude en cours, en attente ou au
+  repos, tâches à faire, tâches terminées. Plusieurs états à la fois, chaque clic
+  prend effet aussitôt, et le même bouton referme le menu. Le choix est retenu.
 - **+** : ajouter une tâche, ou ouvrir une session Claude.
 - **Loupe** : rechercher dans les titres, dates et descriptions.
 - **Roue dentée** : réglages, dont les couleurs et la touche ci-dessus.
@@ -81,7 +83,9 @@ private fun helpText(holdKey: String): String = """
 
 ## Les sessions Claude Code
 
-- Chaque session ouverte sur le PC apparaît en tête, avec son nom.
+- Chaque session ouverte sur le PC apparaît en tête, avec son nom : celles qui
+  travaillent d'abord, puis celles qui attendent une réponse, puis celles au
+  repos. L'entonnoir de la barre permet de n'en garder qu'une partie.
 - La **pastille** dit l'état : disque plein quand la session travaille, anneau
   quand elle est prête.
 - **Survolez la pastille** pour un aperçu des dernières réponses, **cliquez-la**
